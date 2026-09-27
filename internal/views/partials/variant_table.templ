@@ -1,0 +1,63 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+)
+
+// VariantTable lists a product's variants and their margin. Returned alone for
+// HTMX swaps after variant create/update/archive.
+templ VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) {
+	<div id="variant-table">
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">SKU</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Size</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Color</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Cost</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Retail</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Margin</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Threshold</th>
+					<th class="px-4 py-2"></th>
+				</tr>
+			</thead>
+			<tbody id="variant-rows" class="divide-y divide-gray-100">
+				if len(variants) == 0 {
+					<tr>
+						<td colspan="8" class="px-4 py-6 text-center text-gray-500">No variants yet.</td>
+					</tr>
+				}
+				for _, v := range variants {
+					<tr id={ "variant-row-" + fmt.Sprint(v.ID) } class="hover:bg-gray-50">
+						<td class="px-4 py-2 font-mono text-xs text-gray-900">{ v.Sku }</td>
+						<td class="px-4 py-2">{ format.NullString(v.Size) }</td>
+						<td class="px-4 py-2">{ format.NullString(v.Color) }</td>
+						<td class="px-4 py-2 text-right">{ format.Money(v.CostMinor) }</td>
+						<td class="px-4 py-2 text-right">{ format.Money(v.RetailPriceMinor) }</td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprintf("%.1f%%", format.GrossMarginPct(v.RetailPriceMinor, v.CostMinor)) }</td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(v.LowStockThreshold) }</td>
+						<td class="px-4 py-2 text-right">
+							<div class="flex items-center justify-end gap-2">
+								<a href={ "/variants/" + fmt.Sprint(v.ID) + "/edit" } class="text-sm text-gray-600 hover:text-gray-900">Edit</a>
+								if v.IsArchived == 1 {
+									@components.Badge("Archived", "warning")
+								} else {
+									<form method="post" action={ "/variants/" + fmt.Sprint(v.ID) + "/archive" }
+										hx-post={ "/variants/" + fmt.Sprint(v.ID) + "/archive" }
+										hx-target="#variant-table" hx-swap="outerHTML">
+										<input type="hidden" name="csrf_token" value={ csrf }/>
+										<button type="submit" class="text-sm text-red-600 hover:text-red-800">Archive</button>
+									</form>
+								}
+							</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		}
+	</div>
+}

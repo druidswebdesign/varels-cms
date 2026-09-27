@@ -1,0 +1,59 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// VariantForm edits one variant (GET /variants/{id}/edit).
+templ VariantForm(v sqlc.ProductVariant, csrf string) {
+	@layouts.Base("Edit variant", "products", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Edit variant</h1>
+			<a href={ "/products/" + fmt.Sprint(v.ProductID) } class="text-sm text-gray-500 hover:text-gray-700">Back to product</a>
+		</div>
+
+		<form method="post" action={ "/variants/" + fmt.Sprint(v.ID) }
+			class="grid max-w-3xl grid-cols-2 gap-3 rounded-lg border border-gray-200 bg-white p-4 md:grid-cols-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div class="col-span-2 md:col-span-1">
+				<label for="sku" class="mb-1 block text-xs font-medium text-gray-600">SKU</label>
+				<input id="sku" name="sku" type="text" required value={ v.Sku } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="size" class="mb-1 block text-xs font-medium text-gray-600">Size</label>
+				<input id="size" name="size" type="text" value={ format.NullString(v.Size) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="color" class="mb-1 block text-xs font-medium text-gray-600">Color</label>
+				<input id="color" name="color" type="text" value={ format.NullString(v.Color) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="barcode" class="mb-1 block text-xs font-medium text-gray-600">Barcode</label>
+				<input id="barcode" name="barcode" type="text" value={ format.NullString(v.Barcode) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="cost" class="mb-1 block text-xs font-medium text-gray-600">Cost (ARS)</label>
+				<input id="cost" name="cost" type="number" min="0" step="0.01" required value={ format.MinorToPlain(v.CostMinor) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="retail" class="mb-1 block text-xs font-medium text-gray-600">Retail (ARS)</label>
+				<input id="retail" name="retail" type="number" min="0" step="0.01" required value={ format.MinorToPlain(v.RetailPriceMinor) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="wholesale" class="mb-1 block text-xs font-medium text-gray-600">Wholesale (ARS)</label>
+				if v.WholesalePriceMinor.Valid {
+					<input id="wholesale" name="wholesale" type="number" min="0" step="0.01" value={ format.MinorToPlain(v.WholesalePriceMinor.Int64) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				} else {
+					<input id="wholesale" name="wholesale" type="number" min="0" step="0.01" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				}
+			</div>
+			<div class="col-span-2 flex items-end md:col-span-4">
+				<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Save variant</button>
+			</div>
+		</form>
+	}
+}

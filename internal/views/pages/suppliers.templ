@@ -1,0 +1,102 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// Suppliers lists the business "providers" and offers create + inline edit.
+templ Suppliers(suppliers []sqlc.Supplier, csrf string) {
+	@layouts.Base("Suppliers", "suppliers", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Suppliers</h1>
+			<a href="/purchase-orders" class="text-sm text-gray-600 hover:text-gray-900">Purchase orders</a>
+		</div>
+
+		<form method="post" action="/suppliers"
+			class="mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div>
+				<label for="name" class="mb-1 block text-xs font-medium text-gray-600">Name</label>
+				<input id="name" name="name" type="text" required class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="contact_name" class="mb-1 block text-xs font-medium text-gray-600">Contact</label>
+				<input id="contact_name" name="contact_name" type="text" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="email" class="mb-1 block text-xs font-medium text-gray-600">Email</label>
+				<input id="email" name="email" type="email" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="phone" class="mb-1 block text-xs font-medium text-gray-600">Phone</label>
+				<input id="phone" name="phone" type="text" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="lead_time_days" class="mb-1 block text-xs font-medium text-gray-600">Lead time (days)</label>
+				<input id="lead_time_days" name="lead_time_days" type="number" min="0" class="w-24 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Add supplier</button>
+		</form>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Name</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Contact</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Email</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Phone</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Lead time</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Status</th>
+					<th class="px-4 py-2"></th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(suppliers) == 0 {
+					<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">No suppliers yet.</td></tr>
+				}
+				for _, sup := range suppliers {
+					<tr class="hover:bg-gray-50">
+						<td class="px-4 py-2 font-medium text-gray-900">{ sup.Name }</td>
+						<td class="px-4 py-2 text-gray-500">{ format.NullString(sup.ContactName) }</td>
+						<td class="px-4 py-2 text-gray-500">{ format.NullString(sup.Email) }</td>
+						<td class="px-4 py-2 text-gray-500">{ format.NullString(sup.Phone) }</td>
+						<td class="px-4 py-2 text-right text-gray-500">{ format.NullInt64(sup.LeadTimeDays) }</td>
+						<td class="px-4 py-2">
+							if sup.IsActive == 1 {
+								@components.Badge("Active", "success")
+							} else {
+								@components.Badge("Inactive", "danger")
+							}
+						</td>
+						<td class="px-4 py-2 text-right">
+							<details>
+								<summary class="cursor-pointer text-sm text-gray-600 hover:text-gray-900">Edit</summary>
+								<form method="post" action={ "/suppliers/" + fmt.Sprint(sup.ID) }
+									class="mt-2 grid w-72 grid-cols-2 gap-2 rounded-md border border-gray-200 p-2 text-left">
+									<input type="hidden" name="csrf_token" value={ csrf }/>
+									<input name="name" type="text" required value={ sup.Name } placeholder="name" class="col-span-2 rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+									<input name="contact_name" type="text" value={ format.NullString(sup.ContactName) } placeholder="contact" class="rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+									<input name="phone" type="text" value={ format.NullString(sup.Phone) } placeholder="phone" class="rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+									<input name="email" type="email" value={ format.NullString(sup.Email) } placeholder="email" class="col-span-2 rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+									<input name="lead_time_days" type="number" min="0" value={ format.NullInt64(sup.LeadTimeDays) } placeholder="lead days" class="rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+									<select name="is_active" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+										<option value="1" selected?={ sup.IsActive == 1 }>active</option>
+										<option value="0" selected?={ sup.IsActive == 0 }>inactive</option>
+									</select>
+									<textarea name="terms" placeholder="terms" class="col-span-2 rounded-md border border-gray-300 px-2 py-1 text-sm">{ format.NullString(sup.Terms) }</textarea>
+									<textarea name="notes" placeholder="notes" class="col-span-2 rounded-md border border-gray-300 px-2 py-1 text-sm">{ format.NullString(sup.Notes) }</textarea>
+									<button type="submit" class="col-span-2 rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700">Save</button>
+								</form>
+							</details>
+						</td>
+					</tr>
+				}
+			</tbody>
+		}
+	}
+}

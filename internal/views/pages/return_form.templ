@@ -1,0 +1,103 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// ReturnForm processes a full or partial return of one order.
+templ ReturnForm(data SaleDetailData, reasons []sqlc.ReasonCode, csrf string) {
+	@layouts.Base("Return "+data.Order.OrderNumber, "sales", csrf) {
+		<div class="mb-4">
+			<h1 class="text-xl font-semibold">Return · { data.Order.OrderNumber }</h1>
+			<p class="text-sm text-gray-500">{ data.Customer } · { format.Money(data.Order.TotalMinor) }</p>
+		</div>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Item</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Ordered</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Returnable</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				for _, l := range data.Lines {
+					<tr>
+						<td class="px-4 py-2">{ l.ProductName } <span class="text-gray-400">{ l.Size } { l.Color }</span> <span class="font-mono text-xs text-gray-400">{ l.Sku }</span></td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(l.Item.Quantity) }</td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(l.Returnable) }</td>
+					</tr>
+				}
+			</tbody>
+		}
+
+		<form method="post" action={ "/sales/" + fmt.Sprint(data.Order.ID) + "/return" } class="mt-6 space-y-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+
+			<div class="grid max-w-2xl gap-4 md:grid-cols-2">
+				<div>
+					<label for="resolution" class="mb-1 block text-xs font-medium text-gray-600">Resolution</label>
+					<select id="resolution" name="resolution" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+						<option value="refund">Refund</option>
+						<option value="store_credit">Store credit</option>
+						<option value="exchange">Exchange</option>
+					</select>
+				</div>
+				<div>
+					<label for="note" class="mb-1 block text-xs font-medium text-gray-600">Note</label>
+					<input id="note" name="note" type="text" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+			</div>
+
+			@components.Table() {
+				<thead class="bg-gray-50">
+					<tr>
+						<th class="px-4 py-2 text-left font-medium text-gray-500">Item</th>
+						<th class="px-4 py-2 text-right font-medium text-gray-500">Return qty</th>
+						<th class="px-4 py-2 text-left font-medium text-gray-500">Condition</th>
+						<th class="px-4 py-2 text-left font-medium text-gray-500">Reason</th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-100">
+					for _, l := range data.Lines {
+						if l.Returnable > 0 {
+							<tr>
+								<td class="px-4 py-2">
+									<input type="hidden" name="item_id" value={ fmt.Sprint(l.Item.ID) }/>
+									{ l.ProductName } <span class="text-gray-400">{ l.Sku }</span>
+								</td>
+								<td class="px-4 py-2 text-right">
+									<input name="qty" type="number" min="0" max={ fmt.Sprint(l.Returnable) } step="1" value="0"
+										class="w-20 rounded-md border border-gray-300 px-2 py-1 text-right text-sm"/>
+								</td>
+								<td class="px-4 py-2">
+									<select name="condition" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+										<option value="sellable">Sellable</option>
+										<option value="damaged">Damaged</option>
+									</select>
+								</td>
+								<td class="px-4 py-2">
+									<select name="reason" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+										for _, rc := range reasons {
+											<option value={ rc.Code }>{ rc.Label }</option>
+										}
+									</select>
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			}
+
+			<div class="flex items-center gap-3">
+				<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Process return</button>
+				<a href={ "/sales/" + fmt.Sprint(data.Order.ID) } class="text-sm text-gray-500 hover:text-gray-700">Cancel</a>
+			</div>
+		</form>
+	}
+}

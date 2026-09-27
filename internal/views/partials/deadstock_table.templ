@@ -1,0 +1,42 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+)
+
+// DeadstockTable lists variants with no sales in the stale window.
+templ DeadstockTable(rows []sqlc.DeadstockRow, totalTrappedMinor int64, staleDays int) {
+	<div id="deadstock-table">
+		<p class="mb-3 text-sm text-gray-600">
+			Trapped cash: <span class="font-semibold text-gray-900">{ format.Money(totalTrappedMinor) }</span>
+			· no sales in { fmt.Sprint(staleDays) } days
+		</p>
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Product</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">SKU</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">On hand</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Trapped cash</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(rows) == 0 {
+					<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Nothing stale. Good.</td></tr>
+				}
+				for _, r := range rows {
+					<tr>
+						<td class="px-4 py-2">{ r.ProductName }</td>
+						<td class="px-4 py-2 font-mono text-xs text-gray-500">{ r.Sku }</td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(r.QtyOnHand) }</td>
+						<td class="px-4 py-2 text-right font-medium">{ format.Money(r.TrappedCashMinor) }</td>
+					</tr>
+				}
+			</tbody>
+		}
+	</div>
+}

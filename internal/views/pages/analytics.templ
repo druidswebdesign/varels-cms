@@ -1,0 +1,61 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/yourname/varels_cms/internal/views/partials"
+	"github.com/yourname/varels_cms/internal/views/vm"
+)
+
+// Analytics is the admin reporting page (ADR-0007).
+templ Analytics(year int, month int, pl vm.PL, byChannel []vm.ChannelRevenue, best []vm.BestSeller, sizes []vm.SizeRow, valuation vm.Valuation, csrf string) {
+	@layouts.Base("Analytics", "analytics", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Analytics</h1>
+			<form method="get" action="/analytics" class="flex items-end gap-2">
+				<div>
+					<label for="year" class="mb-1 block text-xs font-medium text-gray-600">Year</label>
+					<input id="year" name="year" type="number" value={ fmt.Sprint(year) } class="w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm"/>
+				</div>
+				<div>
+					<label for="month" class="mb-1 block text-xs font-medium text-gray-600">Month (0 = year)</label>
+					<input id="month" name="month" type="number" min="0" max="12" value={ fmt.Sprint(month) } class="w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm"/>
+				</div>
+				<button type="submit" class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50">Apply</button>
+			</form>
+		</div>
+
+		@partials.ProfitCards(pl.RevenueMinor, pl.COGSMinor, pl.GrossMinor, pl.OpExMinor, pl.NetMinor)
+
+		<div class="mt-6 grid gap-4 lg:grid-cols-2">
+			@partials.SalesChart(byChannel)
+			@partials.SizeCurve(sizes)
+		</div>
+
+		<div class="mt-6 grid gap-4 sm:grid-cols-3">
+			@valuationCard("Inventory cost", format.Money(valuation.InventoryCostMinor))
+			@valuationCard("Potential retail", format.Money(valuation.PotentialRetailMinor))
+			@valuationCard("Non-sellable cost", format.Money(valuation.NonSellableCostMinor))
+		</div>
+
+		<div class="mt-6">
+			@partials.BestSellersTable(best, periodLabel(month))
+		</div>
+	}
+}
+
+templ valuationCard(label string, value string) {
+	<div class="rounded-lg border border-gray-200 bg-white p-4">
+		<p class="text-sm text-gray-500">{ label }</p>
+		<p class="mt-1 text-xl font-semibold text-gray-900">{ value }</p>
+	</div>
+}
+
+func periodLabel(month int) string {
+	if month == 0 {
+		return "year"
+	}
+	return "month"
+}

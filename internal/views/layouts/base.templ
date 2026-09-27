@@ -1,0 +1,37 @@
+package layouts
+
+import (
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/flash"
+	"github.com/yourname/varels_cms/internal/views/partials"
+)
+
+// Base is the full-page shell: HTMX, ApexCharts, Tailwind output, navbar and
+// sidebar. Every page renders inside it.
+templ Base(title string, active string, csrf string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>{ title } · varels_cms</title>
+			<link rel="stylesheet" href="/assets/css/app.css"/>
+			<script src="/assets/js/htmx.min.js"></script>
+			<script defer src="/assets/js/alpine.min.js"></script>
+			<script defer src="/assets/js/app.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+		</head>
+		<body hx-headers={ `{"X-CSRF-Token":"` + csrf + `"}` } class="bg-gray-50 text-gray-900">
+			@components.Navbar(csrf)
+			<div class="flex min-h-[calc(100vh-3.5rem)]">
+				@components.Sidebar(active)
+				<main class="flex-1 p-6">
+					<div id="flash" class="mb-4">
+						@partials.FlashMessages(flash.Get(ctx))
+					</div>
+					{ children... }
+				</main>
+			</div>
+		</body>
+	</html>
+}

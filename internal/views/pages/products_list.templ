@@ -1,0 +1,55 @@
+package pages
+
+import (
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/yourname/varels_cms/internal/views/partials"
+)
+
+// ProductsList renders the catalog index with a search box and archived filter.
+templ ProductsList(products []sqlc.Product, categories []sqlc.Category, q string, archived bool, csrf string) {
+	@layouts.Base("Products", "products", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Products</h1>
+			<a href="/products/new" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700">New product</a>
+		</div>
+
+		<form method="get" action="/products"
+			hx-get="/products/search" hx-target="#product-rows" hx-swap="innerHTML"
+			hx-trigger="keyup changed delay:300ms, search, submit"
+			class="mb-4 flex flex-wrap items-center gap-3">
+			<input type="search" name="q" value={ q } placeholder="Search name or slug"
+				class="w-64 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			<label class="flex items-center gap-2 text-sm text-gray-600">
+				<input type="checkbox" name="archived" value="1" checked?={ archived }/>
+				Show archived
+			</label>
+			<button type="submit" class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50">Search</button>
+			if q != "" {
+				<a href="/products" class="text-sm text-gray-500 hover:text-gray-700">Clear</a>
+			}
+		</form>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Name</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Slug</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Status</th>
+					<th class="px-4 py-2"></th>
+				</tr>
+			</thead>
+			<tbody id="product-rows" class="divide-y divide-gray-100">
+				if len(products) == 0 {
+					<tr>
+						<td colspan="4" class="px-4 py-8 text-center text-gray-500">No products found.</td>
+					</tr>
+				}
+				for _, p := range products {
+					@partials.ProductRow(p, csrf)
+				}
+			</tbody>
+		}
+	}
+}

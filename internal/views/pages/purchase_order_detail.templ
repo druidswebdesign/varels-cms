@@ -1,0 +1,109 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// PurchaseOrderDetail shows one PO, its lines, the add-line form and per-line
+// receiving (POST /purchase-orders/{id}/receive).
+templ PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, variants []sqlc.ListSellableVariantsRow, supplier, location, csrf string) {
+	@layouts.Base("PO "+fmt.Sprint(po.ID), "suppliers", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<div>
+				<div class="flex items-center gap-2">
+					<h1 class="text-xl font-semibold">PO-{ fmt.Sprint(po.ID) }</h1>
+					@components.Badge(string(po.Status), poBadgeTone(string(po.Status)))
+				</div>
+				<p class="text-sm text-gray-500">{ supplier } · receive at { location } · expected { format.NullString(po.ExpectedAt) }</p>
+			</div>
+			<div class="flex items-center gap-3">
+				<form method="post" action={ "/purchase-orders/" + fmt.Sprint(po.ID) + "/status" } class="flex items-center gap-2">
+					<input type="hidden" name="csrf_token" value={ csrf }/>
+					<select name="status" class="rounded-md border border-gray-300 px-2 py-1.5 text-sm">
+						<option value="draft" selected?={ po.Status == "draft" }>draft</option>
+						<option value="ordered" selected?={ po.Status == "ordered" }>ordered</option>
+						<option value="cancelled" selected?={ po.Status == "cancelled" }>cancelled</option>
+					</select>
+					<button type="submit" class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50">Set status</button>
+				</form>
+				<a href="/purchase-orders" class="text-sm text-gray-500 hover:text-gray-700">Back</a>
+			</div>
+		</div>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Variant</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Ordered</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Received</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Unit cost</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Line total</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Receive</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(items) == 0 {
+					<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No lines yet. Add one below.</td></tr>
+				}
+				for _, it := range items {
+					<tr class="hover:bg-gray-50">
+						<td class="px-4 py-2">{ variantLabelOf(variants, it.VariantID) }</td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(it.QuantityOrdered) }</td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(it.QuantityReceived) }</td>
+						<td class="px-4 py-2 text-right">{ format.Money(it.UnitCostMinor) }</td>
+						<td class="px-4 py-2 text-right">{ format.Money(it.LineTotalMinor) }</td>
+						<td class="px-4 py-2 text-right">
+							if it.QuantityReceived < it.QuantityOrdered {
+								<form method="post" action={ "/purchase-orders/" + fmt.Sprint(po.ID) + "/receive" } class="flex items-center justify-end gap-2">
+									<input type="hidden" name="csrf_token" value={ csrf }/>
+									<input type="hidden" name="item_id" value={ fmt.Sprint(it.ID) }/>
+									<input name="qty" type="number" min="1" value={ fmt.Sprint(it.QuantityOrdered - it.QuantityReceived) } class="w-20 rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+									<button type="submit" class="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50">Receive</button>
+								</form>
+							} else {
+								@components.Badge("complete", "success")
+							}
+						</td>
+					</tr>
+				}
+			</tbody>
+		}
+
+		<h2 class="mb-2 mt-6 text-lg font-semibold">Add line</h2>
+		<form method="post" action={ "/purchase-orders/" + fmt.Sprint(po.ID) + "/items" }
+			class="flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div class="grow">
+				<label for="variant_id" class="mb-1 block text-xs font-medium text-gray-600">Variant</label>
+				<select id="variant_id" name="variant_id" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+					for _, v := range variants {
+						<option value={ fmt.Sprint(v.ID) }>{ v.ProductName } · { format.NullString(v.Size) } { format.NullString(v.Color) } · { v.Sku }</option>
+					}
+				</select>
+			</div>
+			<div>
+				<label for="quantity" class="mb-1 block text-xs font-medium text-gray-600">Quantity</label>
+				<input id="quantity" name="quantity" type="number" min="1" required class="w-24 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="unit_cost" class="mb-1 block text-xs font-medium text-gray-600">Unit cost (ARS)</label>
+				<input id="unit_cost" name="unit_cost" type="number" min="0" step="0.01" required class="w-32 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Add line</button>
+		</form>
+	}
+}
+
+func variantLabelOf(variants []sqlc.ListSellableVariantsRow, id int64) string {
+	for _, v := range variants {
+		if v.ID == id {
+			return v.ProductName + " · " + format.NullString(v.Size) + " " + format.NullString(v.Color) + " · " + v.Sku
+		}
+	}
+	return fmt.Sprint(id)
+}

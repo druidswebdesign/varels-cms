@@ -1,0 +1,45 @@
+package pages
+
+import (
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// ExpenseCategories lists OpEx categories and offers the create form.
+templ ExpenseCategories(categories []sqlc.ExpenseCategory, csrf string) {
+	@layouts.Base("Expense categories", "expenses", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Expense categories</h1>
+			<a href="/expenses" class="text-sm text-gray-500 hover:text-gray-700">Back to expenses</a>
+		</div>
+
+		<form method="post" action="/expense-categories"
+			class="mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div>
+				<label for="name" class="mb-1 block text-xs font-medium text-gray-600">Name</label>
+				<input id="name" name="name" type="text" required class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Add category</button>
+		</form>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Name</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(categories) == 0 {
+					<tr><td class="px-4 py-8 text-center text-gray-500">No categories yet.</td></tr>
+				}
+				for _, c := range categories {
+					<tr class="hover:bg-gray-50">
+						<td class="px-4 py-2 font-medium text-gray-900">{ c.Name }</td>
+					</tr>
+				}
+			</tbody>
+		}
+	}
+}

@@ -1,0 +1,51 @@
+package partials
+
+import (
+	"strconv"
+
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/vm"
+)
+
+// SalesChart renders revenue per channel as simple CSS bars (no JS needed).
+templ SalesChart(rows []vm.ChannelRevenue) {
+	<div id="sales-chart" class="rounded-lg border border-gray-200 bg-white p-4"
+		hx-get="/analytics/chart" hx-trigger="change from:#year, change from:#month"
+		hx-include="#year,#month" hx-swap="outerHTML">
+		<h2 class="mb-3 text-sm font-medium text-gray-700">Revenue by channel</h2>
+		if len(rows) == 0 {
+			<p class="text-sm text-gray-500">No sales in this period.</p>
+		} else {
+			<div class="space-y-3">
+				for _, r := range rows {
+					<div>
+						<div class="mb-1 flex justify-between text-xs text-gray-600">
+							<span>{ r.Channel }</span>
+							<span>{ format.Money(r.RevenueMinor) }</span>
+						</div>
+						<div class="h-2 w-full rounded bg-gray-100">
+							<div class="h-2 rounded bg-gray-900" style={ "width:" + percentWidth(r.RevenueMinor, maxRevenue(rows)) }></div>
+						</div>
+					</div>
+				}
+			</div>
+		}
+	</div>
+}
+
+func maxRevenue(rows []vm.ChannelRevenue) int64 {
+	var max int64
+	for _, r := range rows {
+		if r.RevenueMinor > max {
+			max = r.RevenueMinor
+		}
+	}
+	return max
+}
+
+func percentWidth(value, max int64) string {
+	if max <= 0 {
+		return "0%"
+	}
+	return strconv.FormatInt(value*100/max, 10) + "%"
+}

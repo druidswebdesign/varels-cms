@@ -1,0 +1,55 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/vm"
+)
+
+// BestSellersTable is the HTMX-swappable best-sellers fragment.
+templ BestSellersTable(rows []vm.BestSeller, period string) {
+	<div id="best-sellers">
+		<div class="mb-2 flex items-center justify-between">
+			<h2 class="text-sm font-medium text-gray-700">Best sellers</h2>
+			<div class="flex gap-2 text-xs">
+				@periodLink("month", period, "Month")
+				@periodLink("year", period, "Year")
+				@periodLink("all", period, "All")
+			</div>
+		</div>
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Product</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Variant</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Units</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Revenue</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(rows) == 0 {
+					<tr><td colspan="4" class="px-4 py-6 text-center text-gray-500">No sales in this period.</td></tr>
+				}
+				for _, r := range rows {
+					<tr>
+						<td class="px-4 py-2">{ r.ProductName }</td>
+						<td class="px-4 py-2 text-gray-500">{ r.Sku } <span class="text-gray-400">{ r.Size } { r.Color }</span></td>
+						<td class="px-4 py-2 text-right">{ fmt.Sprint(r.UnitsSold) }</td>
+						<td class="px-4 py-2 text-right">{ format.Money(r.RevenueMinor) }</td>
+					</tr>
+				}
+			</tbody>
+		}
+	</div>
+}
+
+templ periodLink(key string, active string, label string) {
+	if key == active {
+		<span class="rounded bg-gray-900 px-2 py-1 text-white">{ label }</span>
+	} else {
+		<a hx-get={ "/analytics/best-sellers?period=" + key } hx-target="#best-sellers" hx-swap="outerHTML"
+			class="rounded border border-gray-300 px-2 py-1 text-gray-600 hover:bg-gray-50">{ label }</a>
+	}
+}

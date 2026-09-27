@@ -1,0 +1,70 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    schema: "internal/db/schema.sql"
+    queries: "internal/db/queries"
+    gen:
+      go:
+        package: "sqlc"
+        out: "internal/db/sqlc"
+        emit_json_tags: true
+        emit_interface: true
+        emit_empty_slices: true
+        emit_prepared_queries: false
+        overrides:
+          # Named Go string types for CHECK-constrained TEXT enums
+          # (docs/schema.md §8). Defined in internal/db/types.
+          - column: "approved_users.role"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "UserRole" }
+          - column: "approved_users.provider"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "AuthProvider" }
+
+          - column: "stock_levels.state"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "StockState" }
+          - column: "stock_movements.state"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "StockState" }
+          - column: "stock_movements.ref_type"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "StockRefType" }
+          - column: "stock_holds.source"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "HoldSource" }
+          - column: "stock_holds.status"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "HoldStatus" }
+          - column: "reason_codes.kind"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "ReasonKind" }
+
+          - column: "cost_history.source"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "CostSource" }
+          - column: "product_media.media_type"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "MediaType" }
+          - column: "collections.kind"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "CollectionKind" }
+          - column: "locations.kind"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "LocationKind" }
+          - column: "discounts.scope"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "DiscountScope" }
+          - column: "discounts.type"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "DiscountType" }
+
+          - column: "orders.status"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "OrderStatus" }
+          - column: "orders.payment_status"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "PaymentStatus" }
+          - column: "payments.method"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "PaymentMethod" }
+          - column: "payments.status"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "PaymentRecordStatus" }
+
+          - column: "returns.resolution"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "ReturnResolution" }
+          - column: "return_items.resolution"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "ReturnResolution" }
+          - column: "returns.status"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "ReturnStatus" }
+          - column: "return_items.condition_state"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "ReturnCondition" }
+
+          - column: "purchase_orders.status"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "PurchaseOrderStatus" }
+
+          - column: "store_credit_ledger.reason"
+            go_type: { import: "github.com/yourname/varels_cms/internal/db/types", type: "StoreCreditReason" }

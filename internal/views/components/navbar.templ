@@ -1,0 +1,15 @@
+package components
+
+// Navbar is the top bar with the brand and the sign-out action.
+templ Navbar(csrf string) {
+	<header class="flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4">
+		<a href="/dashboard" class="flex items-center gap-2 text-base font-semibold text-gray-900">
+			<img src="/assets/img/logo.svg" alt="" class="h-6 w-6"/>
+			varels_cms
+		</a>
+		<form method="post" action="/logout" class="flex items-center gap-2">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<button type="submit" class="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">Sign out</button>
+		</form>
+	</header>
+}

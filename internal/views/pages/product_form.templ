@@ -1,0 +1,85 @@
+package pages
+
+import (
+	"fmt"
+	"strconv"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// ProductForm renders create (editing=false) and edit (editing=true) for a
+// product. errs carries per-field validation messages.
+templ ProductForm(p sqlc.Product, categories []sqlc.Category, editing bool, errs map[string]string, csrf string) {
+	@layouts.Base(formTitle(editing), "products", csrf) {
+		<h1 class="mb-4 text-xl font-semibold">{ formTitle(editing) }</h1>
+
+		<form method="post" action={ formAction(p, editing) } class="max-w-xl space-y-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+
+			<div>
+				<label for="name" class="mb-1 block text-sm font-medium text-gray-700">Name</label>
+				<input id="name" name="name" type="text" value={ p.Name } required
+					class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				if msg, ok := errs["name"]; ok {
+					<p class="mt-1 text-sm text-red-600">{ msg }</p>
+				}
+			</div>
+
+			<div>
+				<label for="slug" class="mb-1 block text-sm font-medium text-gray-700">Slug</label>
+				<input id="slug" name="slug" type="text" value={ p.Slug } required
+					class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				if msg, ok := errs["slug"]; ok {
+					<p class="mt-1 text-sm text-red-600">{ msg }</p>
+				}
+			</div>
+
+			<div>
+				<label for="category_id" class="mb-1 block text-sm font-medium text-gray-700">Category</label>
+				<select id="category_id" name="category_id"
+					class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+					<option value="">— none —</option>
+					for _, c := range categories {
+						<option value={ fmt.Sprint(c.ID) } selected?={ p.CategoryID.Valid && p.CategoryID.Int64 == c.ID }>{ c.Name }</option>
+					}
+				</select>
+			</div>
+
+			<div>
+				<label for="description" class="mb-1 block text-sm font-medium text-gray-700">Description</label>
+				<textarea id="description" name="description" rows="4"
+					class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">{ format.NullString(p.Description) }</textarea>
+			</div>
+
+			<div class="flex items-center gap-3">
+				<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+					{ saveLabel(editing) }
+				</button>
+				<a href="/products" class="text-sm text-gray-500 hover:text-gray-700">Cancel</a>
+			</div>
+		</form>
+	}
+}
+
+func formTitle(editing bool) string {
+	if editing {
+		return "Edit product"
+	}
+	return "New product"
+}
+
+func saveLabel(editing bool) string {
+	if editing {
+		return "Save changes"
+	}
+	return "Create product"
+}
+
+func formAction(p sqlc.Product, editing bool) string {
+	if editing {
+		return "/products/" + strconv.FormatInt(p.ID, 10)
+	}
+	return "/products"
+}

@@ -1,0 +1,36 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/yourname/varels_cms/internal/views/partials"
+)
+
+// Deadstock lists trapped cash and clearance candidates (admin+).
+templ Deadstock(rows []sqlc.DeadstockRow, totalTrappedMinor int64, staleDays int, csrf string) {
+	@layouts.Base("Deadstock", "deadstock", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Deadstock</h1>
+			<div class="flex items-center gap-2 text-sm">
+				<span class="text-gray-500">Stale after</span>
+				@staleLink(30, staleDays)
+				@staleLink(60, staleDays)
+				@staleLink(90, staleDays)
+			</div>
+		</div>
+		@partials.DeadstockTable(rows, totalTrappedMinor, staleDays)
+	}
+}
+
+templ staleLink(days int, active int) {
+	if days == active {
+		<span class="rounded bg-gray-900 px-2 py-1 text-white">{ fmt.Sprint(days) }d</span>
+	} else {
+		<a href={ "/deadstock?stale_days=" + fmt.Sprint(days) }
+			hx-get={ "/deadstock/table?stale_days=" + fmt.Sprint(days) }
+			hx-target="#deadstock-table" hx-swap="outerHTML"
+			class="rounded border border-gray-300 px-2 py-1 text-gray-600 hover:bg-gray-50">{ fmt.Sprint(days) }d</a>
+	}
+}

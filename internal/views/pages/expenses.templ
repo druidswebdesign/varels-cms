@@ -1,0 +1,84 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// Expenses lists OpEx and offers the create form (ADR-0007).
+templ Expenses(expenses []sqlc.Expense, categories []sqlc.ExpenseCategory, totalMinor int64, csrf string) {
+	@layouts.Base("Expenses", "expenses", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Expenses</h1>
+			<p class="text-sm text-gray-500">Total this view: <span class="font-semibold text-gray-900">{ format.Money(totalMinor) }</span></p>
+		</div>
+
+		<form method="post" action="/expenses" class="mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div>
+				<label for="category_id" class="mb-1 block text-xs font-medium text-gray-600">Category</label>
+				<select id="category_id" name="category_id" class="rounded-md border border-gray-300 px-3 py-2 text-sm">
+					for _, c := range categories {
+						<option value={ fmt.Sprint(c.ID) }>{ c.Name }</option>
+					}
+				</select>
+			</div>
+			<div>
+				<label for="vendor" class="mb-1 block text-xs font-medium text-gray-600">Vendor</label>
+				<input id="vendor" name="vendor" type="text" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="amount" class="mb-1 block text-xs font-medium text-gray-600">Amount (ARS)</label>
+				<input id="amount" name="amount" type="number" min="0" step="0.01" required class="w-32 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="incurred_at" class="mb-1 block text-xs font-medium text-gray-600">Date</label>
+				<input id="incurred_at" name="incurred_at" type="date" required class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="note" class="mb-1 block text-xs font-medium text-gray-600">Note</label>
+				<input id="note" name="note" type="text" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Add expense</button>
+		</form>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Date</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Category</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Vendor</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Note</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Amount</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(expenses) == 0 {
+					<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No expenses recorded.</td></tr>
+				}
+				for _, e := range expenses {
+					<tr>
+						<td class="px-4 py-2 text-gray-500">{ e.IncurredAt }</td>
+						<td class="px-4 py-2">{ categoryName(categories, e.CategoryID) }</td>
+						<td class="px-4 py-2">{ format.NullString(e.Vendor) }</td>
+						<td class="px-4 py-2 text-gray-500">{ format.NullString(e.Note) }</td>
+						<td class="px-4 py-2 text-right font-medium">{ format.Money(e.AmountMinor) }</td>
+					</tr>
+				}
+			</tbody>
+		}
+	}
+}
+
+func categoryName(categories []sqlc.ExpenseCategory, id int64) string {
+	for _, c := range categories {
+		if c.ID == id {
+			return c.Name
+		}
+	}
+	return fmt.Sprint(id)
+}

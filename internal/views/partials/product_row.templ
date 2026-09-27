@@ -1,0 +1,42 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+)
+
+// ProductRow is one <tr> in the products table, also returned alone for live
+// search swaps (HTMX).
+templ ProductRow(p sqlc.Product, csrf string) {
+	<tr id={ "product-row-" + fmt.Sprint(p.ID) } class="hover:bg-gray-50">
+		<td class="px-4 py-3 font-medium text-gray-900">
+			<a href={ "/products/" + fmt.Sprint(p.ID) } class="hover:underline">{ p.Name }</a>
+		</td>
+		<td class="px-4 py-3 text-gray-500">{ p.Slug }</td>
+		<td class="px-4 py-3">
+			if p.IsArchived == 1 {
+				@components.Badge("Archived", "warning")
+			} else {
+				@components.Badge("Active", "success")
+			}
+		</td>
+		<td class="px-4 py-3">
+			<div class="flex items-center justify-end gap-2">
+				<a href={ "/products/" + fmt.Sprint(p.ID) + "/edit" } class="text-sm text-gray-600 hover:text-gray-900">Edit</a>
+				if p.IsArchived == 1 {
+					<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/restore" }>
+						<input type="hidden" name="csrf_token" value={ csrf }/>
+						<button type="submit" class="text-sm text-green-700 hover:text-green-900">Restore</button>
+					</form>
+				} else {
+					<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/archive" }>
+						<input type="hidden" name="csrf_token" value={ csrf }/>
+						<button type="submit" class="text-sm text-red-600 hover:text-red-800">Archive</button>
+					</form>
+				}
+			</div>
+		</td>
+	</tr>
+}

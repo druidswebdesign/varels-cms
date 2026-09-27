@@ -1,0 +1,21 @@
+# Environment
+.env
+
+# Build artifacts
+/bin/
+/tmp/
+
+# SQLite database
+/data/*.db
+/data/*.db-wal
+/data/*.db-shm
+/data/backups/
+
+# Generated code
+*.templ.go
+/internal/db/sqlc/*.go
+!/internal/db/sqlc/doc.go
+/assets/css/app.css
+
+# OS
+.DS_Store

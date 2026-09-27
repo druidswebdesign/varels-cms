@@ -1,0 +1,28 @@
+package components
+
+// Sidebar renders the primary navigation. active is the current section key.
+templ Sidebar(active string) {
+	<nav class="flex w-56 shrink-0 flex-col gap-1 border-r border-gray-200 bg-white p-3 text-sm">
+		@sidebarLink("/dashboard", "dashboard", "Dashboard", active)
+		@sidebarLink("/products", "products", "Products", active)
+		@sidebarLink("/collections", "collections", "Collections", active)
+		@sidebarLink("/restocks", "restocks", "Restock", active)
+		@sidebarLink("/holds", "holds", "Stock holds", active)
+		@sidebarLink("/sales", "sales", "Sales", active)
+		@sidebarLink("/customers", "customers", "Customers", active)
+		@sidebarLink("/suppliers", "suppliers", "Suppliers", active)
+		@sidebarLink("/analytics", "analytics", "Analytics", active)
+		@sidebarLink("/deadstock", "deadstock", "Deadstock", active)
+		@sidebarLink("/expenses", "expenses", "Expenses", active)
+		@sidebarLink("/staff", "staff", "Staff", active)
+		@sidebarLink("/audit", "audit", "Audit log", active)
+	</nav>
+}
+
+templ sidebarLink(href string, key string, label string, active string) {
+	if active == key {
+		<a href={ href } class="rounded-md bg-gray-100 px-3 py-2 font-medium text-gray-900">{ label }</a>
+	} else {
+		<a href={ href } class="rounded-md px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900">{ label }</a>
+	}
+}

@@ -1,0 +1,47 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+)
+
+// SaleRows is a batch of order rows, returned alone for HTMX filter swaps into
+// #sale-rows.
+templ SaleRows(orders []sqlc.Order, channels map[int64]string, customers map[int64]string) {
+	if len(orders) == 0 {
+		<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No sales found.</td></tr>
+	}
+	for _, o := range orders {
+		<tr class="hover:bg-gray-50">
+			<td class="px-4 py-2 font-mono text-xs">
+				<a href={ "/sales/" + fmt.Sprint(o.ID) } class="text-blue-600 hover:underline">{ o.OrderNumber }</a>
+			</td>
+			<td class="px-4 py-2 text-gray-500">{ o.PlacedAt }</td>
+			<td class="px-4 py-2">{ saleCustomerLabel(o, customers) }</td>
+			<td class="px-4 py-2 text-gray-500">{ channels[o.ChannelID] }</td>
+			<td class="px-4 py-2">
+				if o.Status == "cancelled" {
+					@components.Badge(string(o.Status), "danger")
+				} else if o.Status == "returned" {
+					@components.Badge(string(o.Status), "warning")
+				} else {
+					@components.Badge(string(o.Status), "success")
+				}
+			</td>
+			<td class="px-4 py-2 text-right font-medium">{ format.Money(o.TotalMinor) }</td>
+		</tr>
+	}
+}
+
+func saleCustomerLabel(o sqlc.Order, customers map[int64]string) string {
+	if !o.CustomerID.Valid {
+		return "—"
+	}
+	if name, ok := customers[o.CustomerID.Int64]; ok {
+		return name
+	}
+	return fmt.Sprint(o.CustomerID.Int64)
+}

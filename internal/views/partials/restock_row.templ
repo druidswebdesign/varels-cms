@@ -1,0 +1,28 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+)
+
+// RestockRow is one stock movement line, shared by the restock and ledger pages.
+templ RestockRow(m sqlc.StockMovement, sku string, location string) {
+	<tr class="hover:bg-gray-50">
+		<td class="px-4 py-2 text-gray-500">{ m.CreatedAt }</td>
+		<td class="px-4 py-2">{ sku }</td>
+		<td class="px-4 py-2 text-gray-500">{ location }</td>
+		<td class="px-4 py-2">{ string(m.State) }</td>
+		<td class="px-4 py-2 text-right">
+			if m.QuantityDelta >= 0 {
+				@components.Badge("+"+fmt.Sprint(m.QuantityDelta), "success")
+			} else {
+				@components.Badge(fmt.Sprint(m.QuantityDelta), "danger")
+			}
+		</td>
+		<td class="px-4 py-2 text-gray-500">{ string(m.RefType) }</td>
+		<td class="px-4 py-2 text-gray-500">{ format.NullString(m.Note) }</td>
+	</tr>
+}

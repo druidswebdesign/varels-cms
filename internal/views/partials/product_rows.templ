@@ -1,0 +1,16 @@
+package partials
+
+import (
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+)
+
+// ProductRows is a batch of ProductRow <tr> elements, returned alone for HTMX
+// live-search swaps into #product-rows.
+templ ProductRows(products []sqlc.Product, csrf string) {
+	if len(products) == 0 {
+		<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No products found.</td></tr>
+	}
+	for _, p := range products {
+		@ProductRow(p, csrf)
+	}
+}

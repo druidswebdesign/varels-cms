@@ -1,0 +1,17 @@
+package components
+
+// Badge renders a small status pill. tone is one of: neutral, success, warning,
+// danger, info.
+templ Badge(label string, tone string) {
+	if tone == "success" {
+		<span class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">{ label }</span>
+	} else if tone == "warning" {
+		<span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">{ label }</span>
+	} else if tone == "danger" {
+		<span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">{ label }</span>
+	} else if tone == "info" {
+		<span class="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">{ label }</span>
+	} else {
+		<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">{ label }</span>
+	}
+}

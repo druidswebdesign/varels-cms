@@ -1,0 +1,102 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// CustomerDetail shows a profile, its edit form, order history and store credit.
+templ CustomerDetail(c sqlc.Customer, orders []sqlc.Order, balanceMinor int64, entries []sqlc.StoreCreditLedger, csrf string) {
+	@layouts.Base(c.Name, "customers", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">{ c.Name }</h1>
+			<div class="flex items-center gap-3">
+				<span class="text-sm text-gray-500">Store credit: <span class="font-semibold text-gray-900">{ format.Money(balanceMinor) }</span></span>
+				<a href="/customers" class="text-sm text-gray-500 hover:text-gray-700">Back</a>
+			</div>
+		</div>
+
+		<form method="post" action={ "/customers/" + fmt.Sprint(c.ID) }
+			class="mb-6 flex max-w-3xl flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div>
+				<label for="name" class="mb-1 block text-xs font-medium text-gray-600">Name</label>
+				<input id="name" name="name" type="text" required value={ c.Name } class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="phone" class="mb-1 block text-xs font-medium text-gray-600">Phone</label>
+				<input id="phone" name="phone" type="text" value={ format.NullString(c.Phone) } class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="email" class="mb-1 block text-xs font-medium text-gray-600">Email</label>
+				<input id="email" name="email" type="email" value={ format.NullString(c.Email) } class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="instagram" class="mb-1 block text-xs font-medium text-gray-600">Instagram</label>
+				<input id="instagram" name="instagram" type="text" value={ format.NullString(c.Instagram) } class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div class="grow">
+				<label for="notes" class="mb-1 block text-xs font-medium text-gray-600">Notes</label>
+				<input id="notes" name="notes" type="text" value={ format.NullString(c.Notes) } class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Save</button>
+		</form>
+
+		<h2 class="mb-2 text-lg font-semibold">Orders</h2>
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Order</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Date</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Status</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Payment</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Total</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(orders) == 0 {
+					<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No orders yet.</td></tr>
+				}
+				for _, o := range orders {
+					<tr class="hover:bg-gray-50">
+						<td class="px-4 py-2 font-medium">
+							<a href={ "/sales/" + fmt.Sprint(o.ID) } class="text-blue-600 hover:underline">{ o.OrderNumber }</a>
+						</td>
+						<td class="px-4 py-2 text-gray-500">{ o.PlacedAt }</td>
+						<td class="px-4 py-2">{ string(o.Status) }</td>
+						<td class="px-4 py-2">{ string(o.PaymentStatus) }</td>
+						<td class="px-4 py-2 text-right">{ format.Money(o.TotalMinor) }</td>
+					</tr>
+				}
+			</tbody>
+		}
+
+		if len(entries) > 0 {
+			<h2 class="mb-2 mt-6 text-lg font-semibold">Store credit ledger</h2>
+			@components.Table() {
+				<thead class="bg-gray-50">
+					<tr>
+						<th class="px-4 py-2 text-left font-medium text-gray-500">When</th>
+						<th class="px-4 py-2 text-left font-medium text-gray-500">Reason</th>
+						<th class="px-4 py-2 text-left font-medium text-gray-500">Note</th>
+						<th class="px-4 py-2 text-right font-medium text-gray-500">Delta</th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-100">
+					for _, e := range entries {
+						<tr>
+							<td class="px-4 py-2 text-gray-500">{ e.CreatedAt }</td>
+							<td class="px-4 py-2">{ string(e.Reason) }</td>
+							<td class="px-4 py-2 text-gray-500">{ format.NullString(e.Note) }</td>
+							<td class="px-4 py-2 text-right">{ format.Money(e.DeltaMinor) }</td>
+						</tr>
+					}
+				</tbody>
+			}
+		}
+	}
+}

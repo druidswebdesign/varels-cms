@@ -1,0 +1,39 @@
+package pages
+
+import (
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/yourname/varels_cms/internal/views/partials"
+)
+
+// RestockList renders the incoming-stock history.
+templ RestockList(movements []sqlc.StockMovement, skus map[int64]string, locations map[int64]string, csrf string) {
+	@layouts.Base("Restocks", "restocks", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Restocks</h1>
+			<a href="/stock-movements" class="text-sm text-gray-600 hover:text-gray-900">Full ledger</a>
+		</div>
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">When</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Variant</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Location</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">State</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Qty</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Ref</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Note</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(movements) == 0 {
+					<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">No restocks yet.</td></tr>
+				}
+				for _, m := range movements {
+					@partials.RestockRow(m, skus[m.VariantID], locations[m.LocationID])
+				}
+			</tbody>
+		}
+	}
+}

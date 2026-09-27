@@ -1,0 +1,89 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// RestockForm receives stock and offers the manual adjustment form as well.
+templ RestockForm(v sqlc.ProductVariant, productName string, locations []sqlc.Location, reasonCodes []sqlc.ReasonCode, csrf string, errMsg string) {
+	@layouts.Base("Restock", "restocks", csrf) {
+		<div class="mb-4">
+			<h1 class="text-xl font-semibold">Restock</h1>
+			<p class="text-sm text-gray-500">{ productName } · { v.Sku } · current cost { format.Money(v.CostMinor) }</p>
+		</div>
+
+		if errMsg != "" {
+			<div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">Invalid restock values. Check quantity, cost and location.</div>
+		}
+
+		<div class="grid max-w-4xl gap-6 md:grid-cols-2">
+			<form method="post" action={ "/variants/" + fmt.Sprint(v.ID) + "/restock" }
+				class="space-y-4 rounded-lg border border-gray-200 bg-white p-4">
+				<input type="hidden" name="csrf_token" value={ csrf }/>
+				<h2 class="text-sm font-medium text-gray-700">Receive stock</h2>
+				<div>
+					<label for="quantity" class="mb-1 block text-xs font-medium text-gray-600">Quantity</label>
+					<input id="quantity" name="quantity" type="number" min="1" step="1" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="cost" class="mb-1 block text-xs font-medium text-gray-600">Incoming cost (ARS)</label>
+					<input id="cost" name="cost" type="number" min="0" step="1" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="location_id" class="mb-1 block text-xs font-medium text-gray-600">Location</label>
+					<select id="location_id" name="location_id" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+						for _, l := range locations {
+							<option value={ fmt.Sprint(l.ID) }>{ l.Name }</option>
+						}
+					</select>
+				</div>
+				<div>
+					<label for="note" class="mb-1 block text-xs font-medium text-gray-600">Note</label>
+					<input id="note" name="note" type="text" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+				<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Receive</button>
+			</form>
+
+			<form method="post" action={ "/variants/" + fmt.Sprint(v.ID) + "/adjust" }
+				class="space-y-4 rounded-lg border border-gray-200 bg-white p-4">
+				<input type="hidden" name="csrf_token" value={ csrf }/>
+				<h2 class="text-sm font-medium text-gray-700">Adjust stock</h2>
+				<div>
+					<label for="aqty" class="mb-1 block text-xs font-medium text-gray-600">Quantity (±)</label>
+					<input id="aqty" name="quantity" type="number" step="1" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="reason" class="mb-1 block text-xs font-medium text-gray-600">Reason</label>
+					<select id="reason" name="reason_code" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+						for _, rc := range reasonCodes {
+							<option value={ rc.Code }>{ rc.Label }</option>
+						}
+					</select>
+				</div>
+				<div>
+					<label for="state" class="mb-1 block text-xs font-medium text-gray-600">State</label>
+					<select id="state" name="state" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+						<option value="sellable">Sellable</option>
+						<option value="damaged">Damaged</option>
+						<option value="sample">Sample</option>
+						<option value="gift">Gift</option>
+						<option value="personal">Personal</option>
+					</select>
+				</div>
+				<div>
+					<label for="alocation" class="mb-1 block text-xs font-medium text-gray-600">Location</label>
+					<select id="alocation" name="location_id" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+						for _, l := range locations {
+							<option value={ fmt.Sprint(l.ID) }>{ l.Name }</option>
+						}
+					</select>
+				</div>
+				<button type="submit" class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Adjust</button>
+			</form>
+		</div>
+	}
+}

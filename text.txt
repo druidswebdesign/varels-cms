@@ -1,0 +1,117 @@
+.
+├── adr.md
+├── assets
+│   ├── css
+│   │   ├── app.css
+│   │   └── input.css
+│   ├── img
+│   │   └── logo.svg
+│   └── js
+│       ├── app.js
+│       └── htmx.min.js
+├── cmd
+│   └── server
+│       └── main.go
+├── data
+├── Dockerfile
+├── docs
+│   ├── architecture.md
+│   ├── auth.md
+│   ├── functions.md
+│   ├── overview.md
+│   ├── routes.md
+│   ├── schema.md
+│   └── spec-driven-dev.md
+├── fs.txt
+├── go.mod
+├── internal
+│   ├── auth
+│   │   ├── middleware.go
+│   │   ├── oauth.go
+│   │   ├── password.go
+│   │   ├── roles.go
+│   │   ├── session.go
+│   │   └── whitelist.go
+│   ├── db
+│   │   ├── db.go
+│   │   ├── migrations
+│   │   │   ├── 0001_init.down.sql
+│   │   │   ├── 0001_init.up.sql
+│   │   │   ├── 0002_users.down.sql
+│   │   │   └── 0002_users.up.sql
+│   │   ├── queries
+│   │   │   ├── analytics.sql
+│   │   │   ├── auth.sql
+│   │   │   ├── catalog.sql
+│   │   │   ├── finance.sql
+│   │   │   ├── inventory.sql
+│   │   │   └── sales.sql
+│   │   ├── schema.sql
+│   │   ├── seed.go
+│   │   ├── sqlc
+│   │   │   ├── analytics.sql.go
+│   │   │   ├── auth.sql.go
+│   │   │   ├── catalog.sql.go
+│   │   │   ├── db.go
+│   │   │   ├── doc.go
+│   │   │   ├── finance.sql.go
+│   │   │   ├── inventory.sql.go
+│   │   │   ├── models.go
+│   │   │   ├── querier.go
+│   │   │   └── sales.sql.go
+│   │   └── types
+│   │       └── types.go
+│   ├── handlers
+│   │   ├── analytics_handler.go
+│   │   ├── auth_handler.go
+│   │   ├── dashboard_handler.go
+│   │   ├── deadstock_handler.go
+│   │   ├── export_handler.go
+│   │   ├── middleware.go
+│   │   ├── product_handler.go
+│   │   ├── restock_handler.go
+│   │   ├── sale_handler.go
+│   │   ├── staff_handler.go
+│   │   └── variant_handler.go
+│   └── views
+│       ├── components
+│       │   ├── badge.templ
+│       │   ├── button.templ
+│       │   ├── doc.go
+│       │   ├── flash.templ
+│       │   ├── modal.templ
+│       │   ├── navbar.templ
+│       │   ├── sidebar.templ
+│       │   └── table.templ
+│       ├── layouts
+│       │   ├── base.templ
+│       │   └── doc.go
+│       ├── pages
+│       │   ├── analytics.templ
+│       │   ├── dashboard.templ
+│       │   ├── deadstock.templ
+│       │   ├── doc.go
+│       │   ├── login.templ
+│       │   ├── product_detail.templ
+│       │   ├── product_form.templ
+│       │   ├── products_list.templ
+│       │   ├── restock_form.templ
+│       │   ├── sale_form.templ
+│       │   ├── sales_list.templ
+│       │   └── staff.templ
+│       └── partials
+│           ├── best_sellers_table.templ
+│           ├── doc.go
+│           ├── flash_messages.templ
+│           ├── low_stock_widget.templ
+│           ├── product_row.templ
+│           ├── profit_cards.templ
+│           ├── restock_row.templ
+│           ├── sales_chart.templ
+│           └── variant_table.templ
+├── Makefile
+├── README.md
+├── sqlc.yaml
+└── text.txt
+
+22 directories, 93 files

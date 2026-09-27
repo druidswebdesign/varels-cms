@@ -1,0 +1,104 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+)
+
+// Staff lists the OAuth whitelist and offers invite / role / disable actions.
+templ Staff(users []sqlc.ApprovedUser, csrf string) {
+	@layouts.Base("Staff", "staff", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Staff</h1>
+		</div>
+
+		<form method="post" action="/staff/invite"
+			class="mb-6 flex max-w-3xl flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div>
+				<label for="email" class="mb-1 block text-xs font-medium text-gray-600">Email</label>
+				<input id="email" name="email" type="email" required class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="display_name" class="mb-1 block text-xs font-medium text-gray-600">Display name</label>
+				<input id="display_name" name="display_name" type="text" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="role" class="mb-1 block text-xs font-medium text-gray-600">Role</label>
+				<select id="role" name="role" class="rounded-md border border-gray-300 px-3 py-2 text-sm">
+					<option value="staff">staff</option>
+					<option value="admin">admin</option>
+				</select>
+			</div>
+			<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Invite</button>
+		</form>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Email</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Name</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Role</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Provider</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Status</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Last login</th>
+					<th class="px-4 py-2"></th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				for _, u := range users {
+					<tr class="hover:bg-gray-50">
+						<td class="px-4 py-2 font-medium text-gray-900">{ u.Email }</td>
+						<td class="px-4 py-2">{ format.NullString(u.DisplayName) }</td>
+						<td class="px-4 py-2">
+							<form method="post" action={ "/staff/" + fmt.Sprint(u.ID) + "/role" } class="flex items-center gap-2">
+								<input type="hidden" name="csrf_token" value={ csrf }/>
+								<select name="role" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+									<option value="staff" selected?={ string(u.Role) == "staff" }>staff</option>
+									<option value="admin" selected?={ string(u.Role) == "admin" }>admin</option>
+								</select>
+								<button type="submit" class="text-sm text-gray-600 hover:text-gray-900">Save</button>
+							</form>
+						</td>
+						<td class="px-4 py-2 text-gray-500">{ string(u.Provider) }</td>
+						<td class="px-4 py-2">
+							if u.IsActive == 1 {
+								@components.Badge("Active", "success")
+							} else {
+								@components.Badge("Disabled", "danger")
+							}
+						</td>
+						<td class="px-4 py-2 text-gray-500">{ format.NullString(u.LastLoginAt) }</td>
+						<td class="px-4 py-2 text-right">
+							<div class="flex items-center justify-end gap-2">
+								if string(u.Provider) == "local" {
+									<form method="post" action={ "/staff/" + fmt.Sprint(u.ID) + "/reset-password" } class="flex items-center gap-1">
+										<input type="hidden" name="csrf_token" value={ csrf }/>
+										<input name="password" type="password" minlength="8" placeholder="new password"
+											class="w-32 rounded-md border border-gray-300 px-2 py-1 text-sm"/>
+										<button type="submit" class="text-sm text-gray-600 hover:text-gray-900">Reset</button>
+									</form>
+								}
+								if u.IsActive == 1 {
+									<form method="post" action={ "/staff/" + fmt.Sprint(u.ID) + "/disable" }>
+										<input type="hidden" name="csrf_token" value={ csrf }/>
+										<button type="submit" class="text-sm text-red-600 hover:text-red-800">Disable</button>
+									</form>
+								} else {
+									<form method="post" action={ "/staff/" + fmt.Sprint(u.ID) + "/enable" }>
+										<input type="hidden" name="csrf_token" value={ csrf }/>
+										<button type="submit" class="text-sm text-green-700 hover:text-green-900">Enable</button>
+									</form>
+								}
+							</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		}
+	}
+}

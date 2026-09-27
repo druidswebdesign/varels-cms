@@ -1,0 +1,64 @@
+package pages
+
+import (
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/yourname/varels_cms/internal/views/partials"
+)
+
+// StockMovements renders the append-only ledger (ADR-0010, ADR-0017).
+templ StockMovements(movements []sqlc.StockMovement, skus map[int64]string, locations map[int64]string, csrf string) {
+	@layouts.Base("Stock movements", "restocks", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<h1 class="text-xl font-semibold">Stock movements</h1>
+			<a href="/restocks" class="text-sm text-gray-600 hover:text-gray-900">Restocks only</a>
+		</div>
+
+		<form method="get" action="/stock-movements" class="mb-4 flex flex-wrap items-end gap-3">
+			<div>
+				<label for="variant" class="mb-1 block text-xs font-medium text-gray-600">Variant ID</label>
+				<input id="variant" name="variant" type="number" class="w-28 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="location" class="mb-1 block text-xs font-medium text-gray-600">Location ID</label>
+				<input id="location" name="location" type="number" class="w-28 rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="ref_type" class="mb-1 block text-xs font-medium text-gray-600">Ref type</label>
+				<select id="ref_type" name="ref_type" class="rounded-md border border-gray-300 px-3 py-2 text-sm">
+					<option value="">All</option>
+					<option value="order">order</option>
+					<option value="return">return</option>
+					<option value="adjustment">adjustment</option>
+					<option value="po_receipt">po_receipt</option>
+					<option value="transfer">transfer</option>
+					<option value="hold">hold</option>
+				</select>
+			</div>
+			<button type="submit" class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50">Filter</button>
+		</form>
+
+		@components.Table() {
+			<thead class="bg-gray-50">
+				<tr>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">When</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Variant</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Location</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">State</th>
+					<th class="px-4 py-2 text-right font-medium text-gray-500">Qty</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Ref</th>
+					<th class="px-4 py-2 text-left font-medium text-gray-500">Note</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-100">
+				if len(movements) == 0 {
+					<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">No movements found.</td></tr>
+				}
+				for _, m := range movements {
+					@partials.RestockRow(m, skus[m.VariantID], locations[m.LocationID])
+				}
+			</tbody>
+		}
+	}
+}

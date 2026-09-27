@@ -1,0 +1,24 @@
+package partials
+
+import "github.com/yourname/varels_cms/internal/views/flash"
+
+// FlashMessages renders one flash message (if any) inside the #flash slot.
+templ FlashMessages(f flash.Flash) {
+	if f.Message != "" {
+		if f.Tone == "error" {
+			<div role="alert" class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">{ f.Message }</div>
+		} else if f.Tone == "warning" {
+			<div role="alert" class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">{ f.Message }</div>
+		} else {
+			<div role="alert" class="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">{ f.Message }</div>
+		}
+	}
+}
+
+// FlashOOB is the flash slot returned by an HTMX response so the message swaps
+// out-of-band into #flash without a full page reload.
+templ FlashOOB(f flash.Flash) {
+	<div id="flash" hx-swap-oob="true" class="mb-4">
+		@FlashMessages(f)
+	</div>
+}

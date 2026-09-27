@@ -1,0 +1,166 @@
+package pages
+
+import (
+	"fmt"
+
+	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
+	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/yourname/varels_cms/internal/views/partials"
+)
+
+// ProductDetail shows a product, its media, collections, variants and forms for
+// adding variants, media and collection assignments.
+templ ProductDetail(p sqlc.Product, categoryName string, variants []sqlc.ProductVariant, media []sqlc.ProductMedium, collections []sqlc.Collection, allCollections []sqlc.Collection, csrf string) {
+	@layouts.Base(p.Name, "products", csrf) {
+		<div class="mb-4 flex items-center justify-between">
+			<div>
+				<div class="flex items-center gap-2">
+					<h1 class="text-xl font-semibold">{ p.Name }</h1>
+					if p.IsArchived == 1 {
+						@components.Badge("Archived", "warning")
+					}
+				</div>
+				<p class="text-sm text-gray-500">{ p.Slug }</p>
+			</div>
+			<div class="flex items-center gap-3">
+				<a href={ "/products/" + fmt.Sprint(p.ID) + "/edit" } class="text-sm text-gray-600 hover:text-gray-900">Edit</a>
+				<a href="/products" class="text-sm text-gray-500 hover:text-gray-700">Back</a>
+			</div>
+		</div>
+
+		<div class="mb-6 grid gap-4 sm:grid-cols-2">
+			<div class="rounded-lg border border-gray-200 bg-white p-4">
+				<h2 class="mb-2 text-sm font-medium text-gray-500">Details</h2>
+				<dl class="space-y-1 text-sm">
+					<div class="flex justify-between"><dt class="text-gray-500">Category</dt><dd>{ categoryName }</dd></div>
+					<div class="flex justify-between"><dt class="text-gray-500">Variants</dt><dd>{ fmt.Sprint(len(variants)) }</dd></div>
+				</dl>
+				if p.Description.Valid {
+					<p class="mt-3 text-sm text-gray-700">{ p.Description.String }</p>
+				}
+			</div>
+
+			<div class="rounded-lg border border-gray-200 bg-white p-4">
+				<h2 class="mb-2 text-sm font-medium text-gray-500">Collections</h2>
+				if len(allCollections) == 0 {
+					<p class="text-sm text-gray-500">No collections defined. <a href="/collections" class="text-blue-600 hover:underline">Create one</a>.</p>
+				} else {
+					<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/collections" } class="space-y-2">
+						<input type="hidden" name="csrf_token" value={ csrf }/>
+						for _, c := range allCollections {
+							<label class="flex items-center gap-2 text-sm text-gray-700">
+								<input type="checkbox" name="collection_id" value={ fmt.Sprint(c.ID) } checked?={ inCollections(collections, c.ID) }/>
+								{ c.Name }
+								<span class="text-xs text-gray-400">{ string(c.Kind) }</span>
+							</label>
+						}
+						<button type="submit" class="mt-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50">Save collections</button>
+					</form>
+				}
+			</div>
+		</div>
+
+		<div class="mb-6 rounded-lg border border-gray-200 bg-white p-4">
+			<h2 class="mb-2 text-sm font-medium text-gray-500">Media</h2>
+			if len(media) == 0 {
+				<p class="text-sm text-gray-500">No media linked.</p>
+			} else {
+				<ul class="mb-3 space-y-1 text-sm">
+					for _, m := range media {
+						<li class="flex items-center justify-between">
+							<span class="flex items-center gap-2">
+								<a href={ m.Url } class="truncate text-blue-600 hover:underline">{ m.Url }</a>
+								<span class="text-xs text-gray-400">{ string(m.MediaType) }</span>
+								if m.IsPrimary == 1 {
+									@components.Badge("primary", "info")
+								}
+							</span>
+							<form method="post" action={ "/media/" + fmt.Sprint(m.ID) + "/delete" }>
+								<input type="hidden" name="csrf_token" value={ csrf }/>
+								<input type="hidden" name="product_id" value={ fmt.Sprint(p.ID) }/>
+								<button type="submit" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+							</form>
+						</li>
+					}
+				</ul>
+			}
+			<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/media" }
+				class="flex flex-wrap items-end gap-3">
+				<input type="hidden" name="csrf_token" value={ csrf }/>
+				<div class="grow">
+					<label for="media_url" class="mb-1 block text-xs font-medium text-gray-600">URL</label>
+					<input id="media_url" name="url" type="text" required placeholder="/assets/img/photo.jpg" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="media_type" class="mb-1 block text-xs font-medium text-gray-600">Type</label>
+					<select id="media_type" name="media_type" class="rounded-md border border-gray-300 px-3 py-2 text-sm">
+						<option value="image">image</option>
+						<option value="size_chart">size_chart</option>
+						<option value="video">video</option>
+					</select>
+				</div>
+				<div>
+					<label for="alt_text" class="mb-1 block text-xs font-medium text-gray-600">Alt text</label>
+					<input id="alt_text" name="alt_text" type="text" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				</div>
+				<label class="flex items-center gap-2 pb-2 text-sm text-gray-600">
+					<input type="checkbox" name="is_primary" value="1"/>
+					Primary
+				</label>
+				<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Add media</button>
+			</form>
+		</div>
+
+		<h2 class="mb-2 text-lg font-semibold">Variants</h2>
+		@partials.VariantTable(p.ID, variants, csrf)
+
+		<h2 class="mb-2 mt-6 text-lg font-semibold">Add variant</h2>
+		<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/variants" }
+			hx-post={ "/products/" + fmt.Sprint(p.ID) + "/variants" }
+			hx-target="#variant-table" hx-swap="outerHTML"
+			class="grid max-w-3xl grid-cols-2 gap-3 rounded-lg border border-gray-200 bg-white p-4 md:grid-cols-4">
+			<input type="hidden" name="csrf_token" value={ csrf }/>
+			<div class="col-span-2 md:col-span-1">
+				<label for="sku" class="mb-1 block text-xs font-medium text-gray-600">SKU</label>
+				<input id="sku" name="sku" type="text" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="size" class="mb-1 block text-xs font-medium text-gray-600">Size</label>
+				<input id="size" name="size" type="text" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="color" class="mb-1 block text-xs font-medium text-gray-600">Color</label>
+				<input id="color" name="color" type="text" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="cost" class="mb-1 block text-xs font-medium text-gray-600">Cost (ARS)</label>
+				<input id="cost" name="cost" type="number" min="0" step="1" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="retail" class="mb-1 block text-xs font-medium text-gray-600">Retail (ARS)</label>
+				<input id="retail" name="retail" type="number" min="0" step="1" required class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="wholesale" class="mb-1 block text-xs font-medium text-gray-600">Wholesale (ARS)</label>
+				<input id="wholesale" name="wholesale" type="number" min="0" step="1" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div>
+				<label for="threshold" class="mb-1 block text-xs font-medium text-gray-600">Low-stock threshold</label>
+				<input id="threshold" name="threshold" type="number" min="0" step="1" value="0" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+			</div>
+			<div class="col-span-2 flex items-end md:col-span-4">
+				<button type="submit" class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">Add variant</button>
+			</div>
+		</form>
+	}
+}
+
+func inCollections(collections []sqlc.Collection, id int64) bool {
+	for _, c := range collections {
+		if c.ID == id {
+			return true
+		}
+	}
+	return false
+}
