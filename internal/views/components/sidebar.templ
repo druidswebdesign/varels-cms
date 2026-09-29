@@ -1,28 +1,66 @@
 package components
 
-// Sidebar renders the primary navigation. active is the current section key.
+// Sidebar is the primary navigation, styled after the shadcn dashboard shell.
+// On large screens it is a fixed rail; on small screens it slides in as a
+// drawer, driven by the `sidebarOpen` Alpine state declared in layouts.Base.
 templ Sidebar(active string) {
-	<nav class="flex w-56 shrink-0 flex-col gap-1 border-r border-gray-200 bg-white p-3 text-sm">
-		@sidebarLink("/dashboard", "dashboard", "Dashboard", active)
-		@sidebarLink("/products", "products", "Products", active)
-		@sidebarLink("/collections", "collections", "Collections", active)
-		@sidebarLink("/restocks", "restocks", "Restock", active)
-		@sidebarLink("/holds", "holds", "Stock holds", active)
-		@sidebarLink("/sales", "sales", "Sales", active)
-		@sidebarLink("/customers", "customers", "Customers", active)
-		@sidebarLink("/suppliers", "suppliers", "Suppliers", active)
-		@sidebarLink("/analytics", "analytics", "Analytics", active)
-		@sidebarLink("/deadstock", "deadstock", "Deadstock", active)
-		@sidebarLink("/expenses", "expenses", "Expenses", active)
-		@sidebarLink("/staff", "staff", "Staff", active)
-		@sidebarLink("/audit", "audit", "Audit log", active)
-	</nav>
+	<div x-show="sidebarOpen" x-cloak x-transition.opacity @click="sidebarOpen = false"
+		class="fixed inset-0 z-40 bg-black/50 lg:hidden"></div>
+
+	<aside x-bind:style={ "sidebarOpen ? 'transform: translateX(0)' : ''" }
+		class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform duration-200 lg:translate-x-0">
+		<div class="flex h-14 items-center gap-2 border-b border-sidebar-border px-4">
+			<img src="/assets/img/logo.svg" alt="" class="h-6 w-6"/>
+			<span class="text-sm font-semibold tracking-tight">varels_cms</span>
+		</div>
+
+		<nav class="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+			@navGroup("Overview") {
+				@sidebarLink("/dashboard", "dashboard", "Dashboard", "dashboard", active)
+				@sidebarLink("/analytics", "analytics", "Analytics", "chart", active)
+			}
+			@navGroup("Catalog") {
+				@sidebarLink("/products", "products", "Products", "package", active)
+				@sidebarLink("/collections", "collections", "Collections", "layers", active)
+			}
+			@navGroup("Inventory") {
+				@sidebarLink("/restocks", "restocks", "Restock", "truck", active)
+				@sidebarLink("/holds", "holds", "Stock holds", "lock", active)
+				@sidebarLink("/deadstock", "deadstock", "Deadstock", "trending-down", active)
+			}
+			@navGroup("Sales") {
+				@sidebarLink("/sales", "sales", "Sales", "cart", active)
+				@sidebarLink("/customers", "customers", "Customers", "users", active)
+			}
+			@navGroup("Finance") {
+				@sidebarLink("/expenses", "expenses", "Expenses", "receipt", active)
+			}
+			@navGroup("Administration") {
+				@sidebarLink("/suppliers", "suppliers", "Suppliers", "factory", active)
+				@sidebarLink("/staff", "staff", "Staff", "user", active)
+				@sidebarLink("/audit", "audit", "Audit log", "scroll", active)
+			}
+		</nav>
+	</aside>
 }
 
-templ sidebarLink(href string, key string, label string, active string) {
+templ navGroup(label string) {
+	<div class="space-y-1">
+		<p class="px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">{ label }</p>
+		{ children... }
+	</div>
+}
+
+templ sidebarLink(href string, key string, label string, icon string, active string) {
 	if active == key {
-		<a href={ href } class="rounded-md bg-gray-100 px-3 py-2 font-medium text-gray-900">{ label }</a>
+		<a href={ href } class="flex items-center gap-2.5 rounded-md bg-sidebar-accent px-3 py-2 text-sm font-medium text-sidebar-accent-foreground">
+			@Icon(icon, "h-4 w-4 shrink-0")
+			<span>{ label }</span>
+		</a>
 	} else {
-		<a href={ href } class="rounded-md px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900">{ label }</a>
+		<a href={ href } class="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+			@Icon(icon, "h-4 w-4 shrink-0")
+			<span>{ label }</span>
+		</a>
 	}
 }

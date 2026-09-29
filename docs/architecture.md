@@ -65,11 +65,13 @@ pragmatic, and highly cohesive**.
 ├── docs                             # Spec-Driven Development (keep these!)
 │   ├── architecture.md              # this file: stack + folder structure
 │   ├── auth.md
+│   ├── frontend.md                  # UI/design system: tokens, shell, components
 │   ├── functions.md
 │   ├── overview.md
 │   ├── routes.md
 │   ├── schema.md
 │   ├── spec-driven-dev.md
+│   ├── testing.md
 │   └── ai-tracking.md
 │
 ├── assets                           # Static files served by your router
@@ -273,6 +275,8 @@ thousands of lines of custom CSS.
 - **Pro-tip for Go:** Don't install Node.js just for CSS. Download the official
   Tailwind Standalone CLI binary and your project stays 100% free of npm and
   `node_modules`.
+- **Design system:** the shadcn-style tokens, dashboard shell and component
+  conventions are specified in `docs/frontend.md`.
 
 ### 4.2 Database layer — sqlc (type-safe SQL compiler)
 

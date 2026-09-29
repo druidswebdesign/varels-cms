@@ -6,11 +6,11 @@ import "github.com/yourname/varels_cms/internal/views/flash"
 templ FlashMessages(f flash.Flash) {
 	if f.Message != "" {
 		if f.Tone == "error" {
-			<div role="alert" class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">{ f.Message }</div>
+			<div role="alert" class="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{ f.Message }</div>
 		} else if f.Tone == "warning" {
-			<div role="alert" class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">{ f.Message }</div>
+			<div role="alert" class="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-300">{ f.Message }</div>
 		} else {
-			<div role="alert" class="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">{ f.Message }</div>
+			<div role="status" class="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-300">{ f.Message }</div>
 		}
 	}
 }

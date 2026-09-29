@@ -176,6 +176,7 @@ These are binding across every feature and every contributor (human or AI):
 | What features/functions must exist?      | `docs/functions.md`       |
 | How is data modeled?                     | `docs/schema.md`          |
 | What HTTP surface and UI flows?          | `docs/routes.md`          |
+| How is the UI styled and built?          | `docs/frontend.md`        |
 | What was decided and why?                | `adr.md`                  |
 | Stack & structure                        | `docs/architecture.md`    |
 | Auth model                               | `docs/auth.md`            |

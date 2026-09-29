@@ -33,8 +33,8 @@ function showFlash(message, tone) {
   el.setAttribute("role", "alert");
   el.className =
     tone === "error"
-      ? "mb-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
-      : "mb-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800";
+      ? "mb-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+      : "mb-2 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-300";
   el.textContent = message;
   host.prepend(el);
   setTimeout(() => el.remove(), 6000);
@@ -47,6 +47,20 @@ document.addEventListener("alpine:init", () => {
       showFlash(message, tone);
     },
   });
+
+  // Theme toggle (components/navbar.templ). `dark` starts from the class the
+  // inline <head> script already applied, so there is no flash on first paint.
+  window.Alpine.data("theme", () => ({
+    dark: document.documentElement.classList.contains("dark"),
+    toggle() {
+      this.dark = !this.dark;
+      document.documentElement.classList.toggle("dark", this.dark);
+      try {
+        localStorage.setItem("theme", this.dark ? "dark" : "light");
+      } catch (e) {}
+      window.dispatchEvent(new CustomEvent("app:theme", { detail: { dark: this.dark } }));
+    },
+  }));
 
   // POS line editor (pages/sale_form.templ). Keeps repeated field names so the
   // handler still receives variant_id/quantity/unit_price/line_discount arrays.

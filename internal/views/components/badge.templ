@@ -4,14 +4,14 @@ package components
 // danger, info.
 templ Badge(label string, tone string) {
 	if tone == "success" {
-		<span class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">{ label }</span>
+		<span class="inline-flex items-center rounded-full border border-transparent bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300">{ label }</span>
 	} else if tone == "warning" {
-		<span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">{ label }</span>
+		<span class="inline-flex items-center rounded-full border border-transparent bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">{ label }</span>
 	} else if tone == "danger" {
-		<span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">{ label }</span>
+		<span class="inline-flex items-center rounded-full border border-transparent bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800 dark:bg-red-500/15 dark:text-red-300">{ label }</span>
 	} else if tone == "info" {
-		<span class="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">{ label }</span>
+		<span class="inline-flex items-center rounded-full border border-transparent bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-500/15 dark:text-blue-300">{ label }</span>
 	} else {
-		<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">{ label }</span>
+		<span class="inline-flex items-center rounded-full border border-transparent bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">{ label }</span>
 	}
 }

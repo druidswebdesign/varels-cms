@@ -530,3 +530,53 @@ before any further frontend or feature work. `ai-tracking.md` had flagged
 - Order 3 — frontend polish: convert `restock_form.templ` to HTMX fragments and
   replace the remaining `?err=` redirects with flash/OOB toasts.
 - Order 4 — the daily low-stock email digest.
+
+### 2026-09-29 — Frontend: shadcn dashboard shell (start)
+
+Started the shadcn-inspired dashboard redesign on top of the verified core. Built
+the design-token layer and the app shell; per-page migration is intentionally
+incremental, so untouched pages keep rendering inside the new shell.
+
+#### Added / changed
+
+- `assets/css/input.css` — shadcn design tokens (`--background`, `--card`,
+  `--primary`, `--muted`, `--border`, `--sidebar-*`, `--radius`, light + `.dark`)
+  mapped through `@theme inline`, plus a dark `@custom-variant` and base layer.
+  Added `@source "../../assets/js"` so classes built in JS are scanned.
+- `internal/views/components/icons.templ` — new inline lucide-style `Icon(name,
+  class)` set (nav + header glyphs), no npm/CDN dependency.
+- `internal/views/components/card.templ` — `Card`, `CardHeader`, `CardTitle`,
+  `CardDescription`, `CardContent`, `CardFooter`, `StatCard`.
+- `internal/views/components/sidebar.templ` — grouped icon sidebar with active
+  state; slides in as an Alpine drawer below `lg`.
+- `internal/views/components/navbar.templ` — sticky header: mobile trigger, page
+  title, product search, theme toggle, sign-out.
+- `internal/views/layouts/base.templ` — sidebar + header shell, `sidebarOpen`
+  Alpine scope, pre-paint theme script (no dark-mode flash).
+- `internal/views/components/{button,badge,table,flash}.templ` — retokenised.
+- `internal/views/pages/dashboard.templ` — rebuilt on cards/stat cards; HTMX
+  targets (`#profit-cards`, `#low-stock`) preserved.
+- `internal/views/partials/{profit_cards,low_stock_widget,flash_messages}.templ`
+  — retokenised to card primitives.
+- `assets/js/app.js` — `Alpine.data("theme")` toggle persisted in
+  `localStorage`; toast classes moved to tokens. `app.css` regenerated.
+- `docs/frontend.md` — new UI/design-system spec (tokens, shell, components,
+  conventions, migration status), linked from `overview.md`, `architecture.md`
+  and `ai-tracking.md`.
+
+#### Verification
+
+- `templ generate`, `go build ./...`, `go vet ./...`, `gofmt -l`, `node --check
+  assets/js/app.js` — clean; `go test ./...` — 13 tests pass.
+- Live smoke (temp DB, `:8099`, dev login): `/dashboard` 200 and contains the
+  shell (`sidebarOpen`, `bg-sidebar`, `#profit-cards`, `#low-stock`, search);
+  `/dashboard/profit-cards`, `/dashboard/low-stock` and the main list pages all
+  return 200 with no panics. Generated CSS contains `.bg-card`, `.bg-sidebar`,
+  `.text-muted-foreground`, `lg:translate-x-0` and `.dark:` variants.
+
+#### Deferred (next)
+
+- Convert `restock_form.templ` + `?err=` forms to HTMX fragments (testing.md
+  order 3) using the new card/toast primitives.
+- Sweep the remaining pages from `border-gray-200`/`bg-white` to semantic tokens.
+

@@ -1,0 +1,60 @@
+package components
+
+// Card is the shadcn-style surface used across the dashboard.
+templ Card() {
+	<div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+		{ children... }
+	</div>
+}
+
+// CardHeader stacks the title, description and optional action row.
+templ CardHeader() {
+	<div class="flex flex-col gap-1.5 p-6">
+		{ children... }
+	</div>
+}
+
+// CardTitle is the primary heading inside a CardHeader.
+templ CardTitle() {
+	<h3 class="font-semibold leading-none tracking-tight">{ children... }</h3>
+}
+
+// CardDescription is the muted supporting line under a CardTitle.
+templ CardDescription() {
+	<p class="text-sm text-muted-foreground">{ children... }</p>
+}
+
+// CardContent is the padded body of a card.
+templ CardContent() {
+	<div class="p-6 pt-0">
+		{ children... }
+	</div>
+}
+
+// CardFooter is the bottom action row of a card.
+templ CardFooter() {
+	<div class="flex items-center p-6 pt-0">
+		{ children... }
+	</div>
+}
+
+// StatCard is a compact KPI card. tone is one of: neutral, success, danger, info.
+templ StatCard(label string, value string, tone string) {
+	<div class="rounded-xl border bg-card p-6 text-card-foreground shadow-sm">
+		<p class="text-sm font-medium text-muted-foreground">{ label }</p>
+		<p class={"mt-2 text-2xl font-semibold tracking-tight " + statToneClass(tone)}>{ value }</p>
+	</div>
+}
+
+func statToneClass(tone string) string {
+	switch tone {
+		case "success":
+			return "text-emerald-600 dark:text-emerald-400"
+		case "danger":
+			return "text-red-600 dark:text-red-400"
+		case "info":
+			return "text-blue-600 dark:text-blue-400"
+		default:
+			return "text-foreground"
+	}
+}

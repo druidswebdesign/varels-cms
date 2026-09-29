@@ -4,26 +4,31 @@ import (
 	"fmt"
 
 	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/yourname/varels_cms/internal/views/components"
 )
 
 // LowStockWidget is the HTMX-refreshable low-stock list (routes.md §3.1).
 templ LowStockWidget(rows []sqlc.StockLevel, skus map[int64]string, thresholds map[int64]int64) {
-	<div id="low-stock" class="rounded-lg border border-gray-200 bg-white p-4">
-		<div class="mb-2 flex items-center justify-between">
-			<h2 class="text-sm font-medium text-gray-700">Low stock</h2>
-			<a href="/restocks" class="text-xs text-gray-500 hover:text-gray-700">Restock</a>
-		</div>
-		if len(rows) == 0 {
-			<p class="text-sm text-gray-500">Everything is above threshold.</p>
-		} else {
-			<ul class="divide-y divide-gray-100 text-sm">
-				for _, r := range rows {
-					<li class="flex items-center justify-between py-2">
-						<a href={ "/variants/" + fmt.Sprint(r.VariantID) + "/restock" } class="text-gray-900 hover:underline">{ skus[r.VariantID] }</a>
-						<span class="text-gray-500">{ fmt.Sprint(r.Quantity) } / { fmt.Sprint(thresholds[r.VariantID]) }</span>
-					</li>
+	<div id="low-stock">
+		@components.Card() {
+			<div class="flex items-center justify-between p-6 pb-2">
+				@components.CardTitle() { Low stock }
+				<a href="/restocks" class="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">Restock →</a>
+			</div>
+			@components.CardContent() {
+				if len(rows) == 0 {
+					<p class="text-sm text-muted-foreground">Everything is above threshold.</p>
+				} else {
+					<ul class="text-sm">
+						for _, r := range rows {
+							<li class="flex items-center justify-between border-b border-border/60 py-2 last:border-0">
+								<a href={ "/variants/" + fmt.Sprint(r.VariantID) + "/restock" } class="font-medium hover:underline">{ skus[r.VariantID] }</a>
+								<span class="text-muted-foreground">{ fmt.Sprint(r.Quantity) } / { fmt.Sprint(thresholds[r.VariantID]) }</span>
+							</li>
+						}
+					</ul>
 				}
-			</ul>
+			}
 		}
 	</div>
 }

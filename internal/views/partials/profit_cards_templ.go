@@ -5,9 +5,11 @@ package partials
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
+import "github.com/a-h/templ"
+import templruntime "github.com/a-h/templ/runtime"
+
 import (
-	"github.com/a-h/templ"
-	templruntime "github.com/a-h/templ/runtime"
+	"github.com/yourname/varels_cms/internal/views/components"
 	"github.com/yourname/varels_cms/internal/views/format"
 )
 
@@ -33,90 +35,35 @@ func ProfitCards(revenueMinor int64, cogsMinor int64, grossMinor int64, opexMino
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"profit-cards\" class=\"grid gap-4 sm:grid-cols-3\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"profit-cards\" class=\"mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = profitCard("Revenue", format.Money(revenueMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.StatCard("Revenue", format.Money(revenueMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = profitCard("Gross profit", format.Money(grossMinor), "info").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.StatCard("Gross profit", format.Money(grossMinor), "info").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = profitCard("Net profit", format.Money(netMinor), toneFor(netMinor)).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.StatCard("Net profit", format.Money(netMinor), toneFor(netMinor)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = profitCard("COGS", format.Money(cogsMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.StatCard("COGS", format.Money(cogsMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = profitCard("OpEx", format.Money(opexMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.StatCard("OpEx", format.Money(opexMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = profitCard("Gross margin", format.PercentOf(grossMinor, revenueMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.StatCard("Gross margin", format.PercentOf(grossMinor, revenueMinor), "neutral").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func profitCard(label string, value string, tone string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"rounded-lg border border-gray-200 bg-white p-4\"><p class=\"text-sm text-gray-500\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(label)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/profit_cards.templ`, Line: 21, Col: 42}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</p><p class=\"mt-1 text-2xl font-semibold { valueClass(tone) }\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(value)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/profit_cards.templ`, Line: 22, Col: 69}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -129,19 +76,6 @@ func toneFor(v int64) string {
 		return "danger"
 	}
 	return "success"
-}
-
-func valueClass(tone string) string {
-	switch tone {
-	case "success":
-		return "text-green-700"
-	case "danger":
-		return "text-red-600"
-	case "info":
-		return "text-blue-700"
-	default:
-		return "text-gray-900"
-	}
 }
 
 var _ = templruntime.GeneratedTemplate

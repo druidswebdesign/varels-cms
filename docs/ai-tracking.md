@@ -5,7 +5,7 @@
 > [`implementation.md`](implementation.md). Update this file when the shape of
 > the project (routes, wiring, tooling) changes.
 
-**Last updated:** 2026-09-27 (money-path + ledger tests added).
+**Last updated:** 2026-09-29 (shadcn dashboard shell + design tokens).
 
 ---
 
@@ -23,7 +23,7 @@ without reading every log entry.
 | -------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Backend routes | Complete for the documented spec: **86 routes wired** in `cmd/server/main.go`                                        |
 | Handlers       | **22 files**, **85 `Handle*` methods** under `internal/handlers/`                                                    |
-| Views          | **46 templ files** (`pages/`, `partials/`, `components/`, `layouts/`)                                                |
+| Views          | **48 templ files** (`pages/`, `partials/`, `components/`, `layouts/`)                                                |
 | DB layer       | sqlc-generated + goose migrations `0001`–`0003`, `schema.sql` mirrored                                               |
 | Tests          | **13** integration tests in `internal/handlers/*_test.go` (money paths + ledger invariants); see `docs/testing.md`    |
 | Source size    | ~**10,650** hand-written Go lines, ~**2,869** templ lines (generated `*_templ.go` and `internal/db/sqlc/*` excluded) |
@@ -37,6 +37,25 @@ Only genuinely unimplemented feature: the daily low-stock email digest
 
 Browser libraries are vendored in `assets/js/` (not Go modules): HTMX 2.0.4 and
 Alpine.js 3.14.9, loaded from `layouts/base.templ` (ADR-0022).
+
+### Design system (shadcn-style)
+
+Full spec — tokens, shell, components, conventions and migration status — lives
+in [`docs/frontend.md`](frontend.md). Summary:
+
+`assets/css/input.css` defines shadcn design tokens (`--background`, `--card`,
+`--primary`, `--muted`, `--border`, `--sidebar-*`, `--radius`) with light and
+`.dark` values, exposed as Tailwind utilities via `@theme inline`. Use the
+semantic classes (`bg-card`, `text-muted-foreground`, `border-border`,
+`bg-sidebar`, …) in new markup instead of raw `gray-*`/`white`.
+
+The shell in `layouts/base.templ` is a fixed icon sidebar (`components/sidebar.templ`,
+grouped, active state, Alpine drawer under `lg`) plus a sticky header
+(`components/navbar.templ`: title, product search, theme toggle, sign-out).
+Reusable primitives live in `components/`: `card.templ` (`Card*`, `StatCard`),
+`icons.templ` (`Icon` inline lucide set). Dark mode is toggled by
+`Alpine.data("theme")` in `app.js` and applied pre-paint by an inline `<head>`
+script. Migration of the older pages from `gray-*` to tokens is in progress.
 
 ### HTMX (`hx-*`, 35 attributes)
 
