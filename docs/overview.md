@@ -181,6 +181,7 @@ These are binding across every feature and every contributor (human or AI):
 | Auth model                               | `docs/auth.md`            |
 | How we build it with AI                  | `docs/spec-driven-dev.md` |
 | What exists now & how AI work is tracked | `docs/ai-tracking.md`     |
+| How money/inventory paths are verified   | `docs/testing.md`         |
 
 **Status:** implemented through analytics and the full route surface — auth,
 catalog (products, variants, collections, media), inventory (restock,

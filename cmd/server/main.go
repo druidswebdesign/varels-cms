@@ -15,7 +15,15 @@ import (
 
 	"github.com/yourname/varels_cms/internal/auth"
 	"github.com/yourname/varels_cms/internal/db"
-	"github.com/yourname/varels_cms/internal/handlers"
+	"github.com/yourname/varels_cms/internal/handlers/admin"
+	"github.com/yourname/varels_cms/internal/handlers/analytics"
+	"github.com/yourname/varels_cms/internal/handlers/authweb"
+	"github.com/yourname/varels_cms/internal/handlers/catalog"
+	"github.com/yourname/varels_cms/internal/handlers/common"
+	"github.com/yourname/varels_cms/internal/handlers/finance"
+	"github.com/yourname/varels_cms/internal/handlers/inventory"
+	"github.com/yourname/varels_cms/internal/handlers/middleware"
+	"github.com/yourname/varels_cms/internal/handlers/sales"
 )
 
 // config holds runtime configuration loaded from the environment.
@@ -80,7 +88,7 @@ func main() {
 		log.Fatalf("server: %v", err)
 	}
 
-	srv := handlers.NewServer(sqldb, cfg.DBPath, cfg.Env)
+	srv := common.NewServer(sqldb, cfg.DBPath, cfg.Env)
 	srv.Sessions = auth.NewManager(srv.Q, 24*time.Hour, secure)
 	srv.Limiter = auth.NewLoginLimiter(5, 15*time.Minute)
 	srv.OAuthEnabled = cfg.GoogleClientID != "" && cfg.GoogleClientSecret != ""
@@ -124,135 +132,143 @@ func main() {
 }
 
 // routes mounts the HTTP handler tree (docs/routes.md).
-func routes(s *handlers.Server) http.Handler {
+func routes(s *common.Server) http.Handler {
 	r := chi.NewRouter()
 
-	r.Use(handlers.RequestID)
-	r.Use(handlers.Logger)
-	r.Use(handlers.Recover)
-	r.Use(handlers.CSRF)
+	authh := authweb.New(s)
+	adminh := admin.New(s)
+	catalogh := catalog.New(s)
+	salesh := sales.New(s)
+	inventoryh := inventory.New(s)
+	financeh := finance.New(s)
+	analyticsh := analytics.New(s)
+
+	r.Use(middleware.RequestID)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recover)
+	r.Use(middleware.CSRF)
 	r.Use(s.Sessions.LoadAndSave)
 	r.Use(s.FlashFromSession)
 
 	r.Handle("/assets/*", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	r.Get("/healthz", s.HandleHealth)
+	r.Get("/healthz", adminh.HandleHealth)
 
 	// Public auth routes.
-	r.Get("/login", s.HandleLoginPage)
-	r.Get("/auth/google", s.HandleGoogleBegin)
-	r.Get("/auth/google/callback", s.HandleGoogleCallback)
-	r.Get("/auth/denied", s.HandleAccessDenied)
-	r.Get("/admin-login", s.HandleAdminLoginPage)
-	r.Post("/admin-login", s.HandleAdminLogin)
-	r.Post("/logout", s.HandleLogout)
+	r.Get("/login", authh.HandleLoginPage)
+	r.Get("/auth/google", authh.HandleGoogleBegin)
+	r.Get("/auth/google/callback", authh.HandleGoogleCallback)
+	r.Get("/auth/denied", authh.HandleAccessDenied)
+	r.Get("/admin-login", authh.HandleAdminLoginPage)
+	r.Post("/admin-login", authh.HandleAdminLogin)
+	r.Post("/logout", authh.HandleLogout)
 
 	r.Group(func(r chi.Router) {
 		r.Use(s.Sessions.RequireLogin)
 
-		r.Get("/", s.HandleIndex)
-		r.Get("/dashboard", s.HandleDashboard)
+		r.Get("/", adminh.HandleIndex)
+		r.Get("/dashboard", adminh.HandleDashboard)
 
-		r.Get("/products", s.HandleProductsList)
-		r.Get("/products/search", s.HandleProductsSearch)
-		r.Get("/products/new", s.HandleProductForm)
-		r.Post("/products", s.HandleProductCreate)
-		r.Get("/products/{id}", s.HandleProductDetail)
-		r.Get("/products/{id}/edit", s.HandleProductEdit)
-		r.Post("/products/{id}", s.HandleProductUpdate)
-		r.Post("/products/{id}/archive", s.HandleProductArchive)
-		r.Post("/products/{id}/restore", s.HandleProductRestore)
-		r.Post("/products/{id}/collections", s.HandleProductCollections)
-		r.Post("/products/{id}/media", s.HandleMediaCreate)
-		r.Post("/media/{id}/delete", s.HandleMediaDelete)
+		r.Get("/products", catalogh.HandleProductsList)
+		r.Get("/products/search", catalogh.HandleProductsSearch)
+		r.Get("/products/new", catalogh.HandleProductForm)
+		r.Post("/products", catalogh.HandleProductCreate)
+		r.Get("/products/{id}", catalogh.HandleProductDetail)
+		r.Get("/products/{id}/edit", catalogh.HandleProductEdit)
+		r.Post("/products/{id}", catalogh.HandleProductUpdate)
+		r.Post("/products/{id}/archive", catalogh.HandleProductArchive)
+		r.Post("/products/{id}/restore", catalogh.HandleProductRestore)
+		r.Post("/products/{id}/collections", catalogh.HandleProductCollections)
+		r.Post("/products/{id}/media", catalogh.HandleMediaCreate)
+		r.Post("/media/{id}/delete", catalogh.HandleMediaDelete)
 
 		// Collections.
-		r.Get("/collections", s.HandleCollectionsList)
-		r.Post("/collections", s.HandleCollectionCreate)
-		r.Post("/collections/{id}/archive", s.HandleCollectionArchive)
+		r.Get("/collections", catalogh.HandleCollectionsList)
+		r.Post("/collections", catalogh.HandleCollectionCreate)
+		r.Post("/collections/{id}/archive", catalogh.HandleCollectionArchive)
 
-		r.Get("/products/{id}/variants", s.HandleVariantTable)
-		r.Post("/products/{id}/variants", s.HandleVariantCreate)
-		r.Get("/variants/{id}/edit", s.HandleVariantForm)
-		r.Post("/variants/{id}", s.HandleVariantUpdate)
-		r.Post("/variants/{id}/archive", s.HandleVariantArchive)
-		r.Post("/variants/{id}/threshold", s.HandleVariantThreshold)
+		r.Get("/products/{id}/variants", catalogh.HandleVariantTable)
+		r.Post("/products/{id}/variants", catalogh.HandleVariantCreate)
+		r.Get("/variants/{id}/edit", catalogh.HandleVariantForm)
+		r.Post("/variants/{id}", catalogh.HandleVariantUpdate)
+		r.Post("/variants/{id}/archive", catalogh.HandleVariantArchive)
+		r.Post("/variants/{id}/threshold", catalogh.HandleVariantThreshold)
 
 		// Customers.
-		r.Get("/customers", s.HandleCustomersList)
-		r.Post("/customers", s.HandleCustomerCreate)
-		r.Get("/customers/{id}", s.HandleCustomerDetail)
-		r.Post("/customers/{id}", s.HandleCustomerUpdate)
+		r.Get("/customers", salesh.HandleCustomersList)
+		r.Post("/customers", salesh.HandleCustomerCreate)
+		r.Get("/customers/{id}", salesh.HandleCustomerDetail)
+		r.Post("/customers/{id}", salesh.HandleCustomerUpdate)
 
 		// Stock holds / reservations.
-		r.Get("/holds", s.HandleHoldsList)
-		r.Post("/holds", s.HandleHoldCreate)
-		r.Post("/holds/{id}/release", s.HandleHoldRelease)
+		r.Get("/holds", inventoryh.HandleHoldsList)
+		r.Post("/holds", inventoryh.HandleHoldCreate)
+		r.Post("/holds/{id}/release", inventoryh.HandleHoldRelease)
 
 		// Inventory: restock, adjustments, ledger.
-		r.Get("/restocks", s.HandleRestocksList)
-		r.Get("/variants/{id}/restock", s.HandleRestockForm)
-		r.Post("/variants/{id}/restock", s.HandleRestock)
-		r.Post("/variants/{id}/adjust", s.HandleAdjustStock)
-		r.Get("/stock-movements", s.HandleStockMovements)
-		r.Get("/dashboard/low-stock", s.HandleLowStockWidget)
+		r.Get("/restocks", inventoryh.HandleRestocksList)
+		r.Get("/variants/{id}/restock", inventoryh.HandleRestockForm)
+		r.Post("/variants/{id}/restock", inventoryh.HandleRestock)
+		r.Post("/variants/{id}/adjust", inventoryh.HandleAdjustStock)
+		r.Get("/stock-movements", inventoryh.HandleStockMovements)
+		r.Get("/dashboard/low-stock", inventoryh.HandleLowStockWidget)
 
 		// Sales / POS / returns.
-		r.Get("/sales", s.HandleSalesList)
-		r.Get("/sales/filter", s.HandleSalesFilter)
-		r.Get("/sales/new", s.HandleSaleForm)
-		r.Post("/sales", s.HandleSaleCreate)
-		r.Get("/sales/{id}", s.HandleSaleDetail)
-		r.Post("/sales/{id}/void", s.HandleSaleVoid)
-		r.Get("/sales/{id}/return", s.HandleReturnForm)
-		r.Post("/sales/{id}/return", s.HandleReturnCreate)
-		r.Post("/sales/{id}/payments", s.HandlePaymentCreate)
+		r.Get("/sales", salesh.HandleSalesList)
+		r.Get("/sales/filter", salesh.HandleSalesFilter)
+		r.Get("/sales/new", salesh.HandleSaleForm)
+		r.Post("/sales", salesh.HandleSaleCreate)
+		r.Get("/sales/{id}", salesh.HandleSaleDetail)
+		r.Post("/sales/{id}/void", salesh.HandleSaleVoid)
+		r.Get("/sales/{id}/return", salesh.HandleReturnForm)
+		r.Post("/sales/{id}/return", salesh.HandleReturnCreate)
+		r.Post("/sales/{id}/payments", salesh.HandlePaymentCreate)
 
 		// Exports (financial resources are gated inside the handler).
-		r.Get("/export/{resource}", s.HandleExport)
+		r.Get("/export/{resource}", financeh.HandleExport)
 
 		r.Group(func(r chi.Router) {
 			r.Use(s.Sessions.RequireRole(auth.RoleAdmin))
 
-			r.Get("/dashboard/profit-cards", s.HandleProfitCards)
+			r.Get("/dashboard/profit-cards", analyticsh.HandleProfitCards)
 
-			r.Get("/staff", s.HandleStaffList)
-			r.Post("/staff/invite", s.HandleStaffInvite)
-			r.Post("/staff/{id}/role", s.HandleStaffRole)
-			r.Post("/staff/{id}/disable", s.HandleStaffDisable)
-			r.Post("/staff/{id}/enable", s.HandleStaffEnable)
-			r.Post("/staff/{id}/reset-password", s.HandleStaffResetPassword)
+			r.Get("/staff", adminh.HandleStaffList)
+			r.Post("/staff/invite", adminh.HandleStaffInvite)
+			r.Post("/staff/{id}/role", adminh.HandleStaffRole)
+			r.Post("/staff/{id}/disable", adminh.HandleStaffDisable)
+			r.Post("/staff/{id}/enable", adminh.HandleStaffEnable)
+			r.Post("/staff/{id}/reset-password", adminh.HandleStaffResetPassword)
 
 			// Suppliers & purchase orders (supplier terms are admin-only).
-			r.Get("/suppliers", s.HandleSuppliersList)
-			r.Post("/suppliers", s.HandleSupplierCreate)
-			r.Post("/suppliers/{id}", s.HandleSupplierUpdate)
-			r.Get("/purchase-orders", s.HandlePurchaseOrdersList)
-			r.Post("/purchase-orders", s.HandlePurchaseOrderCreate)
-			r.Get("/purchase-orders/{id}", s.HandlePurchaseOrderDetail)
-			r.Post("/purchase-orders/{id}/items", s.HandlePurchaseOrderAddItem)
-			r.Post("/purchase-orders/{id}/status", s.HandlePurchaseOrderStatus)
-			r.Post("/purchase-orders/{id}/receive", s.HandlePurchaseOrderReceive)
+			r.Get("/suppliers", adminh.HandleSuppliersList)
+			r.Post("/suppliers", adminh.HandleSupplierCreate)
+			r.Post("/suppliers/{id}", adminh.HandleSupplierUpdate)
+			r.Get("/purchase-orders", adminh.HandlePurchaseOrdersList)
+			r.Post("/purchase-orders", adminh.HandlePurchaseOrderCreate)
+			r.Get("/purchase-orders/{id}", adminh.HandlePurchaseOrderDetail)
+			r.Post("/purchase-orders/{id}/items", adminh.HandlePurchaseOrderAddItem)
+			r.Post("/purchase-orders/{id}/status", adminh.HandlePurchaseOrderStatus)
+			r.Post("/purchase-orders/{id}/receive", adminh.HandlePurchaseOrderReceive)
 
 			// Audit trail.
-			r.Get("/audit", s.HandleAuditLog)
+			r.Get("/audit", adminh.HandleAuditLog)
 
-			r.Get("/analytics", s.HandleAnalytics)
-			r.Get("/analytics/best-sellers", s.HandleBestSellers)
-			r.Get("/analytics/margin", s.HandleMargin)
-			r.Get("/analytics/chart", s.HandleSalesChart)
-			r.Get("/analytics/pl", s.HandleProfitLoss)
-			r.Get("/analytics/sizes", s.HandleSizeCurve)
+			r.Get("/analytics", analyticsh.HandleAnalytics)
+			r.Get("/analytics/best-sellers", analyticsh.HandleBestSellers)
+			r.Get("/analytics/margin", analyticsh.HandleMargin)
+			r.Get("/analytics/chart", analyticsh.HandleSalesChart)
+			r.Get("/analytics/pl", analyticsh.HandleProfitLoss)
+			r.Get("/analytics/sizes", analyticsh.HandleSizeCurve)
 
-			r.Get("/deadstock", s.HandleDeadstock)
-			r.Get("/deadstock/table", s.HandleDeadstockTable)
+			r.Get("/deadstock", inventoryh.HandleDeadstock)
+			r.Get("/deadstock/table", inventoryh.HandleDeadstockTable)
 
-			r.Get("/expenses", s.HandleExpensesList)
-			r.Post("/expenses", s.HandleExpenseCreate)
-			r.Get("/expense-categories", s.HandleExpenseCategories)
-			r.Post("/expense-categories", s.HandleExpenseCategoryCreate)
+			r.Get("/expenses", financeh.HandleExpensesList)
+			r.Post("/expenses", financeh.HandleExpenseCreate)
+			r.Get("/expense-categories", financeh.HandleExpenseCategories)
+			r.Post("/expense-categories", financeh.HandleExpenseCategoryCreate)
 
-			r.Post("/admin/backup", s.HandleBackup)
-			r.Post("/admin/restore-drill", s.HandleRestoreDrill)
+			r.Post("/admin/backup", adminh.HandleBackup)
+			r.Post("/admin/restore-drill", adminh.HandleRestoreDrill)
 		})
 	})
 

@@ -27,7 +27,7 @@ trapped cash) without a heavyweight ERP.
 | ----------------- | --------------------------------------- |
 | Language & router | Go + go-chi                             |
 | Templating        | templ                                   |
-| Frontend dynamics | HTMX                                    |
+| Frontend dynamics | HTMX + Alpine.js                        |
 | Styling           | Tailwind CSS (standalone CLI, zero npm) |
 | Database          | SQLite + sqlc                           |
 | Migrations        | goose                                   |

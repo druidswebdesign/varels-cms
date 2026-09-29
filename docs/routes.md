@@ -40,7 +40,7 @@ Router: **go-chi** (README / `architecture.md`). Route wiring lives in
 RequestID → Logger → Recover → CSRF → (route group: RequireLogin → RequireRole)
 ```
 
-`internal/handlers/middleware.go` provides `Logger`, `Recover`, `RequestID`,
+`internal/handlers/middleware/middleware.go` provides `Logger`, `Recover`, `RequestID`,
 `CSRF`; `internal/auth/middleware.go` provides `RequireLogin`, `RequireRole`.
 
 ---
@@ -296,7 +296,7 @@ HTMX targets use stable ids: `#flash`, `#product-rows`, `#variant-table`,
 
 | Group       | Handler file                                                     | Views                                                                                                                                  |
 | ----------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Auth        | `internal/handlers/auth_handler.go`                              | `pages/login.templ`                                                                                                                    |
+| Auth        | `internal/handlers/authweb/auth_handler.go`                      | `pages/login.templ`                                                                                                                    |
 | Dashboard   | `dashboard_handler.go`                                           | `pages/dashboard.templ`, `partials/low_stock_widget.templ`, `partials/profit_cards.templ`                                              |
 | Products    | `product_handler.go`                                             | `pages/products_list.templ`, `product_form.templ`, `product_detail.templ`, `partials/product_row.templ`, `partials/product_rows.templ` |
 | Collections | `collection_handler.go`                                          | `pages/collections.templ`                                                                                                              |
@@ -313,4 +313,4 @@ HTMX targets use stable ids: `#flash`, `#product-rows`, `#variant-table`,
 | Staff       | `staff_handler.go`                                               | `pages/staff.templ`                                                                                                                    |
 | Audit       | `audit_handler.go`                                               | `pages/audit.templ`                                                                                                                    |
 | Export      | `export_handler.go`                                              | — (CSV)                                                                                                                                |
-| Shared      | `internal/handlers/middleware.go`, `internal/auth/middleware.go` | `layouts/base.templ`, `components/{navbar,sidebar,table,badge,button,flash,modal}.templ`, `partials/flash_messages.templ`              |
+| Shared      | `internal/handlers/middleware/middleware.go`, `internal/auth/middleware.go` | `layouts/base.templ`, `components/{navbar,sidebar,table,badge,button,flash,modal}.templ`, `partials/flash_messages.templ`              |

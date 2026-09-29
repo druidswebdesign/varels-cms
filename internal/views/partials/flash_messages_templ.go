@@ -5,10 +5,11 @@ package partials
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import "github.com/a-h/templ"
-import templruntime "github.com/a-h/templ/runtime"
-
-import "github.com/yourname/varels_cms/internal/views/flash"
+import (
+	"github.com/a-h/templ"
+	templruntime "github.com/a-h/templ/runtime"
+	"github.com/yourname/varels_cms/internal/views/flash"
+)
 
 // FlashMessages renders one flash message (if any) inside the #flash slot.
 func FlashMessages(f flash.Flash) templ.Component {

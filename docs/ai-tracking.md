@@ -5,7 +5,7 @@
 > [`implementation.md`](implementation.md). Update this file when the shape of
 > the project (routes, wiring, tooling) changes.
 
-**Last updated:** 2026-09-27 (frontend interactivity pass).
+**Last updated:** 2026-09-27 (money-path + ledger tests added).
 
 ---
 
@@ -25,7 +25,7 @@ without reading every log entry.
 | Handlers       | **22 files**, **85 `Handle*` methods** under `internal/handlers/`                                                    |
 | Views          | **46 templ files** (`pages/`, `partials/`, `components/`, `layouts/`)                                                |
 | DB layer       | sqlc-generated + goose migrations `0001`–`0003`, `schema.sql` mirrored                                               |
-| Tests          | **None** (`*_test.go` count: 0) — largest outstanding gap                                                            |
+| Tests          | **13** integration tests in `internal/handlers/*_test.go` (money paths + ledger invariants); see `docs/testing.md`    |
 | Source size    | ~**10,650** hand-written Go lines, ~**2,869** templ lines (generated `*_templ.go` and `internal/db/sqlc/*` excluded) |
 
 Only genuinely unimplemented feature: the daily low-stock email digest
@@ -70,6 +70,16 @@ responses. Handlers set success/error flashes instead of silent `?err=` redirect
 
 - Restock/adjust forms (`restock_form.templ`) are still full-page forms + flash.
 - A few `?err=` query params remain on the sale/return forms (they render inline).
+
+---
+
+### Test layer
+
+`internal/handlers/testenv_test.go` builds an isolated SQLite DB per test and
+mounts the real handlers. Covered today: FIFO sale, totals, partial/damaged
+returns, store credit (issue/redeem/over-spend), oversell atomicity, void
+compensation, and the `stock_levels == Σ stock_movements` invariant. Full
+strategy, ordered plan and coverage matrix: `docs/testing.md`.
 
 ---
 
@@ -121,6 +131,7 @@ Every change should end with:
 
 ```bash
 templ generate && go build ./... && go vet ./... && gofmt -l internal cmd
+go test ./...
 node --check assets/js/app.js
 ```
 

@@ -5,10 +5,9 @@ package layouts
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import "github.com/a-h/templ"
-import templruntime "github.com/a-h/templ/runtime"
-
 import (
+	"github.com/a-h/templ"
+	templruntime "github.com/a-h/templ/runtime"
 	"github.com/yourname/varels_cms/internal/views/components"
 	"github.com/yourname/varels_cms/internal/views/flash"
 	"github.com/yourname/varels_cms/internal/views/partials"

@@ -33,6 +33,13 @@ HTMX + sqlc + AI:
 For Go, chi, templ, HTMX, and sqlc, you want a structure that is **flat,
 pragmatic, and highly cohesive**.
 
+> **Updated.** The codebase later adopted a lighter version of this idea: HTTP
+> concerns are grouped under `internal/handlers` by category, and two *thin*
+> shared layers were added (`internal/service` for cross-package business logic,
+> `internal/repository` for shared reads over sqlc). sqlc is still the database
+> layer and feature handlers still call it directly; the new layers exist only
+> for logic reused by more than one handler package, not as a full DDD stack.
+
 ---
 
 ## 2. The "Flat & Pragmatic" folder structure
@@ -107,19 +114,58 @@ pragmatic, and highly cohesive**.
     │       ├── products.sql.go      # Generated DB methods (replaces internal/repository!)
     │       └── ...
     │
-    ├── handlers                     # Handlers + business logic + validation
-    │   ├── analytics_handler.go
-    │   ├── auth_handler.go
-    │   ├── dashboard_handler.go
-    │   ├── deadstock_handler.go
-    │   ├── export_handler.go
-    │   ├── middleware.go            # Logger, Recover, RequestID, CSRF
-    │   ├── product_handler.go
-    │   ├── restock_handler.go
-    │   ├── sale_handler.go
-    │   ├── staff_handler.go
-    │   ├── validators.go            # Form validation helpers (to add)
-    │   └── variant_handler.go
+    ├── repository                   # Shared data-access helpers over sqlc
+    │   ├── locations.go             # LocationNames
+    │   ├── aggregate.go             # AsInt64 / AsInt64Or
+    │   └── tx.go                    # WithTx transaction primitive
+    ├── reporting                   # Argentina-local reporting time (ADR-0014)
+    │   └── period.go                # ART, PeriodRange, AllTimeRange, ISOUTC
+    ├── service                     # Shared business logic
+    │   ├── inventory.go             # FIFO costing (ConsumeFIFO/AddCostLayer)
+    │   ├── order.go                 # Order numbers
+    │   ├── pricing.go               # IVA derivation (ADR-0013)
+    │   └── clock.go                 # NowUTC
+    │
+    ├── handlers                     # HTTP handlers + shared HTTP concerns
+    │   ├── common                   # Shared HTTP kernel
+    │   │   ├── server.go            # Server: shared DB/session deps
+    │   │   ├── http.go              # Render, ServerError, URLID, list limits
+    │   │   ├── forms.go             # Form parsing helpers (ParsePesos, Null*)
+    │   │   ├── errors.go            # sql.ErrNoRows / UNIQUE mapping
+    │   │   ├── identity.go          # CurrentUserID, ClientIP
+    │   │   ├── flash.go             # Session flash
+    │   │   └── audit.go             # Shared audit-log writer
+    │   ├── middleware               # Logger, Recover, RequestID, CSRF
+    │   │   └── middleware.go
+    │   │
+    │   ├── catalog                  # Products, collections, variants, media
+    │   │   ├── server.go            # Embeds *common.Server
+    │   │   ├── product_handler.go
+    │   │   ├── collection_handler.go
+    │   │   ├── variant_handler.go
+    │   │   └── media_handler.go
+    │   ├── sales                    # Sales, returns, customers
+    │   │   ├── sale_handler.go
+    │   │   └── customer_handler.go
+    │   ├── inventory                # Restock, holds, deadstock
+    │   │   ├── restock_handler.go
+    │   │   ├── hold_handler.go
+    │   │   └── deadstock_handler.go
+    │   ├── finance                  # Expenses, exports
+    │   │   ├── expense_handler.go
+    │   │   └── export_handler.go
+    │   ├── analytics                # Reporting screens
+    │   │   └── analytics_handler.go
+    │   ├── admin                    # Staff, suppliers, audit, ops, dashboard
+    │   │   ├── staff_handler.go
+    │   │   ├── supplier_handler.go
+    │   │   ├── audit_handler.go
+    │   │   ├── ops_handler.go
+    │   │   └── dashboard_handler.go
+    │   ├── authweb                  # Login / OAuth handlers
+    │   │   └── auth_handler.go
+    │   └── tests                    # Cross-package HTTP / money-path tests
+    │       └── ...
     │
     └── views                        # ALL templ files
         ├── components
@@ -147,15 +193,42 @@ pragmatic, and highly cohesive**.
 
 - **DELETED `internal/models/`** — sqlc auto-generates structs directly from the
   database schema; you no longer write these manually.
-- **DELETED `internal/repository/`** — sqlc auto-generates the database methods
-  (e.g. `Queries.CreateProduct`). Handlers call these directly.
-- **DELETED `internal/services/`** — business logic moved directly into handlers.
+- **`internal/repository/` returns as a thin shared data-access layer** — sqlc
+  auto-generates the database methods (e.g. `Queries.CreateProduct`) and handlers
+  call those directly for feature queries. Only helpers reused by more than one
+  handler package live here: shared reads (`LocationNames`, aggregate
+  normalisation) and the `WithTx` transaction primitive. It is not a second ORM.
+- **`internal/service/` returns for shared business logic** — FIFO costing,
+  order numbering, IVA derivation and the clock. Logic used by a single handler
+  package stays in that package; only cross-package business rules live here.
 - **MOVED `internal/validation/`** — validators are now helper functions inside
   `handlers/`, right next to the HTTP logic that uses them.
 - **RENAMED `static/` → `assets/`** — to match the recommended standard (keep
   `static/` if you prefer).
 - **MOVED `views/` into `internal/`** — keeps the public root clean and treats UI
   components as internal application code.
+- **SPLIT `internal/handlers/` by category** — shared HTTP concerns live in
+  `handlers/common` (the `Server`, rendering, form parsing, audit, transactions),
+  middleware in `handlers/middleware`, and HTTP handlers are grouped by category
+  (`catalog`, `sales`, `inventory`, `finance`, `analytics`, `admin`, `authweb`).
+  Each category package defines its own `Server` that embeds `*common.Server`;
+  category packages do not import each other, and the shared layers never import
+  a handler package, so the dependency graph stays acyclic.
+
+### Layer boundaries
+
+| Concern | Package |
+| --- | --- |
+| Shared HTTP kernel (Server, render, forms, audit, tx) | `internal/handlers/common` |
+| HTTP middleware (Logger, Recover, RequestID, CSRF) | `internal/handlers/middleware` |
+| Business logic (FIFO costing, order numbers, IVA) | `internal/service` |
+| Shared DB reads + transactions over sqlc | `internal/repository` |
+| Reporting time ranges | `internal/reporting` |
+| Category HTTP handlers | `internal/handlers/<category>` |
+| Cross-package tests | `internal/handlers/tests` |
+
+Random one-off utilities should not accumulate in `common`; give them a specific
+home or keep them next to their only caller.
 
 ---
 
@@ -163,7 +236,7 @@ pragmatic, and highly cohesive**.
 
 - **The "golden triangle".** To add a product feature you touch only three places:
   1. `internal/db/queries/products.sql` — write the SQL
-  2. `internal/handlers/product_handler.go` — write the Go logic
+  2. `internal/handlers/catalog/product_handler.go` — write the Go logic
   3. `internal/views/pages/product_detail.templ` — write the UI
 - **Zero boilerplate.** With `models/` and `repository/` gone, you no longer map
   `sqlc.Product` to `models.Product`. A handler calls
@@ -178,7 +251,8 @@ pragmatic, and highly cohesive**.
 - **One-stop DB layer.** Tell the AI "I need a new feature," paste
   `internal/db/schema.sql`, and say "write the query in `query.sql`." It knows
   exactly where it goes.
-- **No DTOs.** Chi handlers (`internal/handlers/tasks.go`) call `db.GetTasks()`
+- **No DTOs.** Chi handlers (`internal/handlers/catalog/product_handler.go`) call
+  `db.GetProduct()`
   and pass the raw `db.Task` struct straight into `views.Dashboard(tasks)`. Zero
   mapping, insanely fast to write and generate.
 - **Perfect context windows.** When a feature breaks, look at three files: the DB

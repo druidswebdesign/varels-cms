@@ -43,6 +43,7 @@ not verifiable DeepSeek model IDs; DeepSeek's published lineup is
 | 8   | Analytics/P&L/deadstock + CSV exports, plus OpEx entry                                                               | `analytics_handler.go`, `deadstock_handler.go`, `export_handler.go`, `expense_handler.go` | Hard (financial math)              | Pro-class | ✅ Done                              |
 | 9   | Staff/admin + audit log UI                                                                                           | `staff_handler.go`                                                                        | Easy–Medium                        | Flash     | ✅ Done (audit UI pending)           |
 | 10  | Ops: backup, restore drill, Docker/deploy                                                                            | —                                                                                         | Medium                             | Flash/Pro | ✅ Done                              |
+| 11  | Money-path + ledger integration tests (sale/FIFO, returns, store credit, oversell, invariants)                       | `internal/handlers/*_test.go`                                                             | **Hard (money correctness)**       | Pro-class | ✅ Done                              |
 
 ### Resolve before the dependent task
 
@@ -490,3 +491,42 @@ in place; this wires templ views to them.
   `x-text="money(total())"`; `alpine.min.js` serves (44,758 B).
 - `templ generate`, `go build`, `go vet`, `gofmt`, `node --check app.js` clean;
   no 500s/panics in the log.
+
+### 2026-09-27 — Testing: money-path + ledger integration tests (#11)
+
+Started the ordered plan from `docs/testing.md`: verify the financial core
+before any further frontend or feature work. `ai-tracking.md` had flagged
+`Tests: 0` as the largest outstanding gap; 13 tests now pin the money math.
+
+#### Added
+
+- `internal/handlers/testenv_test.go` — harness: fresh SQLite per test
+  (`t.TempDir` → `db.Open` → `db.Migrate` → `db.Seed` dev fixtures), real
+  handlers on a `chi` router, no auth/CSRF middleware (business logic only),
+  `Sessions = nil` so flashes are no-ops. Helpers: `post`, `get`, `sell`,
+  `addLayer`, `scalarInt`, `sellableStock`, `stateStock`, `movementIDs`,
+  `assertStockLevelsMatchLedger`.
+- `internal/handlers/sale_test.go` — FIFO average cost, totals arithmetic,
+  multi-line single payment, void compensation.
+- `internal/handlers/return_test.go` — partial return restocks at original cost,
+  damaged routing, over-return rejection.
+- `internal/handlers/storecredit_test.go` — issue/redeem/over-spend rollback,
+  customer required.
+- `internal/handlers/oversell_test.go` — single-line and multi-line atomic
+  rollback on the stock trigger's CHECK.
+- `internal/handlers/ledger_test.go` — `stock_levels == Σ stock_movements` per
+  (variant, location, state), non-negative ledger/levels, movement rows never
+  deleted, adjustment reason-code rule.
+- `docs/testing.md` — strategy, ordered plan, harness description, coverage
+  matrix, and what is not yet covered.
+
+#### Verification
+
+- `go test ./...` — 13 tests pass.
+- `go vet ./internal/handlers/`, `gofmt` — clean.
+
+#### Still open (next orders in `docs/testing.md`)
+
+- Order 3 — frontend polish: convert `restock_form.templ` to HTMX fragments and
+  replace the remaining `?err=` redirects with flash/OOB toasts.
+- Order 4 — the daily low-stock email digest.
