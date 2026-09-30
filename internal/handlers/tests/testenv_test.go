@@ -13,12 +13,12 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/yourname/varels_cms/internal/db"
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/db/types"
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/handlers/inventory"
-	"github.com/yourname/varels_cms/internal/handlers/sales"
+	"github.com/druidswebdesign/varels-cms/internal/db"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/inventory"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/sales"
 )
 
 // testEnv is a fresh migrated+seeded SQLite database wired to the real HTTP
@@ -53,8 +53,7 @@ func newTestEnv(t *testing.T) *testEnv {
 		t.Fatalf("db.Migrate: %v", err)
 	}
 	if err := db.Seed(ctx, sqldb, db.SeedOptions{
-		InitialOwnerEmail: "owner@example.com",
-		Dev:               true,
+		Dev: true,
 	}); err != nil {
 		t.Fatalf("db.Seed: %v", err)
 	}

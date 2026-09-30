@@ -11,8 +11,8 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/views/layouts"
 )
 
 // SaleForm is the point-of-sale checkout. The line editor and running total are

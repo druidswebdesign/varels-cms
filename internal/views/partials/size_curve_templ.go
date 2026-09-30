@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 
-	"github.com/yourname/varels_cms/internal/views/vm"
+	"github.com/druidswebdesign/varels-cms/internal/views/vm"
 )
 
 // SizeCurve renders best-selling sizes (sizing curve for next PO).

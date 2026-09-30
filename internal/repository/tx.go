@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 )
 
 // WithTx runs fn inside a SQLite transaction, rolling back on error. Every

@@ -1,4 +1,4 @@
-# Spec-Driven Development with AI — varels_cms
+# Spec-Driven Development with AI — varels-cms
 
 In Spec-Driven Development (SDD) with AI, front-loading context is everything. You
 have your **What** (functions/features, `docs/functions.md`) and your **How**

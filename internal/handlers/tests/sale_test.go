@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/yourname/varels_cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
 )
 
 // TestSale_FIFOStockAndPayment is the core money-path test: one sale must

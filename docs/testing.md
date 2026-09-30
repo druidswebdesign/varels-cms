@@ -1,4 +1,4 @@
-# Testing — varels_cms
+# Testing — varels-cms
 
 The binding strategy for verifying the money and inventory paths, and the
 ordered plan for closing the remaining gaps. Read this with `docs/overview.md`

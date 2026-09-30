@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/yourname/varels_cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
 )
 
 // TestStoreCredit_IssueRedeemOverspend walks the full store-credit lifecycle

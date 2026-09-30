@@ -1,4 +1,4 @@
-# varels_cms — Project Overview
+# varels-cms — Project Overview
 
 The single narrative entry point for the project: what it is, why it exists, who
 it serves, and what is deliberately out of scope. Read this first, then the
@@ -8,7 +8,7 @@ sibling specs in §10 for the _how_.
 
 ## 1. One-liner
 
-`varels_cms` is a private, self-hosted **inventory and profit CMS for an
+`varels-cms` is a private, self-hosted **inventory and profit CMS for an
 independent Argentine clothing brand** — it tracks every garment from purchase to
 sale, tells the owner what stock exists and where, what it cost, what it earns,
 and what is quietly trapping cash.

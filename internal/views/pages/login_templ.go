@@ -8,10 +8,10 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-// Login is the only page rendered outside the authenticated shell. local=true
-// renders the break-glass email/password form used at /admin-login; otherwise
-// it renders the single "Sign in with Google" button.
-func Login(local bool, csrf string, message string) templ.Component {
+// Login is the only page rendered outside the authenticated shell. It renders
+// the employee email/password form. Google OAuth sign-in was removed: access is
+// granted only to whitelisted employees with a local bcrypt password.
+func Login(csrf string, message string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -32,7 +32,7 @@ func Login(local bool, csrf string, message string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Sign in · varels_cms</title><link rel=\"stylesheet\" href=\"/assets/css/app.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.min.js\"></script><script defer src=\"/assets/js/app.js\"></script></head><body class=\"flex min-h-screen items-center justify-center bg-gray-50 p-4 text-gray-900\"><div class=\"w-full max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-sm\"><div class=\"mb-6 flex items-center gap-2\"><img src=\"/assets/img/logo.svg\" alt=\"\" class=\"h-6 w-6\"> <span class=\"text-base font-semibold\">varels_cms</span></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Sign in · varels-cms</title><link rel=\"stylesheet\" href=\"/assets/css/app.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.min.js\"></script><script defer src=\"/assets/js/app.js\"></script></head><body class=\"flex min-h-screen items-center justify-center bg-gray-50 p-4 text-gray-900\"><div class=\"w-full max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-sm\"><div class=\"mb-6 flex items-center gap-2\"><img src=\"/assets/img/logo.svg\" alt=\"\" class=\"h-6 w-6\"> <span class=\"text-base font-semibold\">varels-cms</span></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,31 +55,20 @@ func Login(local bool, csrf string, message string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		if local {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<form method=\"post\" action=\"/admin-login\" class=\"space-y-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/login.templ`, Line: 31, Col: 57}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><div><label for=\"email\" class=\"mb-1 block text-sm font-medium text-gray-700\">Email</label> <input id=\"email\" name=\"email\" type=\"email\" required autocomplete=\"username\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"password\" class=\"mb-1 block text-sm font-medium text-gray-700\">Password</label> <input id=\"password\" name=\"password\" type=\"password\" required autocomplete=\"current-password\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Sign in</button></form>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<a href=\"/auth/google\" class=\"flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50\">Sign in with Google</a>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<form method=\"post\" action=\"/login\" class=\"space-y-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></body></html>")
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/login.templ`, Line: 30, Col: 56}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><div><label for=\"email\" class=\"mb-1 block text-sm font-medium text-gray-700\">Email</label> <input id=\"email\" name=\"email\" type=\"email\" required autocomplete=\"username\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"password\" class=\"mb-1 block text-sm font-medium text-gray-700\">Password</label> <input id=\"password\" name=\"password\" type=\"password\" required autocomplete=\"current-password\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Sign in</button></form></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

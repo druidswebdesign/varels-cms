@@ -1,4 +1,4 @@
-# Routes & UI Flow — varels_cms
+# Routes & UI Flow — varels-cms
 
 Authoritative HTTP surface for the app. Derived from the project docs and the
 actual stub tree (`cmd/server/main.go` route TODO, `internal/handlers/*.go`,

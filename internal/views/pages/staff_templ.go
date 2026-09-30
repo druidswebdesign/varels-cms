@@ -11,10 +11,10 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/views/components"
-	"github.com/yourname/varels_cms/internal/views/format"
-	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/views/components"
+	"github.com/druidswebdesign/varels-cms/internal/views/format"
+	"github.com/druidswebdesign/varels-cms/internal/views/layouts"
 )
 
 // Staff lists the OAuth whitelist and offers invite / role / disable actions.
@@ -64,7 +64,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"email\" class=\"mb-1 block text-xs font-medium text-gray-600\">Email</label> <input id=\"email\" name=\"email\" type=\"email\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"display_name\" class=\"mb-1 block text-xs font-medium text-gray-600\">Display name</label> <input id=\"display_name\" name=\"display_name\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"role\" class=\"mb-1 block text-xs font-medium text-gray-600\">Role</label> <select id=\"role\" name=\"role\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"staff\">staff</option> <option value=\"admin\">admin</option></select></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Invite</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"email\" class=\"mb-1 block text-xs font-medium text-gray-600\">Email</label> <input id=\"email\" name=\"email\" type=\"email\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"display_name\" class=\"mb-1 block text-xs font-medium text-gray-600\">Display name</label> <input id=\"display_name\" name=\"display_name\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"password\" class=\"mb-1 block text-xs font-medium text-gray-600\">Password</label> <input id=\"password\" name=\"password\" type=\"password\" minlength=\"8\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"role\" class=\"mb-1 block text-xs font-medium text-gray-600\">Role</label> <select id=\"role\" name=\"role\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"staff\">staff</option> <option value=\"admin\">admin</option></select></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Invite</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -92,7 +92,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					var templ_7745c5c3_Var5 string
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(u.Email)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 55, Col: 63}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 59, Col: 63}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
@@ -105,7 +105,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					var templ_7745c5c3_Var6 string
 					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(u.DisplayName))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 56, Col: 62}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 60, Col: 62}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 					if templ_7745c5c3_Err != nil {
@@ -118,7 +118,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					var templ_7745c5c3_Var7 templ.SafeURL
 					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs("/staff/" + fmt.Sprint(u.ID) + "/role")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 58, Col: 74}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 62, Col: 74}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 					if templ_7745c5c3_Err != nil {
@@ -131,7 +131,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					var templ_7745c5c3_Var8 string
 					templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 59, Col: 59}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 63, Col: 59}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 					if templ_7745c5c3_Err != nil {
@@ -164,7 +164,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					var templ_7745c5c3_Var9 string
 					templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(string(u.Provider))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 67, Col: 62}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 71, Col: 62}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 					if templ_7745c5c3_Err != nil {
@@ -192,7 +192,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					var templ_7745c5c3_Var10 string
 					templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(u.LastLoginAt))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 75, Col: 76}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 79, Col: 76}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 					if templ_7745c5c3_Err != nil {
@@ -210,7 +210,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						var templ_7745c5c3_Var11 templ.SafeURL
 						templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinURLErrs("/staff/" + fmt.Sprint(u.ID) + "/reset-password")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 79, Col: 86}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 83, Col: 86}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 						if templ_7745c5c3_Err != nil {
@@ -223,7 +223,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						var templ_7745c5c3_Var12 string
 						templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 80, Col: 61}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 84, Col: 61}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var12)
 						if templ_7745c5c3_Err != nil {
@@ -242,7 +242,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						var templ_7745c5c3_Var13 templ.SafeURL
 						templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinURLErrs("/staff/" + fmt.Sprint(u.ID) + "/disable")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 87, Col: 79}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 91, Col: 79}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 						if templ_7745c5c3_Err != nil {
@@ -255,7 +255,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						var templ_7745c5c3_Var14 string
 						templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 88, Col: 61}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 92, Col: 61}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
 						if templ_7745c5c3_Err != nil {
@@ -273,7 +273,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						var templ_7745c5c3_Var15 templ.SafeURL
 						templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinURLErrs("/staff/" + fmt.Sprint(u.ID) + "/enable")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 92, Col: 78}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 96, Col: 78}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 						if templ_7745c5c3_Err != nil {
@@ -286,7 +286,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						var templ_7745c5c3_Var16 string
 						templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 93, Col: 61}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 97, Col: 61}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
 						if templ_7745c5c3_Err != nil {

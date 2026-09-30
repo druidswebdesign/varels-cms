@@ -1,4 +1,4 @@
--- sqlc schema input for varels_cms.
+-- sqlc schema input for varels-cms.
 --
 -- This file MUST mirror the applied goose migrations
 -- (internal/db/migrations/0001_init.up.sql and 0002_users.up.sql). Keep the two

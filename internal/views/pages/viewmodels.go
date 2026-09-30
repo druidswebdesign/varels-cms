@@ -1,6 +1,6 @@
 package pages
 
-import "github.com/yourname/varels_cms/internal/db/sqlc"
+import "github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 
 // SaleLine is one order line enriched for rendering (receipt/detail/return).
 type SaleLine struct {

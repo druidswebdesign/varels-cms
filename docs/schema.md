@@ -1,4 +1,4 @@
-# Data Model & Schema Specification — varels_cms
+# Data Model & Schema Specification — varels-cms
 
 This is the authoritative data model derived from the project docs. It defines the
 SQLite schema that `internal/db/schema.sql` (sqlc input) and

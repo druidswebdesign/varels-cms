@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 )
 
 // ConsumeFIFO consumes qty from the oldest open cost layers (ADR-0012) and

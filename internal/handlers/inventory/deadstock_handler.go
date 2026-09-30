@@ -3,11 +3,11 @@ package inventory
 import (
 	"net/http"
 
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/handlers/middleware"
-	"github.com/yourname/varels_cms/internal/reporting"
-	"github.com/yourname/varels_cms/internal/views/pages"
-	"github.com/yourname/varels_cms/internal/views/partials"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/middleware"
+	"github.com/druidswebdesign/varels-cms/internal/reporting"
+	"github.com/druidswebdesign/varels-cms/internal/views/pages"
+	"github.com/druidswebdesign/varels-cms/internal/views/partials"
 )
 
 const defaultStaleDays = 60

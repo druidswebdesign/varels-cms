@@ -7,18 +7,15 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/yourname/varels_cms/internal/auth"
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/auth"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
 )
 
 // SeedOptions controls first-run bootstrapping.
 type SeedOptions struct {
-	// InitialOwnerEmail becomes the first Google admin when approved_users is
-	// empty (ADR-0004).
-	InitialOwnerEmail string
-	// AdminEmail + AdminPassword create the break-glass local admin. Optional;
-	// when the password is empty no local account is managed.
+	// AdminEmail + AdminPassword create the first (and subsequent) local admin
+	// accounts. Optional; when the password is empty no local account is managed.
 	AdminEmail    string
 	AdminPassword string
 	// Dev inserts a small sample catalog.
@@ -34,9 +31,8 @@ type SeedOptions struct {
 func Seed(ctx context.Context, sqldb *sql.DB, opts SeedOptions) error {
 	q := sqlc.New(sqldb)
 
-	if err := bootstrapAdmin(ctx, q, opts.InitialOwnerEmail); err != nil {
-		return err
-	}
+	// The first admin is bootstrapped from ADMIN_EMAIL/ADMIN_PASSWORD (local
+	// email + bcrypt). The old Google-OAuth bootstrap is commented out below.
 	if err := bootstrapLocalAdmin(ctx, q, opts.AdminEmail, opts.AdminPassword); err != nil {
 		return err
 	}
@@ -48,36 +44,38 @@ func Seed(ctx context.Context, sqldb *sql.DB, opts SeedOptions) error {
 	return nil
 }
 
-// bootstrapAdmin creates the first admin from INITIAL_OWNER_EMAIL when the
-// approved_users table is empty (ADR-0004, docs/auth.md).
-func bootstrapAdmin(ctx context.Context, q *sqlc.Queries, email string) error {
-	n, err := q.CountApprovedUsers(ctx)
-	if err != nil {
-		return fmt.Errorf("seed: count approved_users: %w", err)
-	}
-	if n > 0 {
-		return nil
-	}
-	if email == "" {
-		return errors.New("seed: approved_users is empty and INITIAL_OWNER_EMAIL is not set")
-	}
+// bootstrapAdmin created the first admin from INITIAL_OWNER_EMAIL when the
+// approved_users table was empty. Disabled: Google OAuth sign-in was removed
+// (ADR-0004) in favour of email + bcrypt.
+//
+// func bootstrapAdmin(ctx context.Context, q *sqlc.Queries, email string) error {
+// 	n, err := q.CountApprovedUsers(ctx)
+// 	if err != nil {
+// 		return fmt.Errorf("seed: count approved_users: %w", err)
+// 	}
+// 	if n > 0 {
+// 		return nil
+// 	}
+// 	if email == "" {
+// 		return errors.New("seed: approved_users is empty and INITIAL_OWNER_EMAIL is not set")
+// 	}
+//
+// 	user, err := q.CreateApprovedUser(ctx, sqlc.CreateApprovedUserParams{
+// 		Email:    email,
+// 		Role:     types.UserRoleAdmin,
+// 		Provider: types.AuthProviderGoogle,
+// 	})
+// 	if err != nil {
+// 		return fmt.Errorf("seed: bootstrap admin %q: %w", email, err)
+// 	}
+// 	log.Printf("seed: bootstrapped first admin %s (id=%d)", user.Email, user.ID)
+// 	return nil
+// }
 
-	user, err := q.CreateApprovedUser(ctx, sqlc.CreateApprovedUserParams{
-		Email:    email,
-		Role:     types.UserRoleAdmin,
-		Provider: types.AuthProviderGoogle,
-	})
-	if err != nil {
-		return fmt.Errorf("seed: bootstrap admin %q: %w", email, err)
-	}
-	log.Printf("seed: bootstrapped first admin %s (id=%d)", user.Email, user.ID)
-	return nil
-}
-
-// bootstrapLocalAdmin ensures the break-glass local admin exists with the
-// configured password (auth.md, ADR-0004). It is a no-op when no password is
-// configured. The account is an active admin, reachable only through the
-// unlinked /admin-login route.
+// bootstrapLocalAdmin ensures the admin account exists with the configured
+// password. It is a no-op when no password is configured. This is the only way
+// to create the first account: access is by invite/seed only, never public
+// signup.
 func bootstrapLocalAdmin(ctx context.Context, q *sqlc.Queries, email, password string) error {
 	if password == "" {
 		return nil
@@ -96,7 +94,7 @@ func bootstrapLocalAdmin(ctx context.Context, q *sqlc.Queries, email, password s
 	if errors.Is(err, sql.ErrNoRows) {
 		user, err := q.CreateApprovedUser(ctx, sqlc.CreateApprovedUserParams{
 			Email:        email,
-			DisplayName:  sql.NullString{String: "Break-glass admin", Valid: true},
+			DisplayName:  sql.NullString{String: "Admin", Valid: true},
 			Role:         types.UserRoleAdmin,
 			Provider:     types.AuthProviderLocal,
 			PasswordHash: hashNS,
@@ -104,7 +102,7 @@ func bootstrapLocalAdmin(ctx context.Context, q *sqlc.Queries, email, password s
 		if err != nil {
 			return fmt.Errorf("seed: create local admin %q: %w", email, err)
 		}
-		log.Printf("seed: created break-glass local admin %s (id=%d)", user.Email, user.ID)
+		log.Printf("seed: created local admin %s (id=%d)", user.Email, user.ID)
 		return nil
 	}
 	if err != nil {
@@ -120,7 +118,7 @@ func bootstrapLocalAdmin(ctx context.Context, q *sqlc.Queries, email, password s
 	}); err != nil {
 		return fmt.Errorf("seed: update local admin password: %w", err)
 	}
-	log.Printf("seed: refreshed break-glass local admin %s (id=%d)", email, existing.ID)
+	log.Printf("seed: refreshed local admin %s (id=%d)", email, existing.ID)
 	return nil
 }
 

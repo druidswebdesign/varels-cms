@@ -1,0 +1,278 @@
+.
+├── adr.md
+├── assets
+│   ├── css
+│   │   ├── app.css
+│   │   └── input.css
+│   ├── img
+│   │   └── logo.svg
+│   └── js
+│       ├── alpine.min.js
+│       ├── app.js
+│       └── htmx.min.js
+├── bin
+│   └── varels-cms
+├── cmd
+│   └── server
+│       ├── dotenv.go
+│       ├── dotenv_test.go
+│       └── main.go
+├── data
+│   ├── app.db
+│   ├── app.db-shm
+│   ├── app.db-wal
+│   └── backups
+│       ├── app-20260930T005320Z.db
+│       └── app-20260930T010313Z.db
+├── docker-compose.yml
+├── Dockerfile
+├── docs
+│   ├── ai-tracking.md
+│   ├── architecture.md
+│   ├── auth.md
+│   ├── db.md
+│   ├── frontend.md
+│   ├── functions.md
+│   ├── implementation.md
+│   ├── overview.md
+│   ├── routes.md
+│   ├── schema.md
+│   ├── spec-driven-dev.md
+│   └── testing.md
+├── go.mod
+├── go.sum
+├── internal
+│   ├── auth
+│   │   ├── middleware.go
+│   │   ├── oauth.go
+│   │   ├── password.go
+│   │   ├── password_test.go
+│   │   ├── ratelimit.go
+│   │   ├── ratelimit_test.go
+│   │   ├── roles.go
+│   │   ├── roles_test.go
+│   │   ├── session.go
+│   │   ├── user.go
+│   │   ├── user_test.go
+│   │   └── whitelist.go
+│   ├── db
+│   │   ├── backup.go
+│   │   ├── backup_schedule.go
+│   │   ├── backup_schedule_test.go
+│   │   ├── db.go
+│   │   ├── db_test.go
+│   │   ├── migrations
+│   │   │   ├── 0001_init.sql
+│   │   │   ├── 0002_users.sql
+│   │   │   └── 0003_store_credit.sql
+│   │   ├── queries
+│   │   │   ├── analytics.sql
+│   │   │   ├── auth.sql
+│   │   │   ├── catalog.sql
+│   │   │   ├── finance.sql
+│   │   │   ├── inventory.sql
+│   │   │   └── sales.sql
+│   │   ├── schema.sql
+│   │   ├── seed.go
+│   │   ├── seed_test.go
+│   │   ├── session_cleanup_test.go
+│   │   ├── sqlc
+│   │   │   ├── analytics.sql.go
+│   │   │   ├── auth.sql.go
+│   │   │   ├── catalog.sql.go
+│   │   │   ├── db.go
+│   │   │   ├── doc.go
+│   │   │   ├── finance.sql.go
+│   │   │   ├── inventory.sql.go
+│   │   │   ├── models.go
+│   │   │   ├── querier.go
+│   │   │   └── sales.sql.go
+│   │   └── types
+│   │       └── types.go
+│   ├── handlers
+│   │   ├── admin
+│   │   │   ├── audit_handler.go
+│   │   │   ├── dashboard_handler.go
+│   │   │   ├── ops_handler.go
+│   │   │   ├── server.go
+│   │   │   ├── staff_handler.go
+│   │   │   └── supplier_handler.go
+│   │   ├── analytics
+│   │   │   ├── analytics_handler.go
+│   │   │   └── server.go
+│   │   ├── authweb
+│   │   │   ├── auth_handler.go
+│   │   │   └── server.go
+│   │   ├── catalog
+│   │   │   ├── collection_handler.go
+│   │   │   ├── media_handler.go
+│   │   │   ├── product_handler.go
+│   │   │   ├── server.go
+│   │   │   └── variant_handler.go
+│   │   ├── common
+│   │   │   ├── audit.go
+│   │   │   ├── errors.go
+│   │   │   ├── flash.go
+│   │   │   ├── forms.go
+│   │   │   ├── http.go
+│   │   │   ├── identity.go
+│   │   │   └── server.go
+│   │   ├── finance
+│   │   │   ├── expense_handler.go
+│   │   │   ├── export_handler.go
+│   │   │   └── server.go
+│   │   ├── inventory
+│   │   │   ├── deadstock_handler.go
+│   │   │   ├── hold_handler.go
+│   │   │   ├── restock_handler.go
+│   │   │   └── server.go
+│   │   ├── middleware
+│   │   │   ├── middleware.go
+│   │   │   └── securityheaders_test.go
+│   │   ├── sales
+│   │   │   ├── customer_handler.go
+│   │   │   ├── sale_handler.go
+│   │   │   └── server.go
+│   │   └── tests
+│   │       ├── ledger_test.go
+│   │       ├── oversell_test.go
+│   │       ├── return_test.go
+│   │       ├── sale_test.go
+│   │       ├── storecredit_test.go
+│   │       └── testenv_test.go
+│   ├── reporting
+│   │   ├── period.go
+│   │   └── period_test.go
+│   ├── repository
+│   │   ├── aggregate.go
+│   │   ├── locations.go
+│   │   └── tx.go
+│   ├── service
+│   │   ├── clock.go
+│   │   ├── inventory.go
+│   │   ├── inventory_test.go
+│   │   ├── order.go
+│   │   ├── order_test.go
+│   │   ├── pricing.go
+│   │   └── pricing_test.go
+│   └── views
+│       ├── components
+│       │   ├── badge.templ
+│       │   ├── badge_templ.go
+│       │   ├── button.templ
+│       │   ├── button_templ.go
+│       │   ├── card.templ
+│       │   ├── card_templ.go
+│       │   ├── doc.go
+│       │   ├── flash.templ
+│       │   ├── flash_templ.go
+│       │   ├── icons.templ
+│       │   ├── icons_templ.go
+│       │   ├── modal.templ
+│       │   ├── modal_templ.go
+│       │   ├── navbar.templ
+│       │   ├── navbar_templ.go
+│       │   ├── sidebar.templ
+│       │   ├── sidebar_templ.go
+│       │   ├── table.templ
+│       │   └── table_templ.go
+│       ├── flash
+│       │   └── flash.go
+│       ├── format
+│       │   └── format.go
+│       ├── layouts
+│       │   ├── base.templ
+│       │   ├── base_templ.go
+│       │   └── doc.go
+│       ├── pages
+│       │   ├── analytics.templ
+│       │   ├── analytics_templ.go
+│       │   ├── audit.templ
+│       │   ├── audit_templ.go
+│       │   ├── collections.templ
+│       │   ├── collections_templ.go
+│       │   ├── customer_detail.templ
+│       │   ├── customer_detail_templ.go
+│       │   ├── customers.templ
+│       │   ├── customers_templ.go
+│       │   ├── dashboard.templ
+│       │   ├── dashboard_templ.go
+│       │   ├── deadstock.templ
+│       │   ├── deadstock_templ.go
+│       │   ├── doc.go
+│       │   ├── expense_categories.templ
+│       │   ├── expense_categories_templ.go
+│       │   ├── expenses.templ
+│       │   ├── expenses_templ.go
+│       │   ├── holds.templ
+│       │   ├── holds_templ.go
+│       │   ├── login.templ
+│       │   ├── login_templ.go
+│       │   ├── product_detail.templ
+│       │   ├── product_detail_templ.go
+│       │   ├── product_form.templ
+│       │   ├── product_form_templ.go
+│       │   ├── products_list.templ
+│       │   ├── products_list_templ.go
+│       │   ├── purchase_order_detail.templ
+│       │   ├── purchase_order_detail_templ.go
+│       │   ├── purchase_orders.templ
+│       │   ├── purchase_orders_templ.go
+│       │   ├── restock_form.templ
+│       │   ├── restock_form_templ.go
+│       │   ├── restocks_list.templ
+│       │   ├── restocks_list_templ.go
+│       │   ├── return_form.templ
+│       │   ├── return_form_templ.go
+│       │   ├── sale_detail.templ
+│       │   ├── sale_detail_templ.go
+│       │   ├── sale_form.templ
+│       │   ├── sale_form_templ.go
+│       │   ├── sales_list.templ
+│       │   ├── sales_list_templ.go
+│       │   ├── staff.templ
+│       │   ├── staff_templ.go
+│       │   ├── stock_movements.templ
+│       │   ├── stock_movements_templ.go
+│       │   ├── suppliers.templ
+│       │   ├── suppliers_templ.go
+│       │   ├── variant_form.templ
+│       │   ├── variant_form_templ.go
+│       │   └── viewmodels.go
+│       ├── partials
+│       │   ├── best_sellers_table.templ
+│       │   ├── best_sellers_table_templ.go
+│       │   ├── deadstock_table.templ
+│       │   ├── deadstock_table_templ.go
+│       │   ├── doc.go
+│       │   ├── flash_messages.templ
+│       │   ├── flash_messages_templ.go
+│       │   ├── low_stock_widget.templ
+│       │   ├── low_stock_widget_templ.go
+│       │   ├── product_rows.templ
+│       │   ├── product_rows_templ.go
+│       │   ├── product_row.templ
+│       │   ├── product_row_templ.go
+│       │   ├── profit_cards.templ
+│       │   ├── profit_cards_templ.go
+│       │   ├── restock_row.templ
+│       │   ├── restock_row_templ.go
+│       │   ├── sale_rows.templ
+│       │   ├── sale_rows_templ.go
+│       │   ├── sales_chart.templ
+│       │   ├── sales_chart_templ.go
+│       │   ├── size_curve.templ
+│       │   ├── size_curve_templ.go
+│       │   ├── variant_table.templ
+│       │   └── variant_table_templ.go
+│       └── vm
+│           └── vm.go
+├── Makefile
+├── README.md
+├── sqlc.yaml
+├── text.txt
+├── tmp
+│   └── varels-cms
+└── tree.txt
+
+41 directories, 235 files

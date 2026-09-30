@@ -5,14 +5,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
-      - name: Install templ
-        run: go install github.com/a-h/templ/cmd/templ@latest
+          go-version: '1.26.0'
+
+      # Generated code (templ + sqlc) is not committed; regenerate it before building.
+      - name: Install code generators
+        run: |
+          go install github.com/a-h/templ/cmd/templ@v0.3.1020
+          go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1
+
       - name: Generate templates
         run: templ generate
+
+      - name: Generate SQL code
+        run: sqlc generate
+
+      # app.css is gitignored; the standalone CLI builds it with zero npm.
+      - name: Build CSS
+        run: |
+          curl -sSLo tailwindcss \
+            https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.3/tailwindcss-linux-x64
+          chmod +x tailwindcss
+          ./tailwindcss -i assets/css/input.css -o assets/css/app.css --minify
+
       - name: Build
         run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
       - name: Test
         run: go test ./...

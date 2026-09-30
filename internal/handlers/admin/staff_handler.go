@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/yourname/varels_cms/internal/auth"
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/db/types"
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/handlers/middleware"
-	"github.com/yourname/varels_cms/internal/views/pages"
+	"github.com/druidswebdesign/varels-cms/internal/auth"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/middleware"
+	"github.com/druidswebdesign/varels-cms/internal/views/pages"
 )
 
 // HandleStaffList renders GET /staff.
@@ -23,7 +23,8 @@ func (s *Server) HandleStaffList(w http.ResponseWriter, r *http.Request) {
 	common.Render(w, r, http.StatusOK, pages.Staff(users, middleware.CSRFToken(r)))
 }
 
-// HandleStaffInvite handles POST /staff/invite: adds an email to the whitelist.
+// HandleStaffInvite handles POST /staff/invite: adds an employee to the
+// whitelist with a local email + bcrypt password (Google OAuth removed).
 func (s *Server) HandleStaffInvite(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	_ = r.ParseForm()
@@ -35,17 +36,31 @@ func (s *Server) HandleStaffInvite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	password := r.FormValue("password")
+	if len(password) < 8 {
+		s.SetFlash(r, "Password must be at least 8 characters.", "error")
+		http.Redirect(w, r, "/staff", http.StatusSeeOther)
+		return
+	}
+
 	role := types.UserRole(strings.TrimSpace(r.FormValue("role")))
 	if role != types.UserRoleAdmin && role != types.UserRoleStaff {
 		role = types.UserRoleStaff
 	}
 
+	hash, err := auth.HashPassword(password)
+	if err != nil {
+		common.ServerError(w, err)
+		return
+	}
+
 	if _, err := s.Q.CreateApprovedUser(ctx, sqlc.CreateApprovedUserParams{
-		Email:       email,
-		DisplayName: common.NullString(r.FormValue("display_name")),
-		Role:        role,
-		Provider:    types.AuthProviderGoogle,
-		InvitedBy:   common.CurrentUserID(r),
+		Email:        email,
+		DisplayName:  common.NullString(r.FormValue("display_name")),
+		Role:         role,
+		Provider:     types.AuthProviderLocal,
+		PasswordHash: sql.NullString{String: hash, Valid: true},
+		InvitedBy:    common.CurrentUserID(r),
 	}); err != nil {
 		if common.IsUniqueViolation(err) {
 			s.SetFlash(r, "That email is already on the whitelist.", "error")

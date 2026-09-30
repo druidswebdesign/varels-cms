@@ -1,4 +1,4 @@
-# Architecture Decision Records — varels_cms
+# Architecture Decision Records — varels-cms
 
 This file records the significant architectural and data-modeling decisions for
 the internal inventory CMS. It is derived from `docs/` (`functions.md`,

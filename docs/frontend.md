@@ -1,4 +1,4 @@
-# Frontend & Design System — varels_cms
+# Frontend & Design System — varels-cms
 
 > The authoritative spec for the UI layer: design tokens, the dashboard shell,
 > shared components, dark mode and the conventions for new pages. Read this

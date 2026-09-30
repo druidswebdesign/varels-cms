@@ -11,8 +11,8 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"strconv"
 
-	"github.com/yourname/varels_cms/internal/views/format"
-	"github.com/yourname/varels_cms/internal/views/vm"
+	"github.com/druidswebdesign/varels-cms/internal/views/format"
+	"github.com/druidswebdesign/varels-cms/internal/views/vm"
 )
 
 // SalesChart renders revenue per channel as simple CSS bars (no JS needed).

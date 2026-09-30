@@ -7,23 +7,24 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
+	"strconv"
 	"syscall"
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/markbates/goth"
 
-	"github.com/yourname/varels_cms/internal/auth"
-	"github.com/yourname/varels_cms/internal/db"
-	"github.com/yourname/varels_cms/internal/handlers/admin"
-	"github.com/yourname/varels_cms/internal/handlers/analytics"
-	"github.com/yourname/varels_cms/internal/handlers/authweb"
-	"github.com/yourname/varels_cms/internal/handlers/catalog"
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/handlers/finance"
-	"github.com/yourname/varels_cms/internal/handlers/inventory"
-	"github.com/yourname/varels_cms/internal/handlers/middleware"
-	"github.com/yourname/varels_cms/internal/handlers/sales"
+	"github.com/druidswebdesign/varels-cms/internal/auth"
+	"github.com/druidswebdesign/varels-cms/internal/db"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/admin"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/analytics"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/authweb"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/catalog"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/finance"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/inventory"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/middleware"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/sales"
 )
 
 // config holds runtime configuration loaded from the environment.
@@ -33,13 +34,18 @@ type config struct {
 	Env           string
 	SessionSecret string
 
-	GoogleClientID     string
-	GoogleClientSecret string
-	GoogleRedirectURL  string
+	// Google OAuth is disabled; email + bcrypt is the only sign-in path.
+	// GoogleClientID     string
+	// GoogleClientSecret string
+	// GoogleRedirectURL  string
 
-	InitialOwnerEmail string
-	AdminEmail        string
-	AdminPassword     string
+	// InitialOwnerEmail string
+	AdminEmail    string
+	AdminPassword string
+
+	BackupDir       string
+	BackupInterval  time.Duration
+	BackupRetention int
 }
 
 func loadConfig() config {
@@ -48,13 +54,41 @@ func loadConfig() config {
 		DBPath:             getenv("DB_PATH", "./data/app.db"),
 		Env:                getenv("APP_ENV", "development"),
 		SessionSecret:      os.Getenv("SESSION_SECRET"),
-		GoogleClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-		GoogleClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		GoogleRedirectURL:  getenv("GOOGLE_REDIRECT_URL", "http://localhost:8080/auth/google/callback"),
-		InitialOwnerEmail:  os.Getenv("INITIAL_OWNER_EMAIL"),
 		AdminEmail:         os.Getenv("ADMIN_EMAIL"),
 		AdminPassword:      os.Getenv("ADMIN_PASSWORD"),
+
+		BackupDir:       getenv("BACKUP_DIR", filepath.Join(filepath.Dir(getenv("DB_PATH", "./data/app.db")), "backups")),
+		BackupInterval:  getenvDuration("BACKUP_INTERVAL", 24*time.Hour),
+		BackupRetention: getenvInt("BACKUP_RETENTION", 7),
 	}
+}
+
+// getenvDuration parses a duration like "12h" and falls back on error.
+func getenvDuration(key string, fallback time.Duration) time.Duration {
+	v := os.Getenv(key)
+	if v == "" {
+		return fallback
+	}
+	d, err := time.ParseDuration(v)
+	if err != nil {
+		log.Printf("config: invalid %s=%q, using %s", key, v, fallback)
+		return fallback
+	}
+	return d
+}
+
+// getenvInt parses an integer and falls back on error.
+func getenvInt(key string, fallback int) int {
+	v := os.Getenv(key)
+	if v == "" {
+		return fallback
+	}
+	n, err := strconv.Atoi(v)
+	if err != nil {
+		log.Printf("config: invalid %s=%q, using %d", key, v, fallback)
+		return fallback
+	}
+	return n
 }
 
 func getenv(key, fallback string) string {
@@ -65,8 +99,23 @@ func getenv(key, fallback string) string {
 }
 
 func main() {
+	// Load .env before reading config so `cp .env.example .env` just works.
+	// Real environment variables always take precedence.
+	loadDotEnv(".env")
+
 	cfg := loadConfig()
 	secure := cfg.Env != "development"
+
+	// Validate secrets before touching the database so a misconfigured
+	// production deployment fails fast instead of seeding a weak account.
+	if secure && cfg.AdminPassword != "" {
+		if err := auth.ValidatePasswordStrength(cfg.AdminPassword); err != nil {
+			log.Fatalf("server: %v", err)
+		}
+	}
+	if secure && len(cfg.SessionSecret) < 32 {
+		log.Fatalf("server: SESSION_SECRET must be at least 32 bytes in production")
+	}
 
 	sqldb, err := db.Open(cfg.DBPath)
 	if err != nil {
@@ -80,32 +129,52 @@ func main() {
 
 	ctx := context.Background()
 	if err := db.Seed(ctx, sqldb, db.SeedOptions{
-		InitialOwnerEmail: cfg.InitialOwnerEmail,
-		AdminEmail:        cfg.AdminEmail,
-		AdminPassword:     cfg.AdminPassword,
-		Dev:               cfg.Env == "development",
+		AdminEmail:    cfg.AdminEmail,
+		AdminPassword: cfg.AdminPassword,
+		Dev:           cfg.Env == "development",
 	}); err != nil {
 		log.Fatalf("server: %v", err)
 	}
 
+	db.StartBackupSchedule(ctx, sqldb, cfg.BackupDir, cfg.BackupInterval, cfg.BackupRetention)
+
 	srv := common.NewServer(sqldb, cfg.DBPath, cfg.Env)
 	srv.Sessions = auth.NewManager(srv.Q, 24*time.Hour, secure)
 	srv.Limiter = auth.NewLoginLimiter(5, 15*time.Minute)
-	srv.OAuthEnabled = cfg.GoogleClientID != "" && cfg.GoogleClientSecret != ""
+	// srv.OAuthEnabled = cfg.GoogleClientID != "" && cfg.GoogleClientSecret != ""
+
+	// Periodically purge expired session rows so the sessions table does not
+	// grow without bound.
+	go func() {
+		ticker := time.NewTicker(time.Hour)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				if err := srv.Sessions.CleanupExpiredSessions(ctx); err != nil {
+					log.Printf("session gc: %v", err)
+				}
+			}
+		}
+	}()
 
 	secret := cfg.SessionSecret
-	if secret == "" {
-		log.Printf("warning: SESSION_SECRET is empty; using an ephemeral secret (sessions will not survive a restart)")
+	if len(secret) < 32 {
+		log.Printf("warning: SESSION_SECRET is empty or too short; using an ephemeral secret (sessions will not survive a restart)")
 		secret = auth.RandomSecret()
 	}
 
-	var providers []goth.Provider
-	if srv.OAuthEnabled {
-		providers = append(providers, auth.GoogleProvider(cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.GoogleRedirectURL))
-	} else {
-		log.Printf("warning: Google OAuth is not configured; /auth/google is disabled (use /admin-login)")
-	}
-	auth.SetupOAuth(secret, secure, providers...)
+	// Google OAuth is disabled; email + bcrypt is the only sign-in path. The
+	// old Goth provider registration is kept below for reference.
+	// var providers []goth.Provider
+	// if srv.OAuthEnabled {
+	// 	providers = append(providers, auth.GoogleProvider(cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.GoogleRedirectURL))
+	// } else {
+	// 	log.Printf("warning: Google OAuth is not configured; /auth/google is disabled (use /admin-login)")
+	// }
+	// auth.SetupOAuth(secret, secure, providers...)
 
 	httpSrv := &http.Server{
 		Addr:              ":" + cfg.Port,
@@ -114,7 +183,7 @@ func main() {
 	}
 
 	go func() {
-		log.Printf("varels_cms listening on %s (env=%s)", httpSrv.Addr, cfg.Env)
+		log.Printf("varels-cms listening on %s (env=%s)", httpSrv.Addr, cfg.Env)
 		if err := httpSrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("server: %v", err)
 		}
@@ -146,6 +215,7 @@ func routes(s *common.Server) http.Handler {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recover)
+	r.Use(middleware.SecurityHeaders)
 	r.Use(middleware.CSRF)
 	r.Use(s.Sessions.LoadAndSave)
 	r.Use(s.FlashFromSession)
@@ -153,13 +223,16 @@ func routes(s *common.Server) http.Handler {
 	r.Handle("/assets/*", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	r.Get("/healthz", adminh.HandleHealth)
 
-	// Public auth routes.
+	// Public auth routes (email + bcrypt only; Google OAuth removed).
 	r.Get("/login", authh.HandleLoginPage)
-	r.Get("/auth/google", authh.HandleGoogleBegin)
-	r.Get("/auth/google/callback", authh.HandleGoogleCallback)
-	r.Get("/auth/denied", authh.HandleAccessDenied)
-	r.Get("/admin-login", authh.HandleAdminLoginPage)
-	r.Post("/admin-login", authh.HandleAdminLogin)
+	r.Post("/login", authh.HandleLogin)
+
+	// Google OAuth sign-in disabled (ADR-0004). Kept for reference:
+	// r.Get("/auth/google", authh.HandleGoogleBegin)
+	// r.Get("/auth/google/callback", authh.HandleGoogleCallback)
+	// r.Get("/auth/denied", authh.HandleAccessDenied)
+	// r.Get("/admin-login", authh.HandleAdminLoginPage)
+	// r.Post("/admin-login", authh.HandleAdminLogin)
 	r.Post("/logout", authh.HandleLogout)
 
 	r.Group(func(r chi.Router) {

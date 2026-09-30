@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	dbpkg "github.com/yourname/varels_cms/internal/db"
-	"github.com/yourname/varels_cms/internal/handlers/common"
+	dbpkg "github.com/druidswebdesign/varels-cms/internal/db"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
 )
 
 // HandleHealth reports 200 when the database is reachable.

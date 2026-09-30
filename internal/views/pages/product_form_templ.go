@@ -12,9 +12,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/views/format"
-	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/views/format"
+	"github.com/druidswebdesign/varels-cms/internal/views/layouts"
 )
 
 // ProductForm renders create (editing=false) and edit (editing=true) for a

@@ -1,6 +1,14 @@
 package auth
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"fmt"
+
+	"golang.org/x/crypto/bcrypt"
+)
+
+// MinPasswordLength is the minimum accepted length for a local (break-glass)
+// password. It is enforced in production startup.
+const MinPasswordLength = 12
 
 // dummyHash is compared against when a local account is not found so the
 // failure path costs the same as a real password check (no user enumeration).
@@ -23,4 +31,13 @@ func CheckPassword(hash, plain string) bool {
 // CheckDummy runs a throwaway bcrypt comparison to equalise timing.
 func CheckDummy(plain string) {
 	_ = bcrypt.CompareHashAndPassword([]byte(dummyHash), []byte(plain))
+}
+
+// ValidatePasswordStrength returns an error if plain is too short for a
+// break-glass local account.
+func ValidatePasswordStrength(plain string) error {
+	if len(plain) < MinPasswordLength {
+		return fmt.Errorf("password must be at least %d characters", MinPasswordLength)
+	}
+	return nil
 }

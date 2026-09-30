@@ -9,9 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/yourname/varels_cms/internal/views/components"
-	"github.com/yourname/varels_cms/internal/views/flash"
-	"github.com/yourname/varels_cms/internal/views/partials"
+	"github.com/druidswebdesign/varels-cms/internal/views/components"
+	"github.com/druidswebdesign/varels-cms/internal/views/flash"
+	"github.com/druidswebdesign/varels-cms/internal/views/partials"
 )
 
 // Base is the full-page shell: shadcn-style sidebar + sticky header, HTMX,
@@ -51,7 +51,7 @@ func Base(title string, active string, csrf string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · varels_cms</title><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar saved = localStorage.getItem(\"theme\");\n\t\t\t\t\t\tvar dark = saved === \"dark\" || (saved === null && window.matchMedia(\"(prefers-color-scheme: dark)\").matches);\n\t\t\t\t\t\tif (dark) document.documentElement.classList.add(\"dark\");\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t})();\n\t\t\t</script><link rel=\"stylesheet\" href=\"/assets/css/app.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.min.js\"></script><script defer src=\"/assets/js/app.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script></head><body hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · varels-cms</title><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar saved = localStorage.getItem(\"theme\");\n\t\t\t\t\t\tvar dark = saved === \"dark\" || (saved === null && window.matchMedia(\"(prefers-color-scheme: dark)\").matches);\n\t\t\t\t\t\tif (dark) document.documentElement.classList.add(\"dark\");\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t})();\n\t\t\t</script><link rel=\"stylesheet\" href=\"/assets/css/app.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.min.js\"></script><script defer src=\"/assets/js/app.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script></head><body hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

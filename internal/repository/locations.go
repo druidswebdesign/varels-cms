@@ -6,7 +6,7 @@ package repository
 import (
 	"context"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 )
 
 // LocationNames maps location id -> name.

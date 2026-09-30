@@ -1,6 +1,6 @@
 -- +goose Up
 
--- varels_cms initial schema: catalog, inventory, orders/sales, returns,
+-- varels-cms initial schema: catalog, inventory, orders/sales, returns,
 -- finance/OpEx, audit, and suppliers/purchase orders.
 --
 -- Money is INTEGER ARS minor units (ADR-0005). Timestamps are ISO-8601 UTC

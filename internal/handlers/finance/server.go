@@ -1,6 +1,6 @@
 package finance
 
-import "github.com/yourname/varels_cms/internal/handlers/common"
+import "github.com/druidswebdesign/varels-cms/internal/handlers/common"
 
 // Server adapts the shared handler kernel to the finance package. It embeds
 // *common.Server so these handlers keep the database, session and rendering

@@ -1,4 +1,4 @@
-# Stack & Folder Structure — varels_cms
+# Stack & Folder Structure — varels-cms
 
 > This file is the authoritative stack + folder-structure spec. There is no
 > separate `tech-stack.md` or `folder-structure.md`; the tree below reflects the

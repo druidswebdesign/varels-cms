@@ -1,4 +1,4 @@
-# Implementation Log — varels_cms
+# Implementation Log — varels-cms
 
 Single chronological record of the build: the milestone plan, what was actually
 implemented, how it was verified, and what is still open.
@@ -164,11 +164,16 @@ upload/delete and collections assignment.
 - `internal/db/backup.go`: `Backup` (`VACUUM INTO`, timestamped, refuses to
   overwrite), `RestoreDrill` (opens the newest backup with `query_only(1)` and
   runs `PRAGMA integrity_check`).
+- `internal/db/backup_schedule.go`: `StartBackupSchedule` takes a snapshot on
+  startup and every `BACKUP_INTERVAL` (default 24h), pruning to the newest
+  `BACKUP_RETENTION` (default 7) under `BACKUP_DIR` (default `<DB dir>/backups`).
 - `ops_handler.go`: `GET /healthz`, `POST /admin/backup`,
   `POST /admin/restore-drill`.
-- `Dockerfile`: Go 1.26 builder, copies `go.sum`, `CGO_ENABLED=0` (pure-Go
-  SQLite), runtime image unchanged.
+- `Dockerfile`: Go 1.26 builder regenerates templ/sqlc/CSS, `CGO_ENABLED=0`
+  (pure-Go SQLite), non-root runtime, `/app/data` volume, `/healthz`
+  HEALTHCHECK.
 - `.gitignore`: ignore `/data/backups/`.
+- `cmd/server/dotenv.go`: loads `.env` on startup (process env wins).
 
 #### Verification
 

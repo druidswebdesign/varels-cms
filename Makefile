@@ -1,6 +1,6 @@
 .PHONY: dev build generate sqlc css migrate test tidy clean seed
 
-BINARY          := bin/varels_cms
+BINARY          := bin/varels-cms
 DB_PATH         ?= data/app.db
 MIGRATIONS      := internal/db/migrations
 TAILWIND_INPUT  := assets/css/input.css

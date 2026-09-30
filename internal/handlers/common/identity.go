@@ -5,7 +5,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/yourname/varels_cms/internal/auth"
+	"github.com/druidswebdesign/varels-cms/internal/auth"
 )
 
 // CurrentUserID returns the authenticated user id for audit/ownership columns.

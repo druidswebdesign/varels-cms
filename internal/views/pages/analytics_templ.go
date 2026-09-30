@@ -11,10 +11,10 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 
-	"github.com/yourname/varels_cms/internal/views/format"
-	"github.com/yourname/varels_cms/internal/views/layouts"
-	"github.com/yourname/varels_cms/internal/views/partials"
-	"github.com/yourname/varels_cms/internal/views/vm"
+	"github.com/druidswebdesign/varels-cms/internal/views/format"
+	"github.com/druidswebdesign/varels-cms/internal/views/layouts"
+	"github.com/druidswebdesign/varels-cms/internal/views/partials"
+	"github.com/druidswebdesign/varels-cms/internal/views/vm"
 )
 
 // Analytics is the admin reporting page (ADR-0007).

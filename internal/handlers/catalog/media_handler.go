@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/db/types"
-	"github.com/yourname/varels_cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
 )
 
 // HandleMediaCreate handles POST /products/{id}/media.

@@ -8,7 +8,7 @@ package partials
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/yourname/varels_cms/internal/views/flash"
+import "github.com/druidswebdesign/varels-cms/internal/views/flash"
 
 // FlashMessages renders one flash message (if any) inside the #flash slot.
 func FlashMessages(f flash.Flash) templ.Component {

@@ -10,11 +10,11 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/yourname/varels_cms/internal/auth"
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/reporting"
-	"github.com/yourname/varels_cms/internal/repository"
+	"github.com/druidswebdesign/varels-cms/internal/auth"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/reporting"
+	"github.com/druidswebdesign/varels-cms/internal/repository"
 )
 
 // adminOnlyExports require the admin role (functions.md §3, routes.md §3.9).

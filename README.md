@@ -1,4 +1,4 @@
-# varels_cms
+# varels-cms
 
 Internal inventory-management CMS for a clothing brand.
 
@@ -54,7 +54,7 @@ data/               SQLite database (gitignored)
 
 Prerequisites are single binaries — no Node.js required:
 
-- Go 1.23+
+- Go 1.26+
 - [`templ`](https://github.com/a-h/templ)
 - [`sqlc`](https://sqlc.dev)
 - [`goose`](https://github.com/pressly/goose)
@@ -62,7 +62,7 @@ Prerequisites are single binaries — no Node.js required:
 - [`air`](https://github.com/air-verse/air) (dev only)
 
 ```bash
-cp .env.example .env          # fill in secrets and Google OAuth credentials
+cp .env.example .env          # loaded automatically; real env vars take precedence
 go mod tidy
 make generate                 # templ
 make sqlc                     # generated Go query code
@@ -70,6 +70,10 @@ make css                      # build assets/css/app.css
 make migrate                  # apply goose migrations
 make dev                      # run with live reload
 ```
+
+Generated code (`*_templ.go`, `internal/db/sqlc/*.go`) and `assets/css/app.css` are
+gitignored: a fresh checkout must run `make generate sqlc css` (CI and the
+Dockerfile do this automatically).
 
 ### Auth
 
@@ -80,8 +84,40 @@ A hidden `/admin-login` route provides an emergency local password for the owner
 ## Deployment
 
 ```bash
-make build                    # bin/varels_cms
-./bin/varels_cms              # serves on $PORT, DB at $DB_PATH
+make build                    # bin/varels-cms
+./bin/varels-cms              # serves on $PORT, DB at $DB_PATH
 ```
 
-See `Dockerfile` for a container build.
+The server migrates and seeds the database on startup, so no separate migrate
+step is needed in production.
+
+For a **private deployment**, the server refuses to start unless:
+- `APP_ENV=production`
+- `SESSION_SECRET` is at least 32 bytes (e.g. `openssl rand -hex 32`)
+- `ADMIN_PASSWORD` is at least 12 characters (break-glass login)
+
+and HTTPS terminates in front of the app (nginx/Caddy/Cloudflare). See
+[`docs/auth.md`](docs/auth.md) §4 for the full security hardening and the
+reverse-proxy note.
+
+### Backups
+
+Scheduled snapshots are on by default: one `VACUUM INTO` copy every 24h into
+`<DB dir>/backups`, keeping the newest 7. Tune with `BACKUP_DIR`,
+`BACKUP_INTERVAL` (e.g. `6h`) and `BACKUP_RETENTION`. The manual
+`POST /admin/backup` and `POST /admin/restore-drill` routes remain available.
+
+### Docker
+
+```bash
+docker compose up -d          # app + named volume for /app/data
+```
+
+Or without compose, mount a volume so the SQLite file survives redeploys:
+
+```bash
+docker build -t varels-cms .
+docker run -p 8080:8080 --env-file .env -v varels-data:/app/data varels-cms
+```
+
+See `Dockerfile` for the container build.

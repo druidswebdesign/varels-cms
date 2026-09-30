@@ -1,4 +1,4 @@
-# Functions & Product Specification — varels_cms
+# Functions & Product Specification — varels-cms
 
 > Functional spec for the CMS: the system rules, the calculations, and every
 > user-facing capability grouped by domain. See `docs/overview.md` for context and

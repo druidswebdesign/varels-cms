@@ -9,9 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/views/components"
-	"github.com/yourname/varels_cms/internal/views/layouts"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/views/components"
+	"github.com/druidswebdesign/varels-cms/internal/views/layouts"
 )
 
 // ExpenseCategories lists OpEx categories and offers the create form.

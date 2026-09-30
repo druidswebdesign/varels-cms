@@ -1,4 +1,4 @@
-# AI Work Tracking — varels_cms
+# AI Work Tracking — varels-cms
 
 > Snapshot of what has been built and how to track future AI changes. This is a
 > living reference, not a chronological log — the dated build history lives in

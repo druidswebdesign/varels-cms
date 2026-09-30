@@ -9,8 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/yourname/varels_cms/internal/views/components"
-	"github.com/yourname/varels_cms/internal/views/format"
+	"github.com/druidswebdesign/varels-cms/internal/views/components"
+	"github.com/druidswebdesign/varels-cms/internal/views/format"
 )
 
 // ProfitCards renders the P&L summary. Admin-only (ADR-0007, ADR-0018).

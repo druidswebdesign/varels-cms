@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/db/types"
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/handlers/middleware"
-	"github.com/yourname/varels_cms/internal/views/pages"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/middleware"
+	"github.com/druidswebdesign/varels-cms/internal/views/pages"
 )
 
 // HandleCollectionsList renders GET /collections.

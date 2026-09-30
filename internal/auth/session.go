@@ -9,7 +9,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 )
 
 const (
@@ -47,17 +47,25 @@ func (m *Manager) LoadAndSave(next http.Handler) http.Handler {
 	return m.sm.LoadAndSave(next)
 }
 
-// Login records the user in the session. Call LoadAndSave has already loaded
-// the session for the request; SCS commits it at the end of the request.
-func (m *Manager) Login(ctx context.Context, u sqlc.ApprovedUser) {
+// Login records the user in the session and rotates the session token to
+// prevent session fixation. LoadAndSave has already loaded the session for the
+// request; SCS commits it at the end of the request.
+func (m *Manager) Login(ctx context.Context, u sqlc.ApprovedUser) error {
 	m.sm.Put(ctx, sessionKeyUserID, u.ID)
 	m.sm.Put(ctx, sessionKeyRole, string(u.Role))
 	m.sm.Put(ctx, sessionKeyEmail, u.Email)
+	return m.sm.RenewToken(ctx)
 }
 
 // Logout destroys the session.
 func (m *Manager) Logout(ctx context.Context) error {
 	return m.sm.Destroy(ctx)
+}
+
+// CleanupExpiredSessions deletes session rows that have expired. Call
+// periodically (e.g. hourly) so the sessions table does not grow without bound.
+func (m *Manager) CleanupExpiredSessions(ctx context.Context) error {
+	return m.q.DeleteExpiredSessions(ctx, time.Now().UTC().Format(time.RFC3339))
 }
 
 // SetFlash stores a one-shot message for the next rendered page.

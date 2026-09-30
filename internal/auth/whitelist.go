@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 )
 
 // Whitelist policy (docs/auth.md, ADR-0004): a login is allowed only when the

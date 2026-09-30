@@ -2,8 +2,8 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-  cmd = "templ generate && go build -o ./tmp/varels_cms ./cmd/server"
-  bin = "./tmp/varels_cms"
+  cmd = "templ generate && go build -o ./tmp/varels-cms ./cmd/server"
+  bin = "./tmp/varels-cms"
   include_ext = ["go", "templ", "sql", "html", "css"]
   exclude_dir = ["tmp", "bin", "data", "assets/css", "internal/db/sqlc", "docs", ".git"]
   delay = 300

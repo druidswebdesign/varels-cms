@@ -9,12 +9,12 @@ import (
 
 	"github.com/a-h/templ"
 
-	"github.com/yourname/varels_cms/internal/db/sqlc"
-	"github.com/yourname/varels_cms/internal/handlers/common"
-	"github.com/yourname/varels_cms/internal/handlers/middleware"
-	"github.com/yourname/varels_cms/internal/views/flash"
-	"github.com/yourname/varels_cms/internal/views/pages"
-	"github.com/yourname/varels_cms/internal/views/partials"
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
+	"github.com/druidswebdesign/varels-cms/internal/handlers/middleware"
+	"github.com/druidswebdesign/varels-cms/internal/views/flash"
+	"github.com/druidswebdesign/varels-cms/internal/views/pages"
+	"github.com/druidswebdesign/varels-cms/internal/views/partials"
 )
 
 // HandleVariantTable renders GET /products/{id}/variants as an HTMX fragment.

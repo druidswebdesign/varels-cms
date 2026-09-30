@@ -3,7 +3,7 @@ package common
 import (
 	"net/http"
 
-	"github.com/yourname/varels_cms/internal/views/flash"
+	"github.com/druidswebdesign/varels-cms/internal/views/flash"
 )
 
 // FlashFromSession moves any pending session flash into the request context so

@@ -1,9 +1,9 @@
 package layouts
 
 import (
-	"github.com/yourname/varels_cms/internal/views/components"
-	"github.com/yourname/varels_cms/internal/views/flash"
-	"github.com/yourname/varels_cms/internal/views/partials"
+	"github.com/druidswebdesign/varels-cms/internal/views/components"
+	"github.com/druidswebdesign/varels-cms/internal/views/flash"
+	"github.com/druidswebdesign/varels-cms/internal/views/partials"
 )
 
 // Base is the full-page shell: shadcn-style sidebar + sticky header, HTMX,
@@ -15,7 +15,7 @@ templ Base(title string, active string, csrf string) {
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>{ title } · varels_cms</title>
+			<title>{ title } · varels-cms</title>
 			<script>
 				(function () {
 					try {

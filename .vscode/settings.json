@@ -1,0 +1,23 @@
+{
+  // Generated files are rewritten by `templ generate` / `sqlc generate`.
+  // Editing them in the editor fights the generators and produces
+  // "failed to save" conflicts. Keep them out of the explorer and read-only.
+  "files.exclude": {
+    "**/*_templ.go": true,
+    "internal/db/sqlc/*.sql.go": true,
+    "internal/db/sqlc/models.go": true,
+    "internal/db/sqlc/querier.go": true,
+    "internal/db/sqlc/db.go": true
+  },
+  "files.readonlyInclude": {
+    "**/*_templ.go": true,
+    "internal/db/sqlc/*.sql.go": true,
+    "internal/db/sqlc/models.go": true,
+    "internal/db/sqlc/querier.go": true,
+    "internal/db/sqlc/db.go": true
+  },
+  "search.exclude": {
+    "**/*_templ.go": true,
+    "internal/db/sqlc": true
+  }
+}

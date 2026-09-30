@@ -174,7 +174,7 @@ const (
 
 `sqlc.yaml` maps each enum column to its type via `overrides`, so generated
 structs use `types.OrderStatus` instead of a bare `string`. The override imports
-the module path (`github.com/yourname/varels_cms/internal/db/types`).
+the module path (`github.com/druidswebdesign/varels-cms/internal/db/types`).
 
 This gives compile-time safety on enum values and is the companion to
 `internal/auth/roles.go`, which holds the runtime role helpers

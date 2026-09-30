@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/yourname/varels_cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
 )
 
 // TestReturn_PartialRestoresStockAndOriginalCost checks the ADR-0006/ADR-0012

@@ -1,0 +1,14 @@
+.git
+.github
+.env
+bin
+tmp
+data
+docs
+*.md
+
+# Generated locally; rebuilt inside the image.
+*.templ.go
+/assets/css/app.css
+/internal/db/sqlc/*.go
+!/internal/db/sqlc/doc.go

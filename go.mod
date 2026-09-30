@@ -1,4 +1,4 @@
-module github.com/yourname/varels_cms
+module github.com/druidswebdesign/varels-cms
 
 go 1.26.0
 

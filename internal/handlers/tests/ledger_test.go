@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/yourname/varels_cms/internal/db/types"
+	"github.com/druidswebdesign/varels-cms/internal/db/types"
 )
 
 // TestLedger_StockLevelsEqualMovements is the central invariant of ADR-0017:
