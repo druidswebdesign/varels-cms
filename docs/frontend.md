@@ -231,6 +231,16 @@ handling.
 - Missing keys fall through to the server-rendered English text, so pages adopt
   keys incrementally: add `data-i18n` to a label and a dictionary entry, and it
   translates.
+- **Global phrase table.** Server-rendered content that carries no key is
+  translated by `PHRASES` (also in `app.js`): an English→Spanish map keyed by the
+  *source text itself* (exact, case-sensitive match on the trimmed text node or
+  `placeholder`/`title`/`aria-label` value). This covers every page, table, form,
+  option and empty state without annotating markup, e.g. `<th>Name</th>` →
+  `Nombre`. Mixed nodes work too — the static fragments next to dynamic values
+  (e.g. `Trapped cash:`, `· no sales in`, `days`) are matched individually.
+  Each node keeps its original English so switching back restores it exactly.
+  Trade-off: a dynamic value that happens to equal a table key (e.g. a product
+  literally named `Sales`) is translated; keep keys specific to UI copy.
 - On language change the component updates `document.documentElement.lang`,
   persists `lang`, re-runs `i18n.apply(document)` and fires `app:lang`. HTMX swaps
   re-apply to the swapped subtree in the `htmx:afterSwap` handler.
