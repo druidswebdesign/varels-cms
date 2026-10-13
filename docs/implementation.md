@@ -585,3 +585,50 @@ incremental, so untouched pages keep rendering inside the new shell.
   order 3) using the new card/toast primitives.
 - Sweep the remaining pages from `border-gray-200`/`bg-white` to semantic tokens.
 
+### 2026-10-13 — Order 3 start: restock/adjust HTMX panel + flash/OOB
+
+Converted the restock/adjust forms to the HTMX fragment + out-of-band flash
+contract that the variant table already used (`docs/frontend.md` §6,
+`docs/testing.md` order 3), and swept the restock page onto design tokens.
+
+#### Added / changed
+
+- `internal/views/partials/restock_panel.templ` (new) — `RestockPanel`: current
+  stock by location/state (card) plus the receive and adjust forms, token
+  classes (`bg-card`, `border-input`, `text-muted-foreground`), and
+  `hx-post`/`hx-target="#restock-panel"`/`hx-swap="outerHTML"`.
+- `internal/views/pages/restock_form.templ` — reduced to the shell + heading +
+  `@partials.RestockPanel`; dropped the `errMsg`/`?err=` inline error path
+  (errors now come from the flash slot).
+- `internal/handlers/inventory/restock_handler.go` — `HandleRestockForm` loads
+  stock + location names; new `renderRestockPanel` helper returns the panel +
+  `partials.FlashOOB`. `HandleRestock`/`HandleAdjustStock` return the panel with
+  a success/error flash for `HX-Request`, and keep a graceful non-HTMX
+  redirect + session flash. Removed the `restock?err=invalid` and
+  `...?err=adjust` redirects.
+
+#### Tests
+
+- `internal/handlers/tests/htmx_test.go` (new) — `postHX` helper;
+  `TestHTMX_RestockPanelFragment` (200, `#restock-panel`, OOB flash, stock +2)
+  and `TestHTMX_AdjustErrorReturnsPanel` (rejected adjust returns the panel and
+  writes no movement).
+
+#### Verification (live server, temp DB, `:8099`)
+
+- `templ generate`, `go build ./...`, `go vet ./...`, `make css`, `gofmt` clean;
+  `go test ./...` — 15 tests pass.
+- `/variants/1/restock` 200 containing `#restock-panel`, the current-stock card
+  and both `hx-post` forms.
+- HTMX `POST /variants/1/restock` → 200 panel + `hx-swap-oob` + "Restocked 3
+  units."; HTMX `POST /variants/1/adjust` without a reason → 200 panel + error
+  flash, no movement; with a reason → 200 + "Stock adjusted.".
+- Non-HTMX restock → 303 `/products/1` (fallback preserved).
+
+#### Still open
+
+- Sale/return and variant `?err=` redirects are unchanged (their redirect
+  contract is asserted by the money-path tests).
+- Remaining pages still on legacy `gray-*`/`bg-white` classes; low-stock email
+  digest (order 4) not started.
+

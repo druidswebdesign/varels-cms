@@ -229,9 +229,10 @@ it. Everything else still renders inside the new shell but keeps legacy
 | `Card` / `StatCard` / `Icon` primitives | ✅ Done |
 | `button` / `badge` / `table` / `flash` retokenised | ✅ Done |
 | `dashboard.templ`, `profit_cards`, `low_stock_widget`, `flash_messages` | ✅ Done |
+| `restock_form` + `partials/restock_panel` (stock panel, HTMX + flash/OOB) | ✅ Done (2026-10-13) |
 | All other pages (products, sales, analytics, admin, …) | ⏳ Token sweep pending |
 | `modal.templ` | ⏳ Token sweep pending |
-| Restock/adjust forms → HTMX fragments; remove `?err=` redirects | ⏳ `docs/testing.md` order 3 |
+| Restock/adjust forms → HTMX fragments; remove `?err=` redirects | ⚙️ Restock/adjust done; sale/return/variant `?err=` remain |
 | Low-stock email digest | ⏳ `docs/testing.md` order 4 |
 
 When sweeping a page, do it in one pass: swap palette classes for tokens, wrap

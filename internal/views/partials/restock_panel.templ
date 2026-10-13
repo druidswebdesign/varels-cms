@@ -1,0 +1,120 @@
+package partials
+
+import (
+	"fmt"
+
+	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
+	"github.com/druidswebdesign/varels-cms/internal/views/components"
+	"github.com/druidswebdesign/varels-cms/internal/views/format"
+)
+
+// RestockPanel is the variant stock panel: current stock by location/state plus
+// the restock and adjustment forms. It is embedded by pages.RestockForm for the
+// full page and returned standalone (with an out-of-band flash) for HTMX swaps
+// after a restock or adjustment (docs/frontend.md §6).
+templ RestockPanel(v sqlc.ProductVariant, stock []sqlc.StockLevel, locationNames map[int64]string, locations []sqlc.Location, reasonCodes []sqlc.ReasonCode, csrf string) {
+	<div id="restock-panel" class="space-y-6">
+		@components.Card() {
+			@components.CardHeader() {
+				@components.CardTitle() { Current stock }
+				@components.CardDescription() {
+					<span>{ v.Sku + " · unit cost " + format.Money(v.CostMinor) }</span>
+				}
+			}
+			@components.CardContent() {
+				if len(stock) == 0 {
+					<p class="text-sm text-muted-foreground">No stock recorded yet.</p>
+				} else {
+					<table class="w-full text-sm">
+						<thead>
+							<tr class="text-left text-muted-foreground">
+								<th class="py-1 font-medium">Location</th>
+								<th class="py-1 font-medium">State</th>
+								<th class="py-1 text-right font-medium">Quantity</th>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-border">
+							for _, sl := range stock {
+								<tr>
+									<td class="py-1.5">{ locationNames[sl.LocationID] }</td>
+									<td class="py-1.5">{ string(sl.State) }</td>
+									<td class="py-1.5 text-right tabular-nums">{ fmt.Sprint(sl.Quantity) }</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+			}
+		}
+
+		<div class="grid gap-6 md:grid-cols-2">
+			<form method="post" action={ "/variants/" + fmt.Sprint(v.ID) + "/restock" }
+				hx-post={ "/variants/" + fmt.Sprint(v.ID) + "/restock" }
+				hx-target="#restock-panel" hx-swap="outerHTML"
+				class="space-y-4 rounded-xl border bg-card p-6 text-card-foreground shadow-sm">
+				<input type="hidden" name="csrf_token" value={ csrf }/>
+				<h2 class="font-semibold leading-none tracking-tight">Receive stock</h2>
+				<div>
+					<label for="quantity" class="mb-1 block text-xs font-medium text-muted-foreground">Quantity</label>
+					<input id="quantity" name="quantity" type="number" min="1" step="1" required class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="cost" class="mb-1 block text-xs font-medium text-muted-foreground">Incoming cost (ARS)</label>
+					<input id="cost" name="cost" type="number" min="0" step="1" required class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="location_id" class="mb-1 block text-xs font-medium text-muted-foreground">Location</label>
+					<select id="location_id" name="location_id" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+						for _, l := range locations {
+							<option value={ fmt.Sprint(l.ID) }>{ l.Name }</option>
+						}
+					</select>
+				</div>
+				<div>
+					<label for="note" class="mb-1 block text-xs font-medium text-muted-foreground">Note</label>
+					<input id="note" name="note" type="text" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"/>
+				</div>
+				@components.Button("Receive", "primary")
+			</form>
+
+			<form method="post" action={ "/variants/" + fmt.Sprint(v.ID) + "/adjust" }
+				hx-post={ "/variants/" + fmt.Sprint(v.ID) + "/adjust" }
+				hx-target="#restock-panel" hx-swap="outerHTML"
+				class="space-y-4 rounded-xl border bg-card p-6 text-card-foreground shadow-sm">
+				<input type="hidden" name="csrf_token" value={ csrf }/>
+				<h2 class="font-semibold leading-none tracking-tight">Adjust stock</h2>
+				<div>
+					<label for="aqty" class="mb-1 block text-xs font-medium text-muted-foreground">Quantity (±)</label>
+					<input id="aqty" name="quantity" type="number" step="1" required class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"/>
+				</div>
+				<div>
+					<label for="reason" class="mb-1 block text-xs font-medium text-muted-foreground">Reason</label>
+					<select id="reason" name="reason_code" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+						for _, rc := range reasonCodes {
+							<option value={ rc.Code }>{ rc.Label }</option>
+						}
+					</select>
+				</div>
+				<div>
+					<label for="state" class="mb-1 block text-xs font-medium text-muted-foreground">State</label>
+					<select id="state" name="state" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+						<option value="sellable">Sellable</option>
+						<option value="damaged">Damaged</option>
+						<option value="sample">Sample</option>
+						<option value="gift">Gift</option>
+						<option value="personal">Personal</option>
+					</select>
+				</div>
+				<div>
+					<label for="alocation" class="mb-1 block text-xs font-medium text-muted-foreground">Location</label>
+					<select id="alocation" name="location_id" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+						for _, l := range locations {
+							<option value={ fmt.Sprint(l.ID) }>{ l.Name }</option>
+						}
+					</select>
+				</div>
+				@components.Button("Adjust", "secondary")
+			</form>
+		</div>
+	</div>
+}

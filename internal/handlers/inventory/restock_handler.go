@@ -6,12 +6,15 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/a-h/templ"
+
 	"github.com/druidswebdesign/varels-cms/internal/db/sqlc"
 	"github.com/druidswebdesign/varels-cms/internal/db/types"
 	"github.com/druidswebdesign/varels-cms/internal/handlers/common"
 	"github.com/druidswebdesign/varels-cms/internal/handlers/middleware"
 	"github.com/druidswebdesign/varels-cms/internal/repository"
 	"github.com/druidswebdesign/varels-cms/internal/service"
+	"github.com/druidswebdesign/varels-cms/internal/views/flash"
 	"github.com/druidswebdesign/varels-cms/internal/views/pages"
 	"github.com/druidswebdesign/varels-cms/internal/views/partials"
 )
@@ -49,7 +52,48 @@ func (s *Server) HandleRestockForm(w http.ResponseWriter, r *http.Request) {
 		common.ServerError(w, err)
 		return
 	}
-	common.Render(w, r, http.StatusOK, pages.RestockForm(v, productName, locations, reasonCodes, middleware.CSRFToken(r), r.URL.Query().Get("err")))
+	stock, err := s.Q.ListStockByVariant(ctx, id)
+	if err != nil {
+		common.ServerError(w, err)
+		return
+	}
+	locationNames, _ := repository.LocationNames(ctx, s.Q)
+	common.Render(w, r, http.StatusOK, pages.RestockForm(v, productName, stock, locationNames, locations, reasonCodes, middleware.CSRFToken(r)))
+}
+
+// renderRestockPanel re-renders the stock panel plus an out-of-band flash for an
+// HTMX mutation response, so a restock/adjust updates stock in place.
+func (s *Server) renderRestockPanel(w http.ResponseWriter, r *http.Request, id int64, message, tone string) {
+	ctx := r.Context()
+	v, err := s.Q.GetVariant(ctx, id)
+	if err != nil {
+		if common.IsNotFound(err) {
+			http.NotFound(w, r)
+			return
+		}
+		common.ServerError(w, err)
+		return
+	}
+	stock, err := s.Q.ListStockByVariant(ctx, id)
+	if err != nil {
+		common.ServerError(w, err)
+		return
+	}
+	locations, err := s.Q.ListLocations(ctx, 1)
+	if err != nil {
+		common.ServerError(w, err)
+		return
+	}
+	reasonCodes, err := s.Q.ListReasonCodes(ctx, types.ReasonKindStockAdjustment)
+	if err != nil {
+		common.ServerError(w, err)
+		return
+	}
+	locationNames, _ := repository.LocationNames(ctx, s.Q)
+	common.Render(w, r, http.StatusOK, templ.Join(
+		partials.RestockPanel(v, stock, locationNames, locations, reasonCodes, middleware.CSRFToken(r)),
+		partials.FlashOOB(flash.Flash{Message: message, Tone: tone}),
+	))
 }
 
 // HandleRestock handles POST /variants/{id}/restock: writes a positive stock
@@ -68,7 +112,12 @@ func (s *Server) HandleRestock(w http.ResponseWriter, r *http.Request) {
 	cost, costErr := common.ParsePesos(r.FormValue("cost"))
 	locationID, locOK := common.ParseInt64(r.FormValue("location_id"))
 	if !ok || qty <= 0 || costErr != nil || !locOK {
-		http.Redirect(w, r, "/variants/"+common.Itoa(id)+"/restock?err=invalid", http.StatusSeeOther)
+		if common.IsHX(r) {
+			s.renderRestockPanel(w, r, id, "Invalid restock values. Check quantity, cost and location.", "error")
+			return
+		}
+		s.SetFlash(r, "Invalid restock values. Check quantity, cost and location.", "error")
+		http.Redirect(w, r, "/variants/"+common.Itoa(id)+"/restock", http.StatusSeeOther)
 		return
 	}
 	note := strings.TrimSpace(r.FormValue("note"))
@@ -123,6 +172,11 @@ func (s *Server) HandleRestock(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.Audit(r, "restock", "product_variant", id, "restocked "+common.Itoa(qty)+" units")
+	if common.IsHX(r) {
+		s.renderRestockPanel(w, r, id, "Restocked "+common.Itoa(qty)+" units.", "success")
+		return
+	}
+	s.SetFlash(r, "Restocked "+common.Itoa(qty)+" units.", "success")
 	http.Redirect(w, r, "/products/"+common.Itoa(productIDFor(r, s, id)), http.StatusSeeOther)
 }
 
@@ -145,7 +199,12 @@ func (s *Server) HandleAdjustStock(w http.ResponseWriter, r *http.Request) {
 		state = types.StockStateSellable
 	}
 	if !ok || qty == 0 || !locOK || reasonCode == "" {
-		http.Redirect(w, r, "/products/"+common.Itoa(productIDFor(r, s, id))+"?err=adjust", http.StatusSeeOther)
+		if common.IsHX(r) {
+			s.renderRestockPanel(w, r, id, "Adjustment needs a non-zero quantity and a reason code.", "error")
+			return
+		}
+		s.SetFlash(r, "Adjustment needs a non-zero quantity and a reason code.", "error")
+		http.Redirect(w, r, "/variants/"+common.Itoa(id)+"/restock", http.StatusSeeOther)
 		return
 	}
 
@@ -164,6 +223,11 @@ func (s *Server) HandleAdjustStock(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.Audit(r, "adjust", "product_variant", id, reasonCode)
+	if common.IsHX(r) {
+		s.renderRestockPanel(w, r, id, "Stock adjusted.", "success")
+		return
+	}
+	s.SetFlash(r, "Stock adjusted.", "success")
 	http.Redirect(w, r, "/products/"+common.Itoa(productIDFor(r, s, id)), http.StatusSeeOther)
 }
 

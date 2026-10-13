@@ -33,7 +33,7 @@ make test
 | - | ---------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------- |
 | 1 | Money-path integration tests       | Sale (FIFO cost, stock decrement, payment), partial return + restock at original cost, store credit, oversell rollback | ✅ Done       |
 | 2 | Ledger invariant tests             | `stock_levels == Σ stock_movements` per (variant, location, state); append-only movements                  | ✅ Done       |
-| 3 | Frontend polish                    | Convert restock/adjust forms to HTMX fragments; replace remaining `?err=` redirects with flash/OOB toasts  | ⏳ Next       |
+| 3 | Frontend polish                    | Convert restock/adjust forms to HTMX fragments; replace remaining `?err=` redirects with flash/OOB toasts  | ⚙️ In progress (restock/adjust done; sale/variant `?err=` remain) |
 | 4 | Low-stock email digest             | Scheduled job (the only unimplemented feature)                                                             | ⏳ Later      |
 
 Orders 3 and 4 are deliberately after 1–2: they are low-risk and can land on a
@@ -83,6 +83,8 @@ Deliberate choices:
 | `TestOversell_MultiLineIsAtomic`              | A valid line is not committed when a later line oversells              |
 | `TestLedger_StockLevelsEqualMovements`        | `stock_levels == Σ movements` after restock→sale→return→void; existing movement ids survive (ADR-0017) |
 | `TestLedger_AdjustmentRequiresReason`         | Adjustment without a reason code is rejected; with one it decrements stock |
+| `TestHTMX_RestockPanelFragment`               | HTMX restock returns `#restock-panel` + OOB flash (200, no redirect) and updates stock |
+| `TestHTMX_AdjustErrorReturnsPanel`            | Rejected HTMX adjustment returns the panel with an error flash and writes no movement |
 
 ---
 
@@ -103,4 +105,4 @@ Deliberate choices:
 - Auth/OAuth/session lifecycle (currently verified by live smoke checks only).
 - Analytics / P&L math and CSV export contents.
 - Purchase-order receiving transaction.
-- HTMX fragment/response contract (order 3 will touch this).
+- HTMX fragment/response contract (restock/adjust panel now covered; sale/variant `?err=` conversions remain).

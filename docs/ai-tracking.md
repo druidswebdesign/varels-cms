@@ -5,7 +5,7 @@
 > [`implementation.md`](implementation.md). Update this file when the shape of
 > the project (routes, wiring, tooling) changes.
 
-**Last updated:** 2026-09-29 (shadcn dashboard shell + design tokens).
+**Last updated:** 2026-10-13 (restock/adjust HTMX panel + flash/OOB, order 3 start).
 
 ---
 
@@ -25,7 +25,7 @@ without reading every log entry.
 | Handlers       | **22 files**, **85 `Handle*` methods** under `internal/handlers/`                                                    |
 | Views          | **48 templ files** (`pages/`, `partials/`, `components/`, `layouts/`)                                                |
 | DB layer       | sqlc-generated + goose migrations `0001`–`0003`, `schema.sql` mirrored                                               |
-| Tests          | **13** integration tests in `internal/handlers/*_test.go` (money paths + ledger invariants); see `docs/testing.md`    |
+| Tests          | **15** integration tests in `internal/handlers/tests/*_test.go` (money paths + ledger invariants + HTMX fragment contract); see `docs/testing.md` |
 | Source size    | ~**10,650** hand-written Go lines, ~**2,869** templ lines (generated `*_templ.go` and `internal/db/sqlc/*` excluded) |
 
 Only genuinely unimplemented feature: the daily low-stock email digest
@@ -68,6 +68,7 @@ script. Migration of the older pages from `gray-*` to tokens is in progress.
 | Analytics chart/sizes  | `partials/sales_chart.templ`, `size_curve.templ` on `#year`/`#month` change | `GET /analytics/chart`, `/analytics/sizes`                    |
 | Deadstock window       | `pages/deadstock.templ` → `#deadstock-table`                                | `GET /deadstock/table?stale_days=`                            |
 | Dashboard cards        | `pages/dashboard.templ` `hx-trigger="load"`                                 | `GET /dashboard/profit-cards`, `/dashboard/low-stock`         |
+| Restock / adjust       | `partials/restock_panel.templ` `hx-target="#restock-panel"`                 | `POST /variants/{id}/restock`, `/variants/{id}/adjust`        |
 | CSRF                   | `layouts/base.templ` `hx-headers`                                           | all HTMX requests                                             |
 
 ### Alpine (`x-*`, 10 attributes)
@@ -87,8 +88,11 @@ responses. Handlers set success/error flashes instead of silent `?err=` redirect
 
 ### Not yet converted
 
-- Restock/adjust forms (`restock_form.templ`) are still full-page forms + flash.
-- A few `?err=` query params remain on the sale/return forms (they render inline).
+- Restock/adjust now return `partials.RestockPanel` + OOB flash (`docs/testing.md`
+  order 3, landed 2026-10-13); the older pages keep legacy `gray-*` classes
+  until their token sweep.
+- A few `?err=` query params remain on the sale/return and variant forms (they
+  render inline); the sale/return redirect contract is still asserted by tests.
 
 ---
 
@@ -97,8 +101,9 @@ responses. Handlers set success/error flashes instead of silent `?err=` redirect
 `internal/handlers/testenv_test.go` builds an isolated SQLite DB per test and
 mounts the real handlers. Covered today: FIFO sale, totals, partial/damaged
 returns, store credit (issue/redeem/over-spend), oversell atomicity, void
-compensation, and the `stock_levels == Σ stock_movements` invariant. Full
-strategy, ordered plan and coverage matrix: `docs/testing.md`.
+compensation, the `stock_levels == Σ stock_movements` invariant, and the HTMX
+restock/adjust fragment + OOB flash contract. Full strategy, ordered plan and
+coverage matrix: `docs/testing.md`.
 
 ---
 
