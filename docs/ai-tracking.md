@@ -5,7 +5,7 @@
 > [`implementation.md`](implementation.md). Update this file when the shape of
 > the project (routes, wiring, tooling) changes.
 
-**Last updated:** 2026-10-13 (restock/adjust HTMX panel + flash/OOB, order 3 start).
+**Last updated:** 2026-10-13 (theme/language/collapsible-sidebar preferences, full token sweep).
 
 ---
 
@@ -44,18 +44,21 @@ Full spec — tokens, shell, components, conventions and migration status — li
 in [`docs/frontend.md`](frontend.md). Summary:
 
 `assets/css/input.css` defines shadcn design tokens (`--background`, `--card`,
-`--primary`, `--muted`, `--border`, `--sidebar-*`, `--radius`) with light and
-`.dark` values, exposed as Tailwind utilities via `@theme inline`. Use the
-semantic classes (`bg-card`, `text-muted-foreground`, `border-border`,
-`bg-sidebar`, …) in new markup instead of raw `gray-*`/`white`.
+`--primary`, `--muted`, `--border`, `--sidebar-*`, `--sidebar-w`, `--radius`)
+with light and `.dark` values, exposed as Tailwind utilities via `@theme inline`.
+Use the semantic classes (`bg-card`, `text-muted-foreground`, `border-border`,
+`bg-sidebar`, …) instead of raw `gray-*`/`white`. Every page/partial has been
+swept to tokens, so the whole app reacts to theme changes.
 
-The shell in `layouts/base.templ` is a fixed icon sidebar (`components/sidebar.templ`,
-grouped, active state, Alpine drawer under `lg`) plus a sticky header
-(`components/navbar.templ`: title, product search, theme toggle, sign-out).
+The shell in `layouts/base.templ` is a fixed, **collapsible** icon sidebar
+(`components/sidebar.templ`: grouped, active state, sign-out pinned at the bottom,
+Alpine drawer under `lg`) plus a sticky header (`components/navbar.templ`: title,
+product search, language toggle, theme toggle — sign-out moved to the sidebar).
 Reusable primitives live in `components/`: `card.templ` (`Card*`, `StatCard`),
-`icons.templ` (`Icon` inline lucide set). Dark mode is toggled by
-`Alpine.data("theme")` in `app.js` and applied pre-paint by an inline `<head>`
-script. Migration of the older pages from `gray-*` to tokens is in progress.
+`icons.templ` (`Icon` inline lucide set, incl. `panel-left-*`, `languages`). A
+single `shell` Alpine component (`app.js`) owns three localStorage preferences —
+`theme`, `lang`, `sidebarCollapsed` — applied pre-paint by an inline `<head>`
+script. Migration from `gray-*` to tokens is **complete**.
 
 ### HTMX (`hx-*`, 35 attributes)
 
@@ -71,11 +74,18 @@ script. Migration of the older pages from `gray-*` to tokens is in progress.
 | Restock / adjust       | `partials/restock_panel.templ` `hx-target="#restock-panel"`                 | `POST /variants/{id}/restock`, `/variants/{id}/adjust`        |
 | CSRF                   | `layouts/base.templ` `hx-headers`                                           | all HTMX requests                                             |
 
-### Alpine (`x-*`, 10 attributes)
+### Alpine (`x-*`)
 
-- **POS line editor** — `Alpine.data("pos", …)` in `assets/js/app.js`, used by
-  `pages/sale_form.templ` (`x-data="pos()"`, `<template x-for>`): add/remove
-  lines, price autofill, reactive total.
+- **Shell** — `Alpine.data("shell", …)` in `assets/js/app.js`, mounted on the
+  `layouts/base.templ` (and login) wrapper. Owns `sidebarOpen` (mobile drawer),
+  `collapsed` (desktop rail), `dark` and `lang`, with `t(key)` i18n lookup. State
+  is persisted in localStorage and re-applied pre-paint.
+- **i18n** — `I18N.en`/`I18N.es` dictionaries + `i18n.apply(root)`; fills
+  `data-i18n`, `data-i18n-placeholder`, `data-i18n-aria`, `data-i18n-title`.
+  Instant EN/ES switch, no reload; re-runs on `htmx:afterSwap`.
+- **POS line editor** — `Alpine.data("pos", …)`, used by `pages/sale_form.templ`
+  (`x-data="pos()"`, `<template x-for>`): add/remove lines, price autofill,
+  reactive total.
 - **Toast store** — `$store.app.flash(msg)` registered on `alpine:init`.
 - `app.js` re-initialises Alpine on `htmx:afterSwap` and toasts HTMX failures.
 
@@ -88,11 +98,14 @@ responses. Handlers set success/error flashes instead of silent `?err=` redirect
 
 ### Not yet converted
 
-- Restock/adjust now return `partials.RestockPanel` + OOB flash (`docs/testing.md`
-  order 3, landed 2026-10-13); the older pages keep legacy `gray-*` classes
-  until their token sweep.
-- A few `?err=` query params remain on the sale/return and variant forms (they
-  render inline); the sale/return redirect contract is still asserted by tests.
+- Restock/adjust return `partials.RestockPanel` + OOB flash (`docs/testing.md`
+  order 3, landed 2026-10-13). The rest of the `?err=` redirects (sale/return,
+  variant forms) still redirect and render inline errors; their redirect contract
+  is asserted by tests.
+- i18n covers the shell (navigation, page titles, controls, toasts, login).
+  Page-level body text/buttons are server-rendered English; add `data-i18n` keys
+  to translate a page (see `docs/frontend.md` §6.1). Server flash messages are
+  not translated by the client layer.
 
 ---
 

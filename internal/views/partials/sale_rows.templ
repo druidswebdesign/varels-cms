@@ -12,16 +12,16 @@ import (
 // #sale-rows.
 templ SaleRows(orders []sqlc.Order, channels map[int64]string, customers map[int64]string) {
 	if len(orders) == 0 {
-		<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No sales found.</td></tr>
+		<tr><td colspan="6" class="px-4 py-8 text-center text-muted-foreground">No sales found.</td></tr>
 	}
 	for _, o := range orders {
-		<tr class="hover:bg-gray-50">
+		<tr class="hover:bg-accent">
 			<td class="px-4 py-2 font-mono text-xs">
-				<a href={ "/sales/" + fmt.Sprint(o.ID) } class="text-blue-600 hover:underline">{ o.OrderNumber }</a>
+				<a href={ "/sales/" + fmt.Sprint(o.ID) } class="text-primary hover:underline">{ o.OrderNumber }</a>
 			</td>
-			<td class="px-4 py-2 text-gray-500">{ o.PlacedAt }</td>
+			<td class="px-4 py-2 text-muted-foreground">{ o.PlacedAt }</td>
 			<td class="px-4 py-2">{ saleCustomerLabel(o, customers) }</td>
-			<td class="px-4 py-2 text-gray-500">{ channels[o.ChannelID] }</td>
+			<td class="px-4 py-2 text-muted-foreground">{ channels[o.ChannelID] }</td>
 			<td class="px-4 py-2">
 				if o.Status == "cancelled" {
 					@components.Badge(string(o.Status), "danger")

@@ -49,7 +49,7 @@ func ProductsList(products []sqlc.Product, categories []sqlc.Category, q string,
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Products</h1><a href=\"/products/new\" class=\"rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700\">New product</a></div><form method=\"get\" action=\"/products\" hx-get=\"/products/search\" hx-target=\"#product-rows\" hx-swap=\"innerHTML\" hx-trigger=\"keyup changed delay:300ms, search, submit\" class=\"mb-4 flex flex-wrap items-center gap-3\"><input type=\"search\" name=\"q\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Products</h1><a href=\"/products/new\" class=\"rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">New product</a></div><form method=\"get\" action=\"/products\" hx-get=\"/products/search\" hx-target=\"#product-rows\" hx-swap=\"innerHTML\" hx-trigger=\"keyup changed delay:300ms, search, submit\" class=\"mb-4 flex flex-wrap items-center gap-3\"><input type=\"search\" name=\"q\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -62,7 +62,7 @@ func ProductsList(products []sqlc.Product, categories []sqlc.Category, q string,
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" placeholder=\"Search name or slug\" class=\"w-64 rounded-md border border-gray-300 px-3 py-2 text-sm\"> <label class=\"flex items-center gap-2 text-sm text-gray-600\"><input type=\"checkbox\" name=\"archived\" value=\"1\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" placeholder=\"Search name or slug\" class=\"w-64 rounded-md border border-input px-3 py-2 text-sm\"> <label class=\"flex items-center gap-2 text-sm text-muted-foreground\"><input type=\"checkbox\" name=\"archived\" value=\"1\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -72,12 +72,12 @@ func ProductsList(products []sqlc.Product, categories []sqlc.Category, q string,
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "> Show archived</label> <button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50\">Search</button> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "> Show archived</label> <button type=\"submit\" class=\"rounded-md border border-input bg-card px-3 py-2 text-sm hover:bg-accent\">Search</button> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if q != "" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<a href=\"/products\" class=\"text-sm text-gray-500 hover:text-gray-700\">Clear</a>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<a href=\"/products\" class=\"text-sm text-muted-foreground hover:text-foreground\">Clear</a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -98,12 +98,12 @@ func ProductsList(products []sqlc.Product, categories []sqlc.Category, q string,
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Name</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Slug</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Status</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody id=\"product-rows\" class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Name</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Slug</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Status</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody id=\"product-rows\" class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(products) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<tr><td colspan=\"4\" class=\"px-4 py-8 text-center text-gray-500\">No products found.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<tr><td colspan=\"4\" class=\"px-4 py-8 text-center text-muted-foreground\">No products found.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

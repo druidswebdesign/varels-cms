@@ -51,7 +51,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Staff</h1></div><form method=\"post\" action=\"/staff/invite\" class=\"mb-6 flex max-w-3xl flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Staff</h1></div><form method=\"post\" action=\"/staff/invite\" class=\"mb-6 flex max-w-3xl flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"email\" class=\"mb-1 block text-xs font-medium text-gray-600\">Email</label> <input id=\"email\" name=\"email\" type=\"email\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"display_name\" class=\"mb-1 block text-xs font-medium text-gray-600\">Display name</label> <input id=\"display_name\" name=\"display_name\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"password\" class=\"mb-1 block text-xs font-medium text-gray-600\">Password</label> <input id=\"password\" name=\"password\" type=\"password\" minlength=\"8\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"role\" class=\"mb-1 block text-xs font-medium text-gray-600\">Role</label> <select id=\"role\" name=\"role\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"staff\">staff</option> <option value=\"admin\">admin</option></select></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Invite</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"email\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Email</label> <input id=\"email\" name=\"email\" type=\"email\" required class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"display_name\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Display name</label> <input id=\"display_name\" name=\"display_name\" type=\"text\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"password\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Password</label> <input id=\"password\" name=\"password\" type=\"password\" minlength=\"8\" required class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"role\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Role</label> <select id=\"role\" name=\"role\" class=\"rounded-md border border-input px-3 py-2 text-sm\"><option value=\"staff\">staff</option> <option value=\"admin\">admin</option></select></div><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Invite</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -80,19 +80,19 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Email</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Name</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Role</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Provider</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Status</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Last login</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Email</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Name</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Role</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Provider</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Status</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Last login</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				for _, u := range users {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<tr class=\"hover:bg-gray-50\"><td class=\"px-4 py-2 font-medium text-gray-900\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<tr class=\"hover:bg-accent\"><td class=\"px-4 py-2 font-medium text-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var5 string
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(u.Email)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 59, Col: 63}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 59, Col: 65}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
@@ -137,7 +137,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"> <select name=\"role\" class=\"rounded-md border border-gray-300 px-2 py-1 text-sm\"><option value=\"staff\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"> <select name=\"role\" class=\"rounded-md border border-input px-2 py-1 text-sm\"><option value=\"staff\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -157,14 +157,14 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 							return templ_7745c5c3_Err
 						}
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, ">admin</option></select> <button type=\"submit\" class=\"text-sm text-gray-600 hover:text-gray-900\">Save</button></form></td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, ">admin</option></select> <button type=\"submit\" class=\"text-sm text-muted-foreground hover:text-foreground\">Save</button></form></td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var9 string
 					templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(string(u.Provider))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 71, Col: 62}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 71, Col: 70}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 					if templ_7745c5c3_Err != nil {
@@ -185,14 +185,14 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 							return templ_7745c5c3_Err
 						}
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var10 string
 					templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(u.LastLoginAt))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 79, Col: 76}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/staff.templ`, Line: 79, Col: 84}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 					if templ_7745c5c3_Err != nil {
@@ -229,7 +229,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"> <input name=\"password\" type=\"password\" minlength=\"8\" placeholder=\"new password\" class=\"w-32 rounded-md border border-gray-300 px-2 py-1 text-sm\"> <button type=\"submit\" class=\"text-sm text-gray-600 hover:text-gray-900\">Reset</button></form>")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"> <input name=\"password\" type=\"password\" minlength=\"8\" placeholder=\"new password\" class=\"w-32 rounded-md border border-input px-2 py-1 text-sm\"> <button type=\"submit\" class=\"text-sm text-muted-foreground hover:text-foreground\">Reset</button></form>")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -261,7 +261,7 @@ func Staff(users []sqlc.ApprovedUser, csrf string) templ.Component {
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\"> <button type=\"submit\" class=\"text-sm text-red-600 hover:text-red-800\">Disable</button></form>")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\"> <button type=\"submit\" class=\"text-sm text-destructive hover:text-destructive/80\">Disable</button></form>")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}

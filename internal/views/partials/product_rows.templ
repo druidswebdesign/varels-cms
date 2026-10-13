@@ -8,7 +8,7 @@ import (
 // live-search swaps into #product-rows.
 templ ProductRows(products []sqlc.Product, csrf string) {
 	if len(products) == 0 {
-		<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No products found.</td></tr>
+		<tr><td colspan="4" class="px-4 py-8 text-center text-muted-foreground">No products found.</td></tr>
 	}
 	for _, p := range products {
 		@ProductRow(p, csrf)

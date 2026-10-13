@@ -73,14 +73,14 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><p class=\"text-sm text-gray-500\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><p class=\"text-sm text-muted-foreground\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(supplier)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_order_detail.templ`, Line: 22, Col: 47}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_order_detail.templ`, Line: 22, Col: 55}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -93,7 +93,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(location)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_order_detail.templ`, Line: 22, Col: 74}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_order_detail.templ`, Line: 22, Col: 82}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -106,7 +106,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(po.ExpectedAt))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_order_detail.templ`, Line: 22, Col: 123}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_order_detail.templ`, Line: 22, Col: 131}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -138,7 +138,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"> <select name=\"status\" class=\"rounded-md border border-gray-300 px-2 py-1.5 text-sm\"><option value=\"draft\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"> <select name=\"status\" class=\"rounded-md border border-input px-2 py-1.5 text-sm\"><option value=\"draft\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -168,7 +168,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, ">cancelled</option></select> <button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50\">Set status</button></form><a href=\"/purchase-orders\" class=\"text-sm text-gray-500 hover:text-gray-700\">Back</a></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, ">cancelled</option></select> <button type=\"submit\" class=\"rounded-md border border-input bg-card px-3 py-1.5 text-sm hover:bg-accent\">Set status</button></form><a href=\"/purchase-orders\" class=\"text-sm text-muted-foreground hover:text-foreground\">Back</a></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -184,18 +184,18 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Variant</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Ordered</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Received</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Unit cost</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Line total</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Receive</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Variant</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Ordered</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Received</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Unit cost</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Line total</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Receive</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(items) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<tr><td colspan=\"6\" class=\"px-4 py-8 text-center text-gray-500\">No lines yet. Add one below.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<tr><td colspan=\"6\" class=\"px-4 py-8 text-center text-muted-foreground\">No lines yet. Add one below.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				for _, it := range items {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<tr class=\"hover:bg-gray-50\"><td class=\"px-4 py-2\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<tr class=\"hover:bg-accent\"><td class=\"px-4 py-2\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -317,7 +317,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" class=\"w-20 rounded-md border border-gray-300 px-2 py-1 text-sm\"> <button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50\">Receive</button></form>")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" class=\"w-20 rounded-md border border-input px-2 py-1 text-sm\"> <button type=\"submit\" class=\"rounded-md border border-input bg-card px-2 py-1 text-sm hover:bg-accent\">Receive</button></form>")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -355,7 +355,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "\" class=\"flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "\" class=\"flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -368,7 +368,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"grow\"><label for=\"variant_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Variant</label> <select id=\"variant_id\" name=\"variant_id\" required class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"grow\"><label for=\"variant_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Variant</label> <select id=\"variant_id\" name=\"variant_id\" required class=\"w-full rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -443,7 +443,7 @@ func PurchaseOrderDetail(po sqlc.PurchaseOrder, items []sqlc.PurchaseOrderItem, 
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "</select></div><div><label for=\"quantity\" class=\"mb-1 block text-xs font-medium text-gray-600\">Quantity</label> <input id=\"quantity\" name=\"quantity\" type=\"number\" min=\"1\" required class=\"w-24 rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"unit_cost\" class=\"mb-1 block text-xs font-medium text-gray-600\">Unit cost (ARS)</label> <input id=\"unit_cost\" name=\"unit_cost\" type=\"number\" min=\"0\" step=\"0.01\" required class=\"w-32 rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Add line</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "</select></div><div><label for=\"quantity\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Quantity</label> <input id=\"quantity\" name=\"quantity\" type=\"number\" min=\"1\" required class=\"w-24 rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"unit_cost\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Unit cost (ARS)</label> <input id=\"unit_cost\" name=\"unit_cost\" type=\"number\" min=\"0\" step=\"0.01\" required class=\"w-32 rounded-md border border-input px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Add line</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

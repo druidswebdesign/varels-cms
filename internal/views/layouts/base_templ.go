@@ -17,6 +17,10 @@ import (
 // Base is the full-page shell: shadcn-style sidebar + sticky header, HTMX,
 // Alpine, ApexCharts and the compiled Tailwind stylesheet. Every page renders
 // inside it. `active` is the sidebar key; `title` labels the current page.
+//
+// The outer div carries the `shell` Alpine scope (sidebar drawer, collapse,
+// theme and language). The pre-paint script below applies the persisted theme,
+// language and sidebar state before first paint to avoid a flash.
 func Base(title string, active string, csrf string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -45,38 +49,38 @@ func Base(title string, active string, csrf string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/layouts/base.templ`, Line: 18, Col: 17}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/layouts/base.templ`, Line: 22, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · varels-cms</title><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar saved = localStorage.getItem(\"theme\");\n\t\t\t\t\t\tvar dark = saved === \"dark\" || (saved === null && window.matchMedia(\"(prefers-color-scheme: dark)\").matches);\n\t\t\t\t\t\tif (dark) document.documentElement.classList.add(\"dark\");\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t})();\n\t\t\t</script><link rel=\"stylesheet\" href=\"/assets/css/app.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.min.js\"></script><script defer src=\"/assets/js/app.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script></head><body hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · varels-cms</title><script>\n\t\t\t\t(function () {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar theme = localStorage.getItem(\"theme\");\n\t\t\t\t\t\tvar dark = theme === \"dark\" || (theme === null && window.matchMedia(\"(prefers-color-scheme: dark)\").matches);\n\t\t\t\t\t\tif (dark) document.documentElement.classList.add(\"dark\");\n\t\t\t\t\t\tdocument.documentElement.style.colorScheme = dark ? \"dark\" : \"light\";\n\n\t\t\t\t\t\tdocument.documentElement.lang = localStorage.getItem(\"lang\") === \"es\" ? \"es\" : \"en\";\n\n\t\t\t\t\t\tdocument.documentElement.dataset.sidebar =\n\t\t\t\t\t\t\tlocalStorage.getItem(\"sidebarCollapsed\") === \"true\" ? \"collapsed\" : \"expanded\";\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t})();\n\t\t\t</script><link rel=\"stylesheet\" href=\"/assets/css/app.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/app.js\"></script><script defer src=\"/assets/js/alpine.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script></head><body hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(`{"X-CSRF-Token":"` + csrf + `"}`)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/layouts/base.templ`, Line: 34, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/layouts/base.templ`, Line: 44, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"min-h-screen bg-background text-foreground antialiased\"><div x-data=\"{ sidebarOpen: false }\" class=\"min-h-screen\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"min-h-screen bg-background text-foreground antialiased\"><div x-data=\"shell\" class=\"min-h-screen\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.Sidebar(active).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.Sidebar(active, csrf).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"flex min-h-screen flex-col lg:pl-64\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"app-content flex min-h-screen flex-col lg:pl-[var(--sidebar-w)]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.Navbar(title, csrf).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.Navbar(title, active, csrf).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

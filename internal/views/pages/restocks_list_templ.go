@@ -49,7 +49,7 @@ func RestockList(movements []sqlc.StockMovement, skus map[int64]string, location
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Restocks</h1><a href=\"/stock-movements\" class=\"text-sm text-gray-600 hover:text-gray-900\">Full ledger</a></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Restocks</h1><a href=\"/stock-movements\" class=\"text-sm text-muted-foreground hover:text-foreground\">Full ledger</a></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -65,12 +65,12 @@ func RestockList(movements []sqlc.StockMovement, skus map[int64]string, location
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">When</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Variant</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Location</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">State</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Qty</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Ref</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Note</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">When</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Variant</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Location</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">State</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Qty</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Ref</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Note</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(movements) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr><td colspan=\"7\" class=\"px-4 py-8 text-center text-gray-500\">No restocks yet.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr><td colspan=\"7\" class=\"px-4 py-8 text-center text-muted-foreground\">No restocks yet.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

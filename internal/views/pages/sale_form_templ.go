@@ -52,19 +52,19 @@ func SaleForm(variants []sqlc.ListSellableVariantsRow, customers []sqlc.Customer
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">New sale</h1><a href=\"/sales\" class=\"text-sm text-gray-600 hover:text-gray-900\">Sales</a></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">New sale</h1><a href=\"/sales\" class=\"text-sm text-muted-foreground hover:text-foreground\">Sales</a></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if err != "" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"mb-4 rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(saleErr(err))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_form.templ`, Line: 22, Col: 109}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_form.templ`, Line: 22, Col: 128}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -88,7 +88,7 @@ func SaleForm(variants []sqlc.ListSellableVariantsRow, customers []sqlc.Customer
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><div class=\"grid gap-4 rounded-lg border border-gray-200 bg-white p-4 md:grid-cols-3\"><div><label for=\"customer_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Customer (optional)</label> <select id=\"customer_id\" name=\"customer_id\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"\">— anonymous —</option> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><div class=\"grid gap-4 rounded-lg border border-border bg-card p-4 md:grid-cols-3\"><div><label for=\"customer_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Customer (optional)</label> <select id=\"customer_id\" name=\"customer_id\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"><option value=\"\">— anonymous —</option> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -124,7 +124,7 @@ func SaleForm(variants []sqlc.ListSellableVariantsRow, customers []sqlc.Customer
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</select> <input name=\"new_customer_name\" type=\"text\" placeholder=\"…or new customer name\" class=\"mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"> <input name=\"new_customer_phone\" type=\"text\" placeholder=\"new customer phone\" class=\"mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"channel_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Channel</label> <select id=\"channel_id\" name=\"channel_id\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</select> <input name=\"new_customer_name\" type=\"text\" placeholder=\"…or new customer name\" class=\"mt-2 w-full rounded-md border border-input px-3 py-2 text-sm\"> <input name=\"new_customer_phone\" type=\"text\" placeholder=\"new customer phone\" class=\"mt-2 w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"channel_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Channel</label> <select id=\"channel_id\" name=\"channel_id\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -160,7 +160,7 @@ func SaleForm(variants []sqlc.ListSellableVariantsRow, customers []sqlc.Customer
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</select></div><div><label for=\"location_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Location</label> <select id=\"location_id\" name=\"location_id\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</select></div><div><label for=\"location_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Location</label> <select id=\"location_id\" name=\"location_id\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -196,7 +196,7 @@ func SaleForm(variants []sqlc.ListSellableVariantsRow, customers []sqlc.Customer
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</select></div></div><div class=\"rounded-lg border border-gray-200 bg-white p-4\"><div class=\"mb-2 flex items-center justify-between\"><h2 class=\"text-sm font-medium text-gray-700\">Items</h2><button type=\"button\" @click=\"addLine()\" class=\"rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50\">Add line</button></div><table class=\"min-w-full text-sm\"><thead><tr class=\"text-gray-500\"><th class=\"py-1 text-left font-medium\">Variant</th><th class=\"py-1 text-right font-medium\">Qty</th><th class=\"py-1 text-right font-medium\">Unit price (ARS)</th><th class=\"py-1 text-right font-medium\">Discount (ARS)</th><th class=\"py-1\"></th></tr></thead> <tbody><template x-for=\"(line, index) in lines\" :key=\"line.key\"><tr class=\"border-t border-gray-100\"><td class=\"py-1 pr-2\"><select name=\"variant_id\" x-model=\"line.variant_id\" @change=\"onVariant($event, index)\" class=\"w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm\"><option value=\"\">— select —</option> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</select></div></div><div class=\"rounded-lg border border-border bg-card p-4\"><div class=\"mb-2 flex items-center justify-between\"><h2 class=\"text-sm font-medium text-foreground\">Items</h2><button type=\"button\" @click=\"addLine()\" class=\"rounded-md border border-input px-3 py-1.5 text-sm hover:bg-accent\">Add line</button></div><table class=\"min-w-full text-sm\"><thead><tr class=\"text-muted-foreground\"><th class=\"py-1 text-left font-medium\">Variant</th><th class=\"py-1 text-right font-medium\">Qty</th><th class=\"py-1 text-right font-medium\">Unit price (ARS)</th><th class=\"py-1 text-right font-medium\">Discount (ARS)</th><th class=\"py-1\"></th></tr></thead> <tbody><template x-for=\"(line, index) in lines\" :key=\"line.key\"><tr class=\"border-t border-border\"><td class=\"py-1 pr-2\"><select name=\"variant_id\" x-model=\"line.variant_id\" @change=\"onVariant($event, index)\" class=\"w-full rounded-md border border-input px-2 py-1.5 text-sm\"><option value=\"\">— select —</option> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -258,7 +258,7 @@ func SaleForm(variants []sqlc.ListSellableVariantsRow, customers []sqlc.Customer
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</select></td><td class=\"py-1 pr-2\"><input name=\"quantity\" type=\"number\" min=\"1\" step=\"1\" x-model.number=\"line.quantity\" @input=\"recalc()\" class=\"w-20 rounded-md border border-gray-300 px-2 py-1.5 text-right text-sm\"></td><td class=\"py-1 pr-2\"><input name=\"unit_price\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"line.unit_price\" @input=\"recalc()\" class=\"w-28 rounded-md border border-gray-300 px-2 py-1.5 text-right text-sm\"></td><td class=\"py-1 pr-2\"><input name=\"line_discount\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"line.line_discount\" @input=\"recalc()\" class=\"w-24 rounded-md border border-gray-300 px-2 py-1.5 text-right text-sm\"></td><td class=\"py-1\"><button type=\"button\" @click=\"removeLine(index)\" class=\"text-sm text-red-600 hover:text-red-800\">×</button></td></tr></template></tbody></table></div><div class=\"grid gap-4 rounded-lg border border-gray-200 bg-white p-4 md:grid-cols-4\"><div><label for=\"payment_method\" class=\"mb-1 block text-xs font-medium text-gray-600\">Payment</label> <select id=\"payment_method\" name=\"payment_method\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"cash\">Cash</option> <option value=\"card\">Card</option> <option value=\"mercadopago\">MercadoPago</option> <option value=\"transfer\">Transfer</option> <option value=\"store_credit\">Store credit</option></select></div><div><label for=\"order_discount\" class=\"mb-1 block text-xs font-medium text-gray-600\">Order discount (ARS)</label> <input id=\"order_discount\" name=\"order_discount\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"orderDiscount\" @input=\"recalc()\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"shipping\" class=\"mb-1 block text-xs font-medium text-gray-600\">Shipping (ARS)</label> <input id=\"shipping\" name=\"shipping\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"shipping\" @input=\"recalc()\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"note\" class=\"mb-1 block text-xs font-medium text-gray-600\">Note</label> <input id=\"note\" name=\"note\" type=\"text\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div></div><div class=\"flex items-center justify-between\"><p class=\"text-lg font-semibold\">Total: <span x-text=\"money(total())\">$0,00</span></p><button type=\"submit\" class=\"rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-700\">Complete sale</button></div></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</select></td><td class=\"py-1 pr-2\"><input name=\"quantity\" type=\"number\" min=\"1\" step=\"1\" x-model.number=\"line.quantity\" @input=\"recalc()\" class=\"w-20 rounded-md border border-input px-2 py-1.5 text-right text-sm\"></td><td class=\"py-1 pr-2\"><input name=\"unit_price\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"line.unit_price\" @input=\"recalc()\" class=\"w-28 rounded-md border border-input px-2 py-1.5 text-right text-sm\"></td><td class=\"py-1 pr-2\"><input name=\"line_discount\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"line.line_discount\" @input=\"recalc()\" class=\"w-24 rounded-md border border-input px-2 py-1.5 text-right text-sm\"></td><td class=\"py-1\"><button type=\"button\" @click=\"removeLine(index)\" class=\"text-sm text-destructive hover:text-destructive/80\">×</button></td></tr></template></tbody></table></div><div class=\"grid gap-4 rounded-lg border border-border bg-card p-4 md:grid-cols-4\"><div><label for=\"payment_method\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Payment</label> <select id=\"payment_method\" name=\"payment_method\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"><option value=\"cash\">Cash</option> <option value=\"card\">Card</option> <option value=\"mercadopago\">MercadoPago</option> <option value=\"transfer\">Transfer</option> <option value=\"store_credit\">Store credit</option></select></div><div><label for=\"order_discount\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Order discount (ARS)</label> <input id=\"order_discount\" name=\"order_discount\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"orderDiscount\" @input=\"recalc()\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"shipping\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Shipping (ARS)</label> <input id=\"shipping\" name=\"shipping\" type=\"number\" min=\"0\" step=\"0.01\" x-model.number=\"shipping\" @input=\"recalc()\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"note\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Note</label> <input id=\"note\" name=\"note\" type=\"text\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div></div><div class=\"flex items-center justify-between\"><p class=\"text-lg font-semibold\">Total: <span x-text=\"money(total())\">$0,00</span></p><button type=\"submit\" class=\"rounded-md bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Complete sale</button></div></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

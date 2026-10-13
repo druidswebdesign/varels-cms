@@ -71,10 +71,10 @@ make css        # tailwindcss -i assets/css/input.css -o assets/css/app.css --mi
 
 ```text
 <body hx-headers='{"X-CSRF-Token":"…"}'>
-  <div x-data="{ sidebarOpen: false }">        # Alpine scope for the drawer
-    @components.Sidebar(active)                # fixed rail / mobile drawer
-    <div class="flex min-h-screen flex-col lg:pl-64">
-      @components.Navbar(title, csrf)          # sticky header
+  <div x-data="shell">                         # drawer + collapse + theme + lang
+    @components.Sidebar(active, csrf)          # rail / drawer, sign-out at bottom
+    <div class="app-content flex min-h-screen flex-col lg:pl-[var(--sidebar-w)]">
+      @components.Navbar(title, active, csrf)  # sticky header + search/theme/lang
       <main class="flex-1 px-4 py-6 lg:px-8">
         <div id="flash">…</div>                # OOB flash target
         { children... }
@@ -85,10 +85,13 @@ make css        # tailwindcss -i assets/css/input.css -o assets/css/app.css --mi
 ```
 
 - `Base(title, active, csrf)` — `title` labels the current page (header + tab
-  title); `active` is the sidebar key (see §4); `csrf` feeds both the
-  `hx-headers` attribute and the sign-out form.
-- The sidebar is fixed at `w-64` from `lg` up; below `lg` it is off-canvas and
-  the header's menu button toggles `sidebarOpen`.
+  title); `active` is the sidebar key (see §4) and also the navbar title's
+  `data-i18n` key; `csrf` feeds the `hx-headers` attribute and the sign-out form.
+- The outer div carries the `x-data="shell"` scope shared by the sidebar, navbar
+  and login page (theme, language, sidebar drawer/collapse).
+- The sidebar width is `var(--sidebar-w)` (16rem, or 4rem collapsed on `lg`+);
+  the content column pads left by the same property. Below `lg` it is off-canvas
+  and the header's menu button toggles `sidebarOpen`.
 - `<body>` sets `hx-headers` so **every** HTMX request carries the CSRF token;
   forms still include `csrf_token` hidden inputs.
 
@@ -108,7 +111,7 @@ All shared UI lives in `internal/views/components/` (templ components; call with
 | `table.templ` | `Table()` | Bordered card shell; caller supplies `thead`/`tbody`. |
 | `flash.templ` | `Flash(kind, message)` | Static flash block; live flashes come from `partials.FlashMessages` / `FlashOOB`. |
 | `sidebar.templ`, `navbar.templ` | `Sidebar(active)`, `Navbar(title, csrf)` | Shell pieces; normally only `base.templ` calls them. |
-| `modal.templ` | `Modal(id)` | Hidden-by-default container toggled by HTMX/script; styling unchanged pending token sweep. |
+| `modal.templ` | `Modal(id)` | Hidden-by-default container toggled by HTMX/script; retokenised (`bg-card`, `bg-black/40`). |
 
 Composition example (the pattern new pages should follow):
 
@@ -147,10 +150,32 @@ page. Sub-pages reuse their parent key (e.g. `variant_form.templ` uses
 `products`; `purchase_orders.templ` uses `suppliers`).
 
 Mobile behaviour is Alpine-only and degrades gracefully without JS: the aside
-uses static `-translate-x-full lg:translate-x-0` plus
-`x-bind:style="sidebarOpen ? 'transform: translateX(0)' : ''"` (inline style wins
-over the static classes on small screens), a backdrop with
-`x-show="sidebarOpen" x-cloak`, and the header button sets `sidebarOpen = true`.
+uses a `--sidebar-w` width custom property plus `-translate-x-full lg:translate-x-0`,
+`sidebarOpen` toggles the drawer, a backdrop with `x-show="sidebarOpen" x-cloak`,
+and the header button sets `sidebarOpen = true`.
+
+### 4.1 Collapsible rail (desktop)
+
+The shell has a collapse control in the sidebar header (`panel-left-*` icon,
+desktop only). Collapsed state lives in the `shell` Alpine scope and is persisted
+as `localStorage.sidebarCollapsed`:
+
+- The pre-paint `<head>` script sets `html[data-sidebar="collapsed"]`, and
+  `input.css` shrinks `--sidebar-w` to `4rem` under `@media (min-width:1024px)`.
+  The aside (`w-[var(--sidebar-w)]`) and content (`lg:pl-[var(--sidebar-w)]`) both
+  follow, so there is no layout flash before Alpine boots.
+- Labels (`data-i18n` spans) and group headings are `x-show="sidebarOpen || !collapsed"`
+  — hidden on a collapsed desktop rail, visible in the mobile drawer.
+- Collapsed links center their icon (`lg:justify-center`) and expose the label as
+  both a `title` tooltip and an `aria-label` via `x-bind`.
+- Mobile is unaffected: below `lg` the rail stays full-width as a drawer.
+
+### 4.2 Sign out
+
+Sign-out lives at the **bottom** of the sidebar, separated from navigation by
+`mt-auto border-t border-sidebar-border` (it stays pinned regardless of menu
+content or screen size). It is a `POST /logout` form carrying the CSRF token;
+when the rail is collapsed it shows the icon with a tooltip/`aria-label`.
 
 ---
 
@@ -158,38 +183,83 @@ over the static classes on small screens), a backdrop with
 
 Two pieces, both required:
 
-1. **Pre-paint** — an inline `<script>` in the `base.templ` `<head>` reads
-   `localStorage.theme` (falling back to `prefers-color-scheme: dark`) and adds
-   `.dark` to `<html>` before first paint, so there is no flash.
-2. **Toggle** — `Alpine.data("theme")` in `assets/js/app.js` exposes `dark` and
-   `toggle()`; the header button (`x-data="theme"`, `@click="toggle"`) flips the
-   class and persists the choice. It also dispatches `app:theme` for chart/JS
-   listeners.
+1. **Pre-paint** — an inline `<script>` in the `<head>` reads
+   `localStorage.theme` (falling back to `prefers-color-scheme: dark`), adds
+   `.dark` to `<html>` and sets `document.documentElement.style.colorScheme`
+   before first paint, so there is no flash. Both `layouts/base.templ` and the
+   standalone `pages/login.templ` include it.
+2. **Toggle** — the `shell` Alpine component (see §6) exposes `dark` and
+   `toggleTheme()`; the header button flips the class, persists
+   `localStorage.theme`, and dispatches `app:theme` for chart/JS listeners.
 
-All theme-aware styling must use `dark:` variants or token utilities — never
-assume light mode.
+`input.css` declares `color-scheme: light` on `:root` and `dark` on `.dark`, so
+native controls (selects, scrollbars, date pickers) follow the theme too. All
+theme-aware styling must use `dark:` variants or token utilities — never assume
+light mode. Every page and component has been swept to tokens, so switching
+themes repaints the whole app consistently (login included).
 
 ---
 
-## 6. HTMX & Alpine conventions
+## 6. Preferences: theme, language, sidebar
+
+Three persisted UI preferences live in `localStorage`, applied pre-paint by the
+inline `<head>` script and managed by the `shell` Alpine component
+(`assets/js/app.js`) mounted on the shell wrapper in `base.templ` (and on the
+login page):
+
+| Preference          | Key                   | Values                | Control |
+| ------------------- | --------------------- | --------------------- | ------- |
+| Theme               | `theme`               | `light` / `dark`      | Navbar/header sun-moon button (`toggleTheme`) |
+| Language            | `lang`                | `en` / `es`           | Navbar/header `EN`/`ES` button (`toggleLang`) |
+| Collapsed sidebar   | `sidebarCollapsed`    | `true` / `false`      | Sidebar header `panel-left-*` button (`toggleCollapsed`) |
+
+Everything reads the shared `shell` scope, so the controls are keyboard-operable
+real `<button>`s with `aria-label`s (`a11y.*` keys) and visible focus rings.
+
+### 6.1 i18n (English / Spanish)
+
+Translation is **client-side**, so switching is instant with no reload and works
+for HTMX-swapped fragments too. There is no server round-trip and no `Accept-Language`
+handling.
+
+- The dictionary lives in `assets/js/app.js` (`I18N.en` / `I18N.es`). `i18n.apply(root)`
+  walks the subtree and fills:
+  - `data-i18n="key"` → `textContent`
+  - `data-i18n-placeholder="key"` → `placeholder`
+  - `data-i18n-aria="key"` → `aria-label`
+  - `data-i18n-title="key"` → `title`
+- Missing keys fall through to the server-rendered English text, so pages adopt
+  keys incrementally: add `data-i18n` to a label and a dictionary entry, and it
+  translates.
+- On language change the component updates `document.documentElement.lang`,
+  persists `lang`, re-runs `i18n.apply(document)` and fires `app:lang`. HTMX swaps
+  re-apply to the swapped subtree in the `htmx:afterSwap` handler.
+- Dynamic Alpine text uses the component method `t('key')` (e.g. sidebar tooltips).
+- Default language is **English** when no preference is stored.
+
+Server-rendered flash/toast text is not translated by this layer (it is produced
+Go-side); the client-side HTMX error toasts (`msg.*`) are.
+
+## 7. HTMX & Alpine conventions
 
 Unchanged from `docs/architecture.md` §4.6, restated for UI work:
 
 - HTMX does server-driven swaps; Alpine handles local state. Both are vendored
   (`assets/js/htmx.min.js`, `assets/js/alpine.min.js`) and loaded in `base.templ`.
-- `assets/js/app.js` re-initialises Alpine on `htmx:afterSwap`, toasts
-  `htmx:responseError`/`htmx:sendError` into `#flash`, and registers the `pos()`
-  (POS editor) and `theme` components.
+- `assets/js/app.js` re-initialises Alpine on `htmx:afterSwap`, re-applies
+  translations to the swapped subtree, toasts
+  `htmx:responseError`/`htmx:sendError` into `#flash`, and registers the `shell`
+  (theme/lang/sidebar) and `pos()` (POS editor) Alpine components.
 - **Mutating HTMX handlers should return the refreshed fragment plus
   `partials.FlashOOB(...)`** instead of redirecting with `?err=`. This is the
   flash/OOB contract used by the variant table; the remaining `?err=` forms are
-  scheduled for conversion (see §8).
+  scheduled for conversion (see §9).
 - Assert on the **fragment contract** and status codes in tests, not on rendered
   classes.
 
 ---
 
-## 7. Page anatomy
+## 8. Page anatomy
 
 A migrated page follows this shape:
 
@@ -217,11 +287,12 @@ templ ProductsPage(...) {
 
 ---
 
-## 8. Migration status
+## 9. Migration status
 
 The token layer and shell landed on **2026-09-29**; the dashboard was rebuilt on
-it. Everything else still renders inside the new shell but keeps legacy
-`gray-*`/`bg-white` classes until swept.
+it. On **2026-10-13** every page/partial was swept from legacy `gray-*`/`bg-white`
+classes to semantic tokens, and the shell gained theme/language/collapse
+preferences.
 
 | Area | Status |
 | --- | --- |
@@ -230,8 +301,9 @@ it. Everything else still renders inside the new shell but keeps legacy
 | `button` / `badge` / `table` / `flash` retokenised | ✅ Done |
 | `dashboard.templ`, `profit_cards`, `low_stock_widget`, `flash_messages` | ✅ Done |
 | `restock_form` + `partials/restock_panel` (stock panel, HTMX + flash/OOB) | ✅ Done (2026-10-13) |
-| All other pages (products, sales, analytics, admin, …) | ⏳ Token sweep pending |
-| `modal.templ` | ⏳ Token sweep pending |
+| Full token sweep of all pages/partials (products, sales, analytics, admin, …) | ✅ Done (2026-10-13) |
+| Theme / language / collapsed-sidebar preferences (see §6) | ✅ Done (2026-10-13) |
+| Sign-out pinned to bottom of sidebar; collapsible rail + tooltips | ✅ Done (2026-10-13) |
 | Restock/adjust forms → HTMX fragments; remove `?err=` redirects | ⚙️ Restock/adjust done; sale/return/variant `?err=` remain |
 | Low-stock email digest | ⏳ `docs/testing.md` order 4 |
 
@@ -240,7 +312,7 @@ sections in `Card`, and keep the handler's `active` key unchanged.
 
 ---
 
-## 9. Verification gate
+## 10. Verification gate
 
 Run the full gate from `docs/ai-tracking.md` §5 after any UI change:
 
@@ -258,7 +330,7 @@ return 200 with no panics.
 
 ---
 
-## 10. Related documents
+## 11. Related documents
 
 | Question | Document |
 | --- | --- |

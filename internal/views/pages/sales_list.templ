@@ -14,23 +14,23 @@ templ SalesList(orders []sqlc.Order, channels map[int64]string, locations map[in
 	@layouts.Base("Sales", "sales", csrf) {
 		<div class="mb-4 flex items-center justify-between">
 			<h1 class="text-xl font-semibold">Sales</h1>
-			<a href="/sales/new" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700">New sale</a>
+			<a href="/sales/new" class="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">New sale</a>
 		</div>
 
 		<form method="get" action="/sales"
 			hx-get="/sales/filter" hx-target="#sale-rows" hx-swap="innerHTML"
 			class="mb-4 flex flex-wrap items-end gap-3">
 			<div>
-				<label for="from" class="mb-1 block text-xs font-medium text-gray-600">From</label>
-				<input id="from" name="from" type="date" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				<label for="from" class="mb-1 block text-xs font-medium text-muted-foreground">From</label>
+				<input id="from" name="from" type="date" class="rounded-md border border-input px-3 py-2 text-sm"/>
 			</div>
 			<div>
-				<label for="to" class="mb-1 block text-xs font-medium text-gray-600">To</label>
-				<input id="to" name="to" type="date" class="rounded-md border border-gray-300 px-3 py-2 text-sm"/>
+				<label for="to" class="mb-1 block text-xs font-medium text-muted-foreground">To</label>
+				<input id="to" name="to" type="date" class="rounded-md border border-input px-3 py-2 text-sm"/>
 			</div>
 			<div>
-				<label for="location" class="mb-1 block text-xs font-medium text-gray-600">Location</label>
-				<select id="location" name="location" class="rounded-md border border-gray-300 px-3 py-2 text-sm">
+				<label for="location" class="mb-1 block text-xs font-medium text-muted-foreground">Location</label>
+				<select id="location" name="location" class="rounded-md border border-input px-3 py-2 text-sm">
 					<option value="">All locations</option>
 					for id, name := range locations {
 						<option value={ idString(id) }>{ name }</option>
@@ -38,8 +38,8 @@ templ SalesList(orders []sqlc.Order, channels map[int64]string, locations map[in
 				</select>
 			</div>
 			<div>
-				<label for="status" class="mb-1 block text-xs font-medium text-gray-600">Status</label>
-				<select id="status" name="status" class="rounded-md border border-gray-300 px-3 py-2 text-sm">
+				<label for="status" class="mb-1 block text-xs font-medium text-muted-foreground">Status</label>
+				<select id="status" name="status" class="rounded-md border border-input px-3 py-2 text-sm">
 					<option value="">All statuses</option>
 					<option value="completed">completed</option>
 					<option value="partially_returned">partially_returned</option>
@@ -47,21 +47,21 @@ templ SalesList(orders []sqlc.Order, channels map[int64]string, locations map[in
 					<option value="cancelled">cancelled</option>
 				</select>
 			</div>
-			<button type="submit" class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50">Filter</button>
+			<button type="submit" class="rounded-md border border-input bg-card px-3 py-2 text-sm hover:bg-accent">Filter</button>
 		</form>
 
 		@components.Table() {
-			<thead class="bg-gray-50">
+			<thead class="bg-muted">
 				<tr>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Receipt</th>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Date</th>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Customer</th>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Channel</th>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Status</th>
-					<th class="px-4 py-2 text-right font-medium text-gray-500">Total</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Receipt</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Date</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Customer</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Channel</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Status</th>
+					<th class="px-4 py-2 text-right font-medium text-muted-foreground">Total</th>
 				</tr>
 			</thead>
-			<tbody id="sale-rows" class="divide-y divide-gray-100">
+			<tbody id="sale-rows" class="divide-y divide-border">
 				@partials.SaleRows(orders, channels, customers)
 			</tbody>
 		}

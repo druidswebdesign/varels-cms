@@ -10,6 +10,13 @@
 :root {
 	--radius: 0.625rem;
 
+	/* Sidebar rail width; shrinks on desktop when html[data-sidebar="collapsed"].
+	   Used by w-[var(--sidebar-w)] / lg:pl-[var(--sidebar-w)] in the shell so the
+	   collapsed state applies before Alpine boots (no layout flash). */
+	--sidebar-w: 16rem;
+
+	color-scheme: light;
+
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
 
@@ -52,6 +59,8 @@
 }
 
 .dark {
+	color-scheme: dark;
+
 	--background: oklch(0.145 0 0);
 	--foreground: oklch(0.985 0 0);
 
@@ -91,6 +100,13 @@
 	--sidebar-accent-foreground: oklch(0.985 0 0);
 	--sidebar-border: oklch(1 0 0 / 10%);
 	--sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Desktop-only collapsed rail; below lg the sidebar stays a full-width drawer. */
+@media (min-width: 1024px) {
+	html[data-sidebar="collapsed"] {
+		--sidebar-w: 4rem;
+	}
 }
 
 @theme inline {

@@ -632,3 +632,71 @@ contract that the variant table already used (`docs/frontend.md` §6,
 - Remaining pages still on legacy `gray-*`/`bg-white` classes; low-stock email
   digest (order 4) not started.
 
+### 2026-10-13 — Navigation & UI preferences (theme, i18n, collapsible sidebar)
+
+Reworked the shell navigation and settings so theme, language and sidebar state
+are consistent, persisted and accessible.
+
+#### Theme
+
+- `input.css` sets `color-scheme: light` on `:root` and `dark` on `.dark`, so
+  native controls follow the theme.
+- The pre-paint `<head>` script (in `base.templ` **and** `login.templ`) applies
+  the stored theme (falling back to `prefers-color-scheme`) and sets
+  `document.documentElement.style.colorScheme` before first paint.
+- **Full token sweep**: replaced legacy palette classes across all 39 templ files
+  (`bg-white`→`bg-card`, `text-gray-*`→`text-foreground`/`text-muted-foreground`,
+  `border-gray-*`→`border-border`/`border-input`, `bg-gray-900`→`bg-primary`,
+  `text-white`→`text-primary-foreground`, `text-red-*`→`text-destructive`, etc.).
+  A dark/theme toggle now repaints every page, form, table and the login screen.
+
+#### Language (English / Spanish)
+
+- `assets/js/app.js` gains `I18N.en`/`I18N.es` and `i18n.apply(root)`, which fills
+  `data-i18n` (text), `data-i18n-placeholder`, `data-i18n-aria` and
+  `data-i18n-title`. Missing keys fall through to the server English.
+- The `shell` Alpine component's `toggleLang()`/`setLang()` switch instantly with
+  no reload, update `document.documentElement.lang`, persist `lang` and re-apply
+  to the document; `htmx:afterSwap` re-applies to swapped fragments. Default is
+  English. Navbar/lang toggle wired; shell nav, page titles, controls, login and
+  the HTMX error toasts are translated.
+
+#### Sidebar
+
+- Sign-out moved to the **bottom** of the sidebar, separated by
+  `mt-auto border-t border-sidebar-border`, in its own `POST /logout` form with
+  the CSRF token.
+- New desktop **collapse** control (`panel-left-*` icons) toggles an icon-only
+  rail persisted as `localStorage.sidebarCollapsed`. `--sidebar-w` (16rem → 4rem
+  collapsed on `lg`) drives both the rail width and the content left padding via
+  the pre-paint `html[data-sidebar]` attribute, so there is no layout flash.
+  Collapsed links keep full navigation, center their icons and expose the label
+  as a `title` tooltip **and** `aria-label`.
+- Mobile drawer behaviour is unchanged (slide-out, backdrop, `sidebarOpen`).
+
+#### Accessibility
+
+- All controls are real `<button>`s with focus-visible rings and `aria-label`s
+  (`a11y.*` keys): open navigation, toggle theme, switch language, collapse/expand
+  sidebar. Active nav link keeps `aria-current="page"`. Contrast comes from the
+  token pairings in both themes.
+
+#### Verification (live server, temp DB, `:8099`)
+
+- `templ generate`, `go build ./...`, `go vet ./...`, `make css`, `gofmt`,
+  `node --check assets/js/app.js` clean; `go test ./...` — 15 tests pass.
+- `/login` carries the pre-paint script, `x-data="shell"`, language/theme buttons
+  and `data-i18n` labels.
+- Authenticated `/dashboard`, `/products`, `/sales`, `/analytics`, `/staff` all
+  200 with the shell (`x-data="shell"`, `app-content`, `data-i18n` keys,
+  collapse toggle, sidebar bottom sign-out `action="/logout"`).
+- Sidebar sign-out POST works (303 `/login`; session cleared afterwards).
+
+#### Still open
+
+- Body text/buttons on individual pages still render English until given
+  `data-i18n` keys (`docs/frontend.md` §6.1); server flash text is not translated
+  client-side.
+- Sale/return and variant `?err=` redirects and the low-stock email digest remain
+  (orders 3b/4).
+

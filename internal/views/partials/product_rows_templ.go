@@ -36,7 +36,7 @@ func ProductRows(products []sqlc.Product, csrf string) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		if len(products) == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<tr><td colspan=\"4\" class=\"px-4 py-8 text-center text-gray-500\">No products found.</td></tr>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<tr><td colspan=\"4\" class=\"px-4 py-8 text-center text-muted-foreground\">No products found.</td></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

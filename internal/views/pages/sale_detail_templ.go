@@ -83,14 +83,14 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><p class=\"text-sm text-gray-500\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><p class=\"text-sm text-muted-foreground\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(data.Order.PlacedAt)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 58}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 66}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -103,7 +103,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(data.Channel)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 78}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 86}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -116,7 +116,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(data.Location)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 99}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 107}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -129,7 +129,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(data.Customer)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 120}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 26, Col: 128}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -153,7 +153,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" class=\"text-sm text-gray-600 hover:text-gray-900\">Return</a> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" class=\"text-sm text-muted-foreground hover:text-foreground\">Return</a> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -185,12 +185,12 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"> <button type=\"submit\" class=\"text-sm text-red-600 hover:text-red-800\">Void</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"> <button type=\"submit\" class=\"text-sm text-destructive hover:text-destructive/80\">Void</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<a href=\"/sales\" class=\"text-sm text-gray-500 hover:text-gray-700\">Back</a></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<a href=\"/sales\" class=\"text-sm text-muted-foreground hover:text-foreground\">Back</a></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -206,7 +206,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Item</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Qty</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Unit</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Discount</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Line total</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Returned</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Item</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Qty</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Unit</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Discount</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Line total</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Returned</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -224,14 +224,14 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, " <span class=\"text-gray-400\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, " <span class=\"text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var13 string
 					templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(l.Size)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 56, Col: 82}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 56, Col: 90}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 					if templ_7745c5c3_Err != nil {
@@ -244,20 +244,20 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 					var templ_7745c5c3_Var14 string
 					templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(l.Color)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 56, Col: 94}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 56, Col: 102}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</span> <span class=\"font-mono text-xs text-gray-400\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</span> <span class=\"font-mono text-xs text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var15 string
 					templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(l.Sku)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 56, Col: 157}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 56, Col: 173}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 					if templ_7745c5c3_Err != nil {
@@ -343,90 +343,90 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, " <div class=\"mt-4 grid gap-4 md:grid-cols-2\"><div class=\"rounded-lg border border-gray-200 bg-white p-4 text-sm\"><h2 class=\"mb-2 font-medium text-gray-700\">Totals</h2><div class=\"flex justify-between py-1\"><span class=\"text-gray-500\">Subtotal</span><span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, " <div class=\"mt-4 grid gap-4 md:grid-cols-2\"><div class=\"rounded-lg border border-border bg-card p-4 text-sm\"><h2 class=\"mb-2 font-medium text-foreground\">Totals</h2><div class=\"flex justify-between py-1\"><span class=\"text-muted-foreground\">Subtotal</span><span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var21 string
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(data.Order.SubtotalMinor))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 70, Col: 132}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 70, Col: 140}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</span></div><div class=\"flex justify-between py-1\"><span class=\"text-gray-500\">Discount</span><span>−")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</span></div><div class=\"flex justify-between py-1\"><span class=\"text-muted-foreground\">Discount</span><span>−")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var22 string
 			templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(data.Order.DiscountMinor))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 71, Col: 135}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 71, Col: 143}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</span></div><div class=\"flex justify-between py-1\"><span class=\"text-gray-500\">Shipping</span><span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</span></div><div class=\"flex justify-between py-1\"><span class=\"text-muted-foreground\">Shipping</span><span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var23 string
 			templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(data.Order.ShippingMinor))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 72, Col: 132}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 72, Col: 140}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</span></div><div class=\"flex justify-between py-1\"><span class=\"text-gray-500\">IVA (display)</span><span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</span></div><div class=\"flex justify-between py-1\"><span class=\"text-muted-foreground\">IVA (display)</span><span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var24 string
 			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(data.Order.TaxMinor))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 73, Col: 132}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 73, Col: 140}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "</span></div><div class=\"flex justify-between border-t border-gray-100 py-1 font-semibold\"><span>Total</span><span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "</span></div><div class=\"flex justify-between border-t border-border py-1 font-semibold\"><span>Total</span><span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var25 string
 			templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(data.Order.TotalMinor))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 74, Col: 143}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 74, Col: 141}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "</span></div></div><div class=\"rounded-lg border border-gray-200 bg-white p-4 text-sm\"><h2 class=\"mb-2 font-medium text-gray-700\">Payments</h2>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "</span></div></div><div class=\"rounded-lg border border-border bg-card p-4 text-sm\"><h2 class=\"mb-2 font-medium text-foreground\">Payments</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(data.Payments) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<p class=\"text-gray-500\">No payments recorded.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<p class=\"text-muted-foreground\">No payments recorded.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
 			for _, p := range data.Payments {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div class=\"flex justify-between py-1\"><span class=\"text-gray-500\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div class=\"flex justify-between py-1\"><span class=\"text-muted-foreground\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var26 string
 				templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(string(p.Method))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 84, Col: 52}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 84, Col: 60}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 				if templ_7745c5c3_Err != nil {
@@ -439,7 +439,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				var templ_7745c5c3_Var27 string
 				templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(p.PaidAt)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 84, Col: 68}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 84, Col: 76}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 				if templ_7745c5c3_Err != nil {
@@ -452,7 +452,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				var templ_7745c5c3_Var28 string
 				templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(string(p.Status))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 84, Col: 92}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 84, Col: 100}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 				if templ_7745c5c3_Err != nil {
@@ -477,7 +477,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				}
 			}
 			if data.HasCustomer {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<div class=\"mt-2 flex justify-between border-t border-gray-100 py-1\"><span class=\"text-gray-500\">Store credit balance</span> <span>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<div class=\"mt-2 flex justify-between border-t border-border py-1\"><span class=\"text-muted-foreground\">Store credit balance</span> <span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -509,7 +509,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "\" class=\"mt-3 flex flex-wrap items-end gap-2 border-t border-gray-100 pt-3\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "\" class=\"mt-3 flex flex-wrap items-end gap-2 border-t border-border pt-3\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -522,7 +522,7 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><div><label for=\"method\" class=\"mb-1 block text-xs font-medium text-gray-600\">Method</label> <select id=\"method\" name=\"method\" class=\"rounded-md border border-gray-300 px-2 py-1.5 text-sm\"><option value=\"cash\">cash</option> <option value=\"card\">card</option> <option value=\"mercadopago\">mercadopago</option> <option value=\"transfer\">transfer</option> <option value=\"store_credit\">store_credit</option></select></div><div><label for=\"amount\" class=\"mb-1 block text-xs font-medium text-gray-600\">Amount (ARS)</label> <input id=\"amount\" name=\"amount\" type=\"number\" min=\"0\" step=\"0.01\" required class=\"w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm\"></div><div><label for=\"reference\" class=\"mb-1 block text-xs font-medium text-gray-600\">Reference</label> <input id=\"reference\" name=\"reference\" type=\"text\" class=\"w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm\"></div><button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50\">Add payment</button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><div><label for=\"method\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Method</label> <select id=\"method\" name=\"method\" class=\"rounded-md border border-input px-2 py-1.5 text-sm\"><option value=\"cash\">cash</option> <option value=\"card\">card</option> <option value=\"mercadopago\">mercadopago</option> <option value=\"transfer\">transfer</option> <option value=\"store_credit\">store_credit</option></select></div><div><label for=\"amount\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Amount (ARS)</label> <input id=\"amount\" name=\"amount\" type=\"number\" min=\"0\" step=\"0.01\" required class=\"w-28 rounded-md border border-input px-2 py-1.5 text-sm\"></div><div><label for=\"reference\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Reference</label> <input id=\"reference\" name=\"reference\" type=\"text\" class=\"w-32 rounded-md border border-input px-2 py-1.5 text-sm\"></div><button type=\"submit\" class=\"rounded-md border border-input bg-card px-3 py-1.5 text-sm hover:bg-accent\">Add payment</button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -548,19 +548,19 @@ func SaleDetail(data SaleDetailData, csrf string) templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">When</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Resolution</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Status</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Refund</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">When</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Resolution</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Status</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Refund</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					for _, ret := range data.Returns {
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<tr><td class=\"px-4 py-2 text-gray-500\">")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<tr><td class=\"px-4 py-2 text-muted-foreground\">")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var34 string
 						templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(ret.CreatedAt)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 136, Col: 58}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/sale_detail.templ`, Line: 136, Col: 66}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 						if templ_7745c5c3_Err != nil {

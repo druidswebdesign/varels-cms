@@ -37,12 +37,12 @@ func SalesChart(rows []vm.ChannelRevenue) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"sales-chart\" class=\"rounded-lg border border-gray-200 bg-white p-4\" hx-get=\"/analytics/chart\" hx-trigger=\"change from:#year, change from:#month\" hx-include=\"#year,#month\" hx-swap=\"outerHTML\"><h2 class=\"mb-3 text-sm font-medium text-gray-700\">Revenue by channel</h2>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"sales-chart\" class=\"rounded-lg border border-border bg-card p-4\" hx-get=\"/analytics/chart\" hx-trigger=\"change from:#year, change from:#month\" hx-include=\"#year,#month\" hx-swap=\"outerHTML\"><h2 class=\"mb-3 text-sm font-medium text-foreground\">Revenue by channel</h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if len(rows) == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"text-sm text-gray-500\">No sales in this period.</p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"text-sm text-muted-foreground\">No sales in this period.</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -52,7 +52,7 @@ func SalesChart(rows []vm.ChannelRevenue) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, r := range rows {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div><div class=\"mb-1 flex justify-between text-xs text-gray-600\"><span>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div><div class=\"mb-1 flex justify-between text-xs text-muted-foreground\"><span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -78,14 +78,14 @@ func SalesChart(rows []vm.ChannelRevenue) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</span></div><div class=\"h-2 w-full rounded bg-gray-100\"><div class=\"h-2 rounded bg-gray-900\" style=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</span></div><div class=\"h-2 w-full rounded bg-muted\"><div class=\"h-2 rounded bg-primary\" style=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues("width:" + percentWidth(r.RevenueMinor, maxRevenue(rows)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/sales_chart.templ`, Line: 27, Col: 109}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/sales_chart.templ`, Line: 27, Col: 108}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {

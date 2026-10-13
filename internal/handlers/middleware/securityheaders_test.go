@@ -29,7 +29,7 @@ func TestSecurityHeaders(t *testing.T) {
 	if csp == "" {
 		t.Fatal("Content-Security-Policy header missing")
 	}
-	for _, want := range []string{"frame-ancestors 'none'", "form-action 'self'"} {
+	for _, want := range []string{"frame-ancestors 'none'", "form-action 'self'", "'unsafe-eval'"} {
 		if !strings.Contains(csp, want) {
 			t.Errorf("CSP missing %q: %s", want, csp)
 		}

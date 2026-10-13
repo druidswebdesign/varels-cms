@@ -12,7 +12,7 @@ import (
 templ BestSellersTable(rows []vm.BestSeller, period string) {
 	<div id="best-sellers">
 		<div class="mb-2 flex items-center justify-between">
-			<h2 class="text-sm font-medium text-gray-700">Best sellers</h2>
+			<h2 class="text-sm font-medium text-foreground">Best sellers</h2>
 			<div class="flex gap-2 text-xs">
 				@periodLink("month", period, "Month")
 				@periodLink("year", period, "Year")
@@ -20,22 +20,22 @@ templ BestSellersTable(rows []vm.BestSeller, period string) {
 			</div>
 		</div>
 		@components.Table() {
-			<thead class="bg-gray-50">
+			<thead class="bg-muted">
 				<tr>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Product</th>
-					<th class="px-4 py-2 text-left font-medium text-gray-500">Variant</th>
-					<th class="px-4 py-2 text-right font-medium text-gray-500">Units</th>
-					<th class="px-4 py-2 text-right font-medium text-gray-500">Revenue</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Product</th>
+					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Variant</th>
+					<th class="px-4 py-2 text-right font-medium text-muted-foreground">Units</th>
+					<th class="px-4 py-2 text-right font-medium text-muted-foreground">Revenue</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-border">
 				if len(rows) == 0 {
-					<tr><td colspan="4" class="px-4 py-6 text-center text-gray-500">No sales in this period.</td></tr>
+					<tr><td colspan="4" class="px-4 py-6 text-center text-muted-foreground">No sales in this period.</td></tr>
 				}
 				for _, r := range rows {
 					<tr>
 						<td class="px-4 py-2">{ r.ProductName }</td>
-						<td class="px-4 py-2 text-gray-500">{ r.Sku } <span class="text-gray-400">{ r.Size } { r.Color }</span></td>
+						<td class="px-4 py-2 text-muted-foreground">{ r.Sku } <span class="text-muted-foreground">{ r.Size } { r.Color }</span></td>
 						<td class="px-4 py-2 text-right">{ fmt.Sprint(r.UnitsSold) }</td>
 						<td class="px-4 py-2 text-right">{ format.Money(r.RevenueMinor) }</td>
 					</tr>
@@ -47,9 +47,9 @@ templ BestSellersTable(rows []vm.BestSeller, period string) {
 
 templ periodLink(key string, active string, label string) {
 	if key == active {
-		<span class="rounded bg-gray-900 px-2 py-1 text-white">{ label }</span>
+		<span class="rounded bg-primary px-2 py-1 text-primary-foreground">{ label }</span>
 	} else {
 		<a hx-get={ "/analytics/best-sellers?period=" + key } hx-target="#best-sellers" hx-swap="outerHTML"
-			class="rounded border border-gray-300 px-2 py-1 text-gray-600 hover:bg-gray-50">{ label }</a>
+			class="rounded border border-input px-2 py-1 text-muted-foreground hover:bg-accent">{ label }</a>
 	}
 }

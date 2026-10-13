@@ -43,7 +43,7 @@ func Modal(id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4\"><div class=\"w-full max-w-lg rounded-lg bg-white p-6 shadow-xl\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4\"><div class=\"w-full max-w-lg rounded-lg bg-card p-6 shadow-xl\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

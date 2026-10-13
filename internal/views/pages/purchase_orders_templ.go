@@ -51,7 +51,7 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Purchase orders</h1><a href=\"/suppliers\" class=\"text-sm text-gray-500 hover:text-gray-700\">Suppliers</a></div><form method=\"post\" action=\"/purchase-orders\" class=\"mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Purchase orders</h1><a href=\"/suppliers\" class=\"text-sm text-muted-foreground hover:text-foreground\">Suppliers</a></div><form method=\"post\" action=\"/purchase-orders\" class=\"mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"supplier_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Supplier</label> <select id=\"supplier_id\" name=\"supplier_id\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"supplier_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Supplier</label> <select id=\"supplier_id\" name=\"supplier_id\" required class=\"rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -100,7 +100,7 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</select></div><div><label for=\"location_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Receive location</label> <select id=\"location_id\" name=\"location_id\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</select></div><div><label for=\"location_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Receive location</label> <select id=\"location_id\" name=\"location_id\" required class=\"rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -136,7 +136,7 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</select></div><div><label for=\"expected_at\" class=\"mb-1 block text-xs font-medium text-gray-600\">Expected</label> <input id=\"expected_at\" name=\"expected_at\" type=\"date\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"notes\" class=\"mb-1 block text-xs font-medium text-gray-600\">Notes</label> <input id=\"notes\" name=\"notes\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">New PO</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</select></div><div><label for=\"expected_at\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Expected</label> <input id=\"expected_at\" name=\"expected_at\" type=\"date\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"notes\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Notes</label> <input id=\"notes\" name=\"notes\" type=\"text\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">New PO</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -152,18 +152,18 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">PO</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Supplier</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Location</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Status</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Expected</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Created</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">PO</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Supplier</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Location</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Status</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Expected</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Created</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(orders) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<tr><td colspan=\"6\" class=\"px-4 py-8 text-center text-gray-500\">No purchase orders yet.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<tr><td colspan=\"6\" class=\"px-4 py-8 text-center text-muted-foreground\">No purchase orders yet.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				for _, po := range orders {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<tr class=\"hover:bg-gray-50\"><td class=\"px-4 py-2 font-medium\"><a href=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<tr class=\"hover:bg-accent\"><td class=\"px-4 py-2 font-medium\"><a href=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -176,14 +176,14 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"text-blue-600 hover:underline\">PO-")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"text-primary hover:underline\">PO-")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var10 string
 					templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(po.ID))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 68, Col: 119}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 68, Col: 118}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 					if templ_7745c5c3_Err != nil {
@@ -202,14 +202,14 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var12 string
 					templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(locationNameOf(locations, po.LocationID))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 71, Col: 84}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 71, Col: 92}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 					if templ_7745c5c3_Err != nil {
@@ -223,27 +223,27 @@ func PurchaseOrders(orders []sqlc.PurchaseOrder, suppliers []sqlc.Supplier, loca
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var13 string
 					templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(po.ExpectedAt))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 75, Col: 76}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 75, Col: 84}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var14 string
 					templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(po.CreatedAt)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 76, Col: 56}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/purchase_orders.templ`, Line: 76, Col: 64}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 					if templ_7745c5c3_Err != nil {

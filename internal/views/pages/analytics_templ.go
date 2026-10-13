@@ -51,7 +51,7 @@ func Analytics(year int, month int, pl vm.PL, byChannel []vm.ChannelRevenue, bes
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Analytics</h1><form method=\"get\" action=\"/analytics\" class=\"flex items-end gap-2\"><div><label for=\"year\" class=\"mb-1 block text-xs font-medium text-gray-600\">Year</label> <input id=\"year\" name=\"year\" type=\"number\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Analytics</h1><form method=\"get\" action=\"/analytics\" class=\"flex items-end gap-2\"><div><label for=\"year\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Year</label> <input id=\"year\" name=\"year\" type=\"number\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func Analytics(year int, month int, pl vm.PL, byChannel []vm.ChannelRevenue, bes
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm\"></div><div><label for=\"month\" class=\"mb-1 block text-xs font-medium text-gray-600\">Month (0 = year)</label> <input id=\"month\" name=\"month\" type=\"number\" min=\"0\" max=\"12\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"w-24 rounded-md border border-input px-2 py-1.5 text-sm\"></div><div><label for=\"month\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Month (0 = year)</label> <input id=\"month\" name=\"month\" type=\"number\" min=\"0\" max=\"12\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -77,7 +77,7 @@ func Analytics(year int, month int, pl vm.PL, byChannel []vm.ChannelRevenue, bes
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm\"></div><button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50\">Apply</button></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"w-24 rounded-md border border-input px-2 py-1.5 text-sm\"></div><button type=\"submit\" class=\"rounded-md border border-input bg-card px-3 py-2 text-sm hover:bg-accent\">Apply</button></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -156,27 +156,27 @@ func valuationCard(label string, value string) templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div class=\"rounded-lg border border-gray-200 bg-white p-4\"><p class=\"text-sm text-gray-500\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div class=\"rounded-lg border border-border bg-card p-4\"><p class=\"text-sm text-muted-foreground\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(label)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/analytics.templ`, Line: 51, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/analytics.templ`, Line: 51, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</p><p class=\"mt-1 text-xl font-semibold text-gray-900\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</p><p class=\"mt-1 text-xl font-semibold text-foreground\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(value)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/analytics.templ`, Line: 52, Col: 61}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/analytics.templ`, Line: 52, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {

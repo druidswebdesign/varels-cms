@@ -51,7 +51,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Audit log</h1><a href=\"/audit\" class=\"text-sm text-gray-500 hover:text-gray-700\">Clear filters</a></div><form method=\"get\" action=\"/audit\" class=\"mb-4 flex flex-wrap items-end gap-3\"><div><label for=\"user\" class=\"mb-1 block text-xs font-medium text-gray-600\">User ID</label> <input id=\"user\" name=\"user\" type=\"number\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Audit log</h1><a href=\"/audit\" class=\"text-sm text-muted-foreground hover:text-foreground\">Clear filters</a></div><form method=\"get\" action=\"/audit\" class=\"mb-4 flex flex-wrap items-end gap-3\"><div><label for=\"user\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">User ID</label> <input id=\"user\" name=\"user\" type=\"number\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"w-24 rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"entity\" class=\"mb-1 block text-xs font-medium text-gray-600\">Entity type</label> <input id=\"entity\" name=\"entity\" type=\"text\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"w-24 rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"entity\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Entity type</label> <input id=\"entity\" name=\"entity\" type=\"text\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -77,7 +77,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" placeholder=\"order\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"from\" class=\"mb-1 block text-xs font-medium text-gray-600\">From</label> <input id=\"from\" name=\"from\" type=\"date\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" placeholder=\"order\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"from\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">From</label> <input id=\"from\" name=\"from\" type=\"date\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -90,7 +90,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"to\" class=\"mb-1 block text-xs font-medium text-gray-600\">To</label> <input id=\"to\" name=\"to\" type=\"date\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"to\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">To</label> <input id=\"to\" name=\"to\" type=\"date\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -103,7 +103,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50\">Filter</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md border border-input bg-card px-3 py-2 text-sm hover:bg-accent\">Filter</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -119,31 +119,31 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">When</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">User</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Action</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Entity</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Note</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">IP</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">When</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">User</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Action</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Entity</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Note</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">IP</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(logs) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<tr><td colspan=\"6\" class=\"px-4 py-8 text-center text-gray-500\">No audit entries found.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<tr><td colspan=\"6\" class=\"px-4 py-8 text-center text-muted-foreground\">No audit entries found.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				for _, l := range logs {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<tr class=\"hover:bg-gray-50\"><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<tr class=\"hover:bg-accent\"><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var8 string
 					templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(l.CreatedAt)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 57, Col: 55}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 57, Col: 63}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -158,7 +158,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 							return templ_7745c5c3_Err
 						}
 					} else {
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<span class=\"text-gray-400\">system</span>")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<span class=\"text-muted-foreground\">system</span>")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -171,7 +171,7 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</td><td class=\"px-4 py-2 text-gray-700\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</td><td class=\"px-4 py-2 text-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -189,14 +189,14 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 						return templ_7745c5c3_Err
 					}
 					if l.EntityID.Valid {
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<span class=\"text-gray-400\">#")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<span class=\"text-muted-foreground\">#")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var11 string
 						templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(l.EntityID.Int64))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 71, Col: 67}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 71, Col: 75}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 						if templ_7745c5c3_Err != nil {
@@ -207,27 +207,27 @@ func Audit(logs []sqlc.AuditLog, user, entity, from, to, csrf string) templ.Comp
 							return templ_7745c5c3_Err
 						}
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var12 string
 					templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(l.Note))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 74, Col: 69}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 74, Col: 77}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</td><td class=\"px-4 py-2 text-gray-400\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var13 string
 					templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(l.Ip))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 75, Col: 67}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/audit.templ`, Line: 75, Col: 75}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 					if templ_7745c5c3_Err != nil {

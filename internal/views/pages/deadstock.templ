@@ -14,7 +14,7 @@ templ Deadstock(rows []sqlc.DeadstockRow, totalTrappedMinor int64, staleDays int
 		<div class="mb-4 flex items-center justify-between">
 			<h1 class="text-xl font-semibold">Deadstock</h1>
 			<div class="flex items-center gap-2 text-sm">
-				<span class="text-gray-500">Stale after</span>
+				<span class="text-muted-foreground">Stale after</span>
 				@staleLink(30, staleDays)
 				@staleLink(60, staleDays)
 				@staleLink(90, staleDays)
@@ -26,11 +26,11 @@ templ Deadstock(rows []sqlc.DeadstockRow, totalTrappedMinor int64, staleDays int
 
 templ staleLink(days int, active int) {
 	if days == active {
-		<span class="rounded bg-gray-900 px-2 py-1 text-white">{ fmt.Sprint(days) }d</span>
+		<span class="rounded bg-primary px-2 py-1 text-primary-foreground">{ fmt.Sprint(days) }d</span>
 	} else {
 		<a href={ "/deadstock?stale_days=" + fmt.Sprint(days) }
 			hx-get={ "/deadstock/table?stale_days=" + fmt.Sprint(days) }
 			hx-target="#deadstock-table" hx-swap="outerHTML"
-			class="rounded border border-gray-300 px-2 py-1 text-gray-600 hover:bg-gray-50">{ fmt.Sprint(days) }d</a>
+			class="rounded border border-input px-2 py-1 text-muted-foreground hover:bg-accent">{ fmt.Sprint(days) }d</a>
 	}
 }

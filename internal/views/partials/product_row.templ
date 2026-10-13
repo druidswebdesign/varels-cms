@@ -10,11 +10,11 @@ import (
 // ProductRow is one <tr> in the products table, also returned alone for live
 // search swaps (HTMX).
 templ ProductRow(p sqlc.Product, csrf string) {
-	<tr id={ "product-row-" + fmt.Sprint(p.ID) } class="hover:bg-gray-50">
-		<td class="px-4 py-3 font-medium text-gray-900">
+	<tr id={ "product-row-" + fmt.Sprint(p.ID) } class="hover:bg-accent">
+		<td class="px-4 py-3 font-medium text-foreground">
 			<a href={ "/products/" + fmt.Sprint(p.ID) } class="hover:underline">{ p.Name }</a>
 		</td>
-		<td class="px-4 py-3 text-gray-500">{ p.Slug }</td>
+		<td class="px-4 py-3 text-muted-foreground">{ p.Slug }</td>
 		<td class="px-4 py-3">
 			if p.IsArchived == 1 {
 				@components.Badge("Archived", "warning")
@@ -24,7 +24,7 @@ templ ProductRow(p sqlc.Product, csrf string) {
 		</td>
 		<td class="px-4 py-3">
 			<div class="flex items-center justify-end gap-2">
-				<a href={ "/products/" + fmt.Sprint(p.ID) + "/edit" } class="text-sm text-gray-600 hover:text-gray-900">Edit</a>
+				<a href={ "/products/" + fmt.Sprint(p.ID) + "/edit" } class="text-sm text-muted-foreground hover:text-foreground">Edit</a>
 				if p.IsArchived == 1 {
 					<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/restore" }>
 						<input type="hidden" name="csrf_token" value={ csrf }/>
@@ -33,7 +33,7 @@ templ ProductRow(p sqlc.Product, csrf string) {
 				} else {
 					<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/archive" }>
 						<input type="hidden" name="csrf_token" value={ csrf }/>
-						<button type="submit" class="text-sm text-red-600 hover:text-red-800">Archive</button>
+						<button type="submit" class="text-sm text-destructive hover:text-destructive/80">Archive</button>
 					</form>
 				}
 			</div>

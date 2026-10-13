@@ -16,14 +16,14 @@ templ Analytics(year int, month int, pl vm.PL, byChannel []vm.ChannelRevenue, be
 			<h1 class="text-xl font-semibold">Analytics</h1>
 			<form method="get" action="/analytics" class="flex items-end gap-2">
 				<div>
-					<label for="year" class="mb-1 block text-xs font-medium text-gray-600">Year</label>
-					<input id="year" name="year" type="number" value={ fmt.Sprint(year) } class="w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm"/>
+					<label for="year" class="mb-1 block text-xs font-medium text-muted-foreground">Year</label>
+					<input id="year" name="year" type="number" value={ fmt.Sprint(year) } class="w-24 rounded-md border border-input px-2 py-1.5 text-sm"/>
 				</div>
 				<div>
-					<label for="month" class="mb-1 block text-xs font-medium text-gray-600">Month (0 = year)</label>
-					<input id="month" name="month" type="number" min="0" max="12" value={ fmt.Sprint(month) } class="w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm"/>
+					<label for="month" class="mb-1 block text-xs font-medium text-muted-foreground">Month (0 = year)</label>
+					<input id="month" name="month" type="number" min="0" max="12" value={ fmt.Sprint(month) } class="w-24 rounded-md border border-input px-2 py-1.5 text-sm"/>
 				</div>
-				<button type="submit" class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50">Apply</button>
+				<button type="submit" class="rounded-md border border-input bg-card px-3 py-2 text-sm hover:bg-accent">Apply</button>
 			</form>
 		</div>
 
@@ -47,9 +47,9 @@ templ Analytics(year int, month int, pl vm.PL, byChannel []vm.ChannelRevenue, be
 }
 
 templ valuationCard(label string, value string) {
-	<div class="rounded-lg border border-gray-200 bg-white p-4">
-		<p class="text-sm text-gray-500">{ label }</p>
-		<p class="mt-1 text-xl font-semibold text-gray-900">{ value }</p>
+	<div class="rounded-lg border border-border bg-card p-4">
+		<p class="text-sm text-muted-foreground">{ label }</p>
+		<p class="mt-1 text-xl font-semibold text-foreground">{ value }</p>
 	</div>
 }
 

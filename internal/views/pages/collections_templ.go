@@ -51,7 +51,7 @@ func Collections(collections []sqlc.Collection, csrf string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Collections</h1></div><form method=\"post\" action=\"/collections\" class=\"mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Collections</h1></div><form method=\"post\" action=\"/collections\" class=\"mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func Collections(collections []sqlc.Collection, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"name\" class=\"mb-1 block text-xs font-medium text-gray-600\">Name</label> <input id=\"name\" name=\"name\" type=\"text\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"kind\" class=\"mb-1 block text-xs font-medium text-gray-600\">Kind</label> <select id=\"kind\" name=\"kind\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"drop\">drop</option> <option value=\"season\">season</option> <option value=\"essentials\">essentials</option></select></div><div><label for=\"season\" class=\"mb-1 block text-xs font-medium text-gray-600\">Season</label> <input id=\"season\" name=\"season\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"launch_date\" class=\"mb-1 block text-xs font-medium text-gray-600\">Launch date</label> <input id=\"launch_date\" name=\"launch_date\" type=\"date\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Create</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div><label for=\"name\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Name</label> <input id=\"name\" name=\"name\" type=\"text\" required class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"kind\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Kind</label> <select id=\"kind\" name=\"kind\" class=\"rounded-md border border-input px-3 py-2 text-sm\"><option value=\"drop\">drop</option> <option value=\"season\">season</option> <option value=\"essentials\">essentials</option></select></div><div><label for=\"season\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Season</label> <input id=\"season\" name=\"season\" type=\"text\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"launch_date\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Launch date</label> <input id=\"launch_date\" name=\"launch_date\" type=\"date\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Create</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -80,25 +80,25 @@ func Collections(collections []sqlc.Collection, csrf string) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Name</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Kind</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Season</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Launch</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Name</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Kind</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Season</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Launch</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(collections) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<tr><td colspan=\"5\" class=\"px-4 py-8 text-center text-gray-500\">No collections yet.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<tr><td colspan=\"5\" class=\"px-4 py-8 text-center text-muted-foreground\">No collections yet.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				for _, c := range collections {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<tr class=\"hover:bg-gray-50\"><td class=\"px-4 py-2 font-medium text-gray-900\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<tr class=\"hover:bg-accent\"><td class=\"px-4 py-2 font-medium text-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var5 string
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(c.Name)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/collections.templ`, Line: 61, Col: 62}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/collections.templ`, Line: 61, Col: 64}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
@@ -112,27 +112,27 @@ func Collections(collections []sqlc.Collection, csrf string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var6 string
 					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(c.Season))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/collections.templ`, Line: 65, Col: 71}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/collections.templ`, Line: 65, Col: 79}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var7 string
 					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(c.LaunchDate))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/collections.templ`, Line: 66, Col: 75}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/collections.templ`, Line: 66, Col: 83}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 					if templ_7745c5c3_Err != nil {
@@ -164,7 +164,7 @@ func Collections(collections []sqlc.Collection, csrf string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"> <button type=\"submit\" class=\"text-sm text-red-600 hover:text-red-800\">Archive</button></form></td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"> <button type=\"submit\" class=\"text-sm text-destructive hover:text-destructive/80\">Archive</button></form></td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

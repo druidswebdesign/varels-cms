@@ -53,7 +53,9 @@ func Logger(next http.Handler) http.Handler {
 
 // SecurityHeaders sets baseline hardening headers for a private app. The CSP
 // allows the inline theme script and the ApexCharts CDN the templates already
-// use; everything else is locked to same-origin.
+// use; everything else is locked to same-origin. Alpine v3 evaluates x-*
+// expressions with the AsyncFunction constructor, so 'unsafe-eval' is required
+// in script-src for the shell (theme/lang/sidebar) to initialise.
 func SecurityHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h := w.Header()
@@ -63,7 +65,7 @@ func SecurityHeaders(next http.Handler) http.Handler {
 		h.Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
 		h.Set("Content-Security-Policy",
 			"default-src 'self'; "+
-				"script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "+
+				"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; "+
 				"style-src 'self' 'unsafe-inline'; "+
 				"img-src 'self' data:; "+
 				"font-src 'self'; "+

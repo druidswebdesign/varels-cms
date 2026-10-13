@@ -55,12 +55,12 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">SKU</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Size</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Color</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Cost</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Retail</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Margin</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Threshold</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody id=\"variant-rows\" class=\"divide-y divide-gray-100\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">SKU</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Size</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Color</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Cost</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Retail</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Margin</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Threshold</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody id=\"variant-rows\" class=\"divide-y divide-border\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(variants) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr><td colspan=\"8\" class=\"px-4 py-6 text-center text-gray-500\">No variants yet.</td></tr>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr><td colspan=\"8\" class=\"px-4 py-6 text-center text-muted-foreground\">No variants yet.</td></tr>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -79,14 +79,14 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"hover:bg-gray-50\"><td class=\"px-4 py-2 font-mono text-xs text-gray-900\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"hover:bg-accent\"><td class=\"px-4 py-2 font-mono text-xs text-foreground\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(v.Sku)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 36, Col: 67}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 36, Col: 69}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -183,7 +183,7 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" class=\"text-sm text-gray-600 hover:text-gray-900\">Edit</a> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" class=\"text-sm text-muted-foreground hover:text-foreground\">Edit</a> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -232,7 +232,7 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"> <button type=\"submit\" class=\"text-sm text-red-600 hover:text-red-800\">Archive</button></form>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"> <button type=\"submit\" class=\"text-sm text-destructive hover:text-destructive/80\">Archive</button></form>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

@@ -51,20 +51,20 @@ func Expenses(expenses []sqlc.Expense, categories []sqlc.ExpenseCategory, totalM
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Expenses</h1><p class=\"text-sm text-gray-500\">Total this view: <span class=\"font-semibold text-gray-900\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Expenses</h1><p class=\"text-sm text-muted-foreground\">Total this view: <span class=\"font-semibold text-foreground\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(totalMinor))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/expenses.templ`, Line: 17, Col: 121}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/expenses.templ`, Line: 17, Col: 131}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</span></p></div><form method=\"post\" action=\"/expenses\" class=\"mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</span></p></div><form method=\"post\" action=\"/expenses\" class=\"mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -77,7 +77,7 @@ func Expenses(expenses []sqlc.Expense, categories []sqlc.ExpenseCategory, totalM
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div><label for=\"category_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Category</label> <select id=\"category_id\" name=\"category_id\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div><label for=\"category_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Category</label> <select id=\"category_id\" name=\"category_id\" class=\"rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -113,7 +113,7 @@ func Expenses(expenses []sqlc.Expense, categories []sqlc.ExpenseCategory, totalM
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</select></div><div><label for=\"vendor\" class=\"mb-1 block text-xs font-medium text-gray-600\">Vendor</label> <input id=\"vendor\" name=\"vendor\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"amount\" class=\"mb-1 block text-xs font-medium text-gray-600\">Amount (ARS)</label> <input id=\"amount\" name=\"amount\" type=\"number\" min=\"0\" step=\"0.01\" required class=\"w-32 rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"incurred_at\" class=\"mb-1 block text-xs font-medium text-gray-600\">Date</label> <input id=\"incurred_at\" name=\"incurred_at\" type=\"date\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"note\" class=\"mb-1 block text-xs font-medium text-gray-600\">Note</label> <input id=\"note\" name=\"note\" type=\"text\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Add expense</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</select></div><div><label for=\"vendor\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Vendor</label> <input id=\"vendor\" name=\"vendor\" type=\"text\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"amount\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Amount (ARS)</label> <input id=\"amount\" name=\"amount\" type=\"number\" min=\"0\" step=\"0.01\" required class=\"w-32 rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"incurred_at\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Date</label> <input id=\"incurred_at\" name=\"incurred_at\" type=\"date\" required class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"note\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Note</label> <input id=\"note\" name=\"note\" type=\"text\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Add expense</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -129,25 +129,25 @@ func Expenses(expenses []sqlc.Expense, categories []sqlc.ExpenseCategory, totalM
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Date</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Category</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Vendor</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Note</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Amount</th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Date</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Category</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Vendor</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Note</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Amount</th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(expenses) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<tr><td colspan=\"5\" class=\"px-4 py-8 text-center text-gray-500\">No expenses recorded.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<tr><td colspan=\"5\" class=\"px-4 py-8 text-center text-muted-foreground\">No expenses recorded.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				for _, e := range expenses {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<tr><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<tr><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var8 string
 					templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(e.IncurredAt)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/expenses.templ`, Line: 65, Col: 56}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/expenses.templ`, Line: 65, Col: 64}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 					if templ_7745c5c3_Err != nil {
@@ -179,14 +179,14 @@ func Expenses(expenses []sqlc.Expense, categories []sqlc.ExpenseCategory, totalM
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var11 string
 					templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(e.Note))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/expenses.templ`, Line: 68, Col: 69}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/expenses.templ`, Line: 68, Col: 77}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 					if templ_7745c5c3_Err != nil {

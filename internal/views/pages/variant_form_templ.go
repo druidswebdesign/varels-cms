@@ -63,7 +63,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"text-sm text-gray-500 hover:text-gray-700\">Back to product</a></div><form method=\"post\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"text-sm text-muted-foreground hover:text-foreground\">Back to product</a></div><form method=\"post\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -76,7 +76,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"grid max-w-3xl grid-cols-2 gap-3 rounded-lg border border-gray-200 bg-white p-4 md:grid-cols-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"grid max-w-3xl grid-cols-2 gap-3 rounded-lg border border-border bg-card p-4 md:grid-cols-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -89,7 +89,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><div class=\"col-span-2 md:col-span-1\"><label for=\"sku\" class=\"mb-1 block text-xs font-medium text-gray-600\">SKU</label> <input id=\"sku\" name=\"sku\" type=\"text\" required value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><div class=\"col-span-2 md:col-span-1\"><label for=\"sku\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">SKU</label> <input id=\"sku\" name=\"sku\" type=\"text\" required value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -102,7 +102,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"size\" class=\"mb-1 block text-xs font-medium text-gray-600\">Size</label> <input id=\"size\" name=\"size\" type=\"text\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"size\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Size</label> <input id=\"size\" name=\"size\" type=\"text\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -115,7 +115,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"color\" class=\"mb-1 block text-xs font-medium text-gray-600\">Color</label> <input id=\"color\" name=\"color\" type=\"text\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"color\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Color</label> <input id=\"color\" name=\"color\" type=\"text\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -128,7 +128,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"barcode\" class=\"mb-1 block text-xs font-medium text-gray-600\">Barcode</label> <input id=\"barcode\" name=\"barcode\" type=\"text\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"barcode\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Barcode</label> <input id=\"barcode\" name=\"barcode\" type=\"text\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -141,7 +141,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"cost\" class=\"mb-1 block text-xs font-medium text-gray-600\">Cost (ARS)</label> <input id=\"cost\" name=\"cost\" type=\"number\" min=\"0\" step=\"0.01\" required value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"cost\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Cost (ARS)</label> <input id=\"cost\" name=\"cost\" type=\"number\" min=\"0\" step=\"0.01\" required value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -154,7 +154,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"retail\" class=\"mb-1 block text-xs font-medium text-gray-600\">Retail (ARS)</label> <input id=\"retail\" name=\"retail\" type=\"number\" min=\"0\" step=\"0.01\" required value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"retail\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Retail (ARS)</label> <input id=\"retail\" name=\"retail\" type=\"number\" min=\"0\" step=\"0.01\" required value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -167,7 +167,7 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"wholesale\" class=\"mb-1 block text-xs font-medium text-gray-600\">Wholesale (ARS)</label> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"wholesale\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Wholesale (ARS)</label> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -185,17 +185,17 @@ func VariantForm(v sqlc.ProductVariant, csrf string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<input id=\"wholesale\" name=\"wholesale\" type=\"number\" min=\"0\" step=\"0.01\" class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<input id=\"wholesale\" name=\"wholesale\" type=\"number\" min=\"0\" step=\"0.01\" class=\"w-full rounded-md border border-input px-3 py-2 text-sm\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</div><div class=\"col-span-2 flex items-end md:col-span-4\"><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Save variant</button></div></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</div><div class=\"col-span-2 flex items-end md:col-span-4\"><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Save variant</button></div></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

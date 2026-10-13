@@ -1,41 +1,41 @@
 package components
 
 // Navbar is the sticky top header of the dashboard shell: mobile navigation
-// trigger, current page title, product search, theme toggle and sign-out.
-templ Navbar(title string, csrf string) {
+// trigger, current page title, product search, language toggle and theme
+// toggle. Sign-out lives at the bottom of the sidebar. All controls read the
+// shared `shell` Alpine scope declared in layouts.Base.
+templ Navbar(title string, active string, csrf string) {
 	<header class="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur lg:px-6">
-		<button type="button" @click="sidebarOpen = true" aria-label="Open navigation"
-			class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground lg:hidden">
+		<button type="button" @click="sidebarOpen = true" data-i18n-aria="a11y.openNav" aria-label="Open navigation"
+			class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden">
 			@Icon("menu", "h-5 w-5")
 		</button>
 
-		<h1 class="truncate text-sm font-semibold tracking-tight">{ title }</h1>
+		<h1 class="truncate text-sm font-semibold tracking-tight" data-i18n={ "page." + active }>{ title }</h1>
 
 		<div class="ml-auto flex items-center gap-2">
 			<form method="get" action="/products" class="relative hidden md:block">
 				@Icon("search", "pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground")
-				<input type="search" name="q" placeholder="Search products…"
+				<input type="search" name="q" data-i18n-placeholder="nav.searchPlaceholder" placeholder="Search products…"
 					class="h-8 w-56 rounded-md border border-input bg-transparent pl-8 pr-3 text-sm shadow-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"/>
 			</form>
 
-			<button type="button" x-data="theme" @click="toggle" aria-label="Toggle theme"
-				class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
-				<span x-show="!dark">
-					@Icon("sun", "h-4 w-4")
-				</span>
-				<span x-show="dark" x-cloak>
-					@Icon("moon", "h-4 w-4")
-				</span>
+			<button type="button" @click="toggleLang()" data-i18n-aria="a11y.toggleLang" aria-label="Switch language"
+				x-bind:title="t('a11y.toggleLang')"
+				class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+				@Icon("languages", "h-4 w-4")
+				<span x-text="lang.toUpperCase()">EN</span>
 			</button>
 
-			<form method="post" action="/logout">
-				<input type="hidden" name="csrf_token" value={ csrf }/>
-				<button type="submit"
-					class="inline-flex h-8 items-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground">
-					@Icon("log-out", "h-4 w-4")
-					<span class="hidden sm:inline">Sign out</span>
-				</button>
-			</form>
+			<button type="button" @click="toggleTheme()" data-i18n-aria="a11y.toggleTheme" aria-label="Toggle theme"
+				class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+				<span x-show="!dark" x-cloak>
+					@Icon("moon", "h-4 w-4")
+				</span>
+				<span x-show="dark" x-cloak>
+					@Icon("sun", "h-4 w-4")
+				</span>
+			</button>
 		</div>
 	</header>
 }

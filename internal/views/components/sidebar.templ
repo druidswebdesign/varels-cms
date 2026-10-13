@@ -1,66 +1,108 @@
 package components
 
 // Sidebar is the primary navigation, styled after the shadcn dashboard shell.
-// On large screens it is a fixed rail; on small screens it slides in as a
-// drawer, driven by the `sidebarOpen` Alpine state declared in layouts.Base.
-templ Sidebar(active string) {
+//
+// Desktop: a fixed rail that can be collapsed to an icon-only width (persisted
+// in localStorage; the pre-paint script sets html[data-sidebar]). Small screens:
+// an off-canvas drawer driven by the `sidebarOpen` Alpine state declared in
+// layouts.Base. Sign-out is pinned to the bottom, separated from the nav.
+templ Sidebar(active string, csrf string) {
 	<div x-show="sidebarOpen" x-cloak x-transition.opacity @click="sidebarOpen = false"
 		class="fixed inset-0 z-40 bg-black/50 lg:hidden"></div>
 
 	<aside x-bind:style={ "sidebarOpen ? 'transform: translateX(0)' : ''" }
-		class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform duration-200 lg:translate-x-0">
-		<div class="flex h-14 items-center gap-2 border-b border-sidebar-border px-4">
-			<img src="/assets/img/logo.svg" alt="" class="h-6 w-6"/>
-			<span class="text-sm font-semibold tracking-tight">varels-cms</span>
+		class="app-sidebar fixed inset-y-0 left-0 z-50 flex w-[var(--sidebar-w)] -translate-x-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform duration-200 lg:translate-x-0">
+		<div class="flex h-14 items-center gap-2 border-b border-sidebar-border px-3">
+			<a href="/dashboard" x-bind:class="(!sidebarOpen && collapsed) ? 'lg:justify-center' : ''" class="flex items-center gap-2 overflow-hidden" aria-label="varels-cms home">
+				<img src="/assets/img/logo.svg" alt="" class="h-6 w-6 shrink-0"/>
+				<span x-show="sidebarOpen || !collapsed" class="text-sm font-semibold tracking-tight">varels-cms</span>
+			</a>
+			<button type="button" @click="toggleCollapsed()"
+				x-bind:aria-label="collapsed ? t('a11y.expandSidebar') : t('a11y.collapseSidebar')"
+				class="ml-auto hidden h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring lg:inline-flex">
+				<span x-show="!collapsed" x-cloak>
+					@Icon("panel-left-close", "h-4 w-4")
+				</span>
+				<span x-show="collapsed" x-cloak>
+					@Icon("panel-left-open", "h-4 w-4")
+				</span>
+			</button>
 		</div>
 
-		<nav class="flex-1 space-y-5 overflow-y-auto px-3 py-4">
-			@navGroup("Overview") {
-				@sidebarLink("/dashboard", "dashboard", "Dashboard", "dashboard", active)
-				@sidebarLink("/analytics", "analytics", "Analytics", "chart", active)
+		<nav class="flex-1 space-y-5 overflow-y-auto px-3 py-4" aria-label="Main navigation">
+			@navGroup("Overview", "nav.overview") {
+				@sidebarLink("/dashboard", "dashboard", "Dashboard", "dashboard", "nav.dashboard", active)
+				@sidebarLink("/analytics", "analytics", "Analytics", "chart", "nav.analytics", active)
 			}
-			@navGroup("Catalog") {
-				@sidebarLink("/products", "products", "Products", "package", active)
-				@sidebarLink("/collections", "collections", "Collections", "layers", active)
+			@navGroup("Catalog", "nav.catalog") {
+				@sidebarLink("/products", "products", "Products", "package", "nav.products", active)
+				@sidebarLink("/collections", "collections", "Collections", "layers", "nav.collections", active)
 			}
-			@navGroup("Inventory") {
-				@sidebarLink("/restocks", "restocks", "Restock", "truck", active)
-				@sidebarLink("/holds", "holds", "Stock holds", "lock", active)
-				@sidebarLink("/deadstock", "deadstock", "Deadstock", "trending-down", active)
+			@navGroup("Inventory", "nav.inventory") {
+				@sidebarLink("/restocks", "restocks", "Restock", "truck", "nav.restocks", active)
+				@sidebarLink("/holds", "holds", "Stock holds", "lock", "nav.holds", active)
+				@sidebarLink("/deadstock", "deadstock", "Deadstock", "trending-down", "nav.deadstock", active)
 			}
-			@navGroup("Sales") {
-				@sidebarLink("/sales", "sales", "Sales", "cart", active)
-				@sidebarLink("/customers", "customers", "Customers", "users", active)
+			@navGroup("Sales", "nav.sales") {
+				@sidebarLink("/sales", "sales", "Sales", "cart", "nav.sales", active)
+				@sidebarLink("/customers", "customers", "Customers", "users", "nav.customers", active)
 			}
-			@navGroup("Finance") {
-				@sidebarLink("/expenses", "expenses", "Expenses", "receipt", active)
+			@navGroup("Finance", "nav.finance") {
+				@sidebarLink("/expenses", "expenses", "Expenses", "receipt", "nav.expenses", active)
 			}
-			@navGroup("Administration") {
-				@sidebarLink("/suppliers", "suppliers", "Suppliers", "factory", active)
-				@sidebarLink("/staff", "staff", "Staff", "user", active)
-				@sidebarLink("/audit", "audit", "Audit log", "scroll", active)
+			@navGroup("Administration", "nav.administration") {
+				@sidebarLink("/suppliers", "suppliers", "Suppliers", "factory", "nav.suppliers", active)
+				@sidebarLink("/staff", "staff", "Staff", "user", "nav.staff", active)
+				@sidebarLink("/audit", "audit", "Audit log", "scroll", "nav.audit", active)
 			}
 		</nav>
+
+		<div class="mt-auto border-t border-sidebar-border p-3">
+			<form method="post" action="/logout">
+				<input type="hidden" name="csrf_token" value={ csrf }/>
+				@SignOutButton()
+			</form>
+		</div>
 	</aside>
 }
 
-templ navGroup(label string) {
+templ navGroup(label string, key string) {
 	<div class="space-y-1">
-		<p class="px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">{ label }</p>
+		<p x-show="sidebarOpen || !collapsed" data-i18n={ key } class="px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">{ label }</p>
 		{ children... }
 	</div>
 }
 
-templ sidebarLink(href string, key string, label string, icon string, active string) {
-	if active == key {
-		<a href={ href } class="flex items-center gap-2.5 rounded-md bg-sidebar-accent px-3 py-2 text-sm font-medium text-sidebar-accent-foreground">
+templ sidebarLink(href string, activeKey string, label string, icon string, i18nKey string, active string) {
+	if active == activeKey {
+		<a href={ href } x-bind:title="(!sidebarOpen && collapsed) ? t(i18nKey) : null"
+			x-bind:aria-label="(!sidebarOpen && collapsed) ? t(i18nKey) : null"
+			x-bind:class="(!sidebarOpen && collapsed) ? 'lg:justify-center' : ''"
+			class="flex items-center gap-2.5 rounded-md bg-sidebar-accent px-3 py-2 text-sm font-medium text-sidebar-accent-foreground"
+			aria-current="page">
 			@Icon(icon, "h-4 w-4 shrink-0")
-			<span>{ label }</span>
+			<span x-show="sidebarOpen || !collapsed" data-i18n={ i18nKey }>{ label }</span>
 		</a>
 	} else {
-		<a href={ href } class="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+		<a href={ href } x-bind:title="(!sidebarOpen && collapsed) ? t(i18nKey) : null"
+			x-bind:aria-label="(!sidebarOpen && collapsed) ? t(i18nKey) : null"
+			x-bind:class="(!sidebarOpen && collapsed) ? 'lg:justify-center' : ''"
+			class="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
 			@Icon(icon, "h-4 w-4 shrink-0")
-			<span>{ label }</span>
+			<span x-show="sidebarOpen || !collapsed" data-i18n={ i18nKey }>{ label }</span>
 		</a>
 	}
+}
+
+// SignOutButton is the pinned bottom-of-sidebar sign-out control. It posts the
+// hidden logout form (rendered by the caller) and keeps its label/tooltip in
+// sync with the collapse state and language.
+templ SignOutButton() {
+	<button type="submit" x-bind:title="(!sidebarOpen && collapsed) ? t('nav.signOut') : null"
+		x-bind:aria-label="(!sidebarOpen && collapsed) ? t('nav.signOut') : null"
+		x-bind:class="(!sidebarOpen && collapsed) ? 'lg:justify-center' : ''"
+		class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
+		@Icon("log-out", "h-4 w-4 shrink-0")
+		<span x-show="sidebarOpen || !collapsed" data-i18n="nav.signOut">Sign out</span>
+	</button>
 }

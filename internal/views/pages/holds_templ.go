@@ -51,7 +51,7 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Stock holds</h1></div><form method=\"post\" action=\"/holds\" class=\"mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-white p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-4 flex items-center justify-between\"><h1 class=\"text-xl font-semibold\">Stock holds</h1></div><form method=\"post\" action=\"/holds\" class=\"mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-border bg-card p-4\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div class=\"grow\"><label for=\"variant_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Variant</label> <select id=\"variant_id\" name=\"variant_id\" required class=\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div class=\"grow\"><label for=\"variant_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Variant</label> <select id=\"variant_id\" name=\"variant_id\" required class=\"w-full rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -139,7 +139,7 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</select></div><div><label for=\"location_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Location</label> <select id=\"location_id\" name=\"location_id\" required class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</select></div><div><label for=\"location_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Location</label> <select id=\"location_id\" name=\"location_id\" required class=\"rounded-md border border-input px-3 py-2 text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -175,7 +175,7 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</select></div><div><label for=\"quantity\" class=\"mb-1 block text-xs font-medium text-gray-600\">Quantity</label> <input id=\"quantity\" name=\"quantity\" type=\"number\" min=\"1\" required class=\"w-24 rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"source\" class=\"mb-1 block text-xs font-medium text-gray-600\">Source</label> <select id=\"source\" name=\"source\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"manual\">manual</option> <option value=\"cart\">cart</option> <option value=\"preorder\">preorder</option></select></div><div><label for=\"ref_id\" class=\"mb-1 block text-xs font-medium text-gray-600\">Reference</label> <input id=\"ref_id\" name=\"ref_id\" type=\"text\" class=\"w-32 rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><div><label for=\"expires_at\" class=\"mb-1 block text-xs font-medium text-gray-600\">Expires (local)</label> <input id=\"expires_at\" name=\"expires_at\" type=\"datetime-local\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700\">Create hold</button></form><form method=\"get\" action=\"/holds\" class=\"mb-4 flex items-center gap-3\"><select name=\"status\" class=\"rounded-md border border-gray-300 px-3 py-2 text-sm\"><option value=\"\">All statuses</option> <option value=\"active\">active</option> <option value=\"released\">released</option> <option value=\"consumed\">consumed</option> <option value=\"expired\">expired</option></select> <button type=\"submit\" class=\"rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50\">Filter</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</select></div><div><label for=\"quantity\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Quantity</label> <input id=\"quantity\" name=\"quantity\" type=\"number\" min=\"1\" required class=\"w-24 rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"source\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Source</label> <select id=\"source\" name=\"source\" class=\"rounded-md border border-input px-3 py-2 text-sm\"><option value=\"manual\">manual</option> <option value=\"cart\">cart</option> <option value=\"preorder\">preorder</option></select></div><div><label for=\"ref_id\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Reference</label> <input id=\"ref_id\" name=\"ref_id\" type=\"text\" class=\"w-32 rounded-md border border-input px-3 py-2 text-sm\"></div><div><label for=\"expires_at\" class=\"mb-1 block text-xs font-medium text-muted-foreground\">Expires (local)</label> <input id=\"expires_at\" name=\"expires_at\" type=\"datetime-local\" class=\"rounded-md border border-input px-3 py-2 text-sm\"></div><button type=\"submit\" class=\"rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90\">Create hold</button></form><form method=\"get\" action=\"/holds\" class=\"mb-4 flex items-center gap-3\"><select name=\"status\" class=\"rounded-md border border-input px-3 py-2 text-sm\"><option value=\"\">All statuses</option> <option value=\"active\">active</option> <option value=\"released\">released</option> <option value=\"consumed\">consumed</option> <option value=\"expired\">expired</option></select> <button type=\"submit\" class=\"rounded-md border border-input bg-card px-3 py-2 text-sm hover:bg-accent\">Filter</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -191,25 +191,25 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<thead class=\"bg-gray-50\"><tr><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Created</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Variant</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Location</th><th class=\"px-4 py-2 text-right font-medium text-gray-500\">Qty</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Source</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Status</th><th class=\"px-4 py-2 text-left font-medium text-gray-500\">Expires</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody class=\"divide-y divide-gray-100\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Created</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Variant</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Location</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Qty</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Source</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Status</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Expires</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody class=\"divide-y divide-border\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if len(holds) == 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<tr><td colspan=\"8\" class=\"px-4 py-8 text-center text-gray-500\">No holds found.</td></tr>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<tr><td colspan=\"8\" class=\"px-4 py-8 text-center text-muted-foreground\">No holds found.</td></tr>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
 				for _, h := range holds {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<tr class=\"hover:bg-gray-50\"><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<tr class=\"hover:bg-accent\"><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var12 string
 					templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(h.CreatedAt)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 91, Col: 55}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 91, Col: 63}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 					if templ_7745c5c3_Err != nil {
@@ -241,14 +241,14 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var15 string
 					templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(h.LocationName)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 93, Col: 58}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 93, Col: 66}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 					if templ_7745c5c3_Err != nil {
@@ -267,14 +267,14 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var17 string
 					templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(string(h.Source))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 95, Col: 60}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 95, Col: 68}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 					if templ_7745c5c3_Err != nil {
@@ -288,14 +288,14 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</td><td class=\"px-4 py-2 text-gray-500\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</td><td class=\"px-4 py-2 text-muted-foreground\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var18 string
 					templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(h.ExpiresAt))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 99, Col: 74}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/pages/holds.templ`, Line: 99, Col: 82}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 					if templ_7745c5c3_Err != nil {
@@ -332,7 +332,7 @@ func Holds(holds []sqlc.ListStockHoldsRow, variants []sqlc.ListSellableVariantsR
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\"> <button type=\"submit\" class=\"text-sm text-gray-600 hover:text-gray-900\">Release</button></form>")
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\"> <button type=\"submit\" class=\"text-sm text-muted-foreground hover:text-foreground\">Release</button></form>")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
