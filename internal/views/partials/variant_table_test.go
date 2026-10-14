@@ -10,8 +10,8 @@ import (
 )
 
 // TestVariantTableShowsStockControls guards the product-page stock affordance:
-// each variant row must show its sellable on-hand quantity and link to the
-// receive/adjust editor, otherwise quantity cannot be edited from the UI.
+// each variant row must show an editable sellable on-hand quantity that posts to
+// the set-quantity endpoint, plus a link to the receive/adjust editor.
 func TestVariantTableShowsStockControls(t *testing.T) {
 	variants := []sqlc.ProductVariant{{ID: 7, Sku: "SKU-1"}}
 	comp := VariantTable(42, variants, map[int64]int64{7: 12}, "tok")
@@ -22,7 +22,14 @@ func TestVariantTableShowsStockControls(t *testing.T) {
 	}
 	html := buf.String()
 
-	for _, want := range []string{"On hand", "/variants/7/restock", ">Stock</a>", ">12</td>"} {
+	for _, want := range []string{
+		"On hand",
+		"/variants/7/quantity",
+		`name="quantity"`,
+		`value="12"`,
+		"/variants/7/restock",
+		">Stock</a>",
+	} {
 		if !strings.Contains(html, want) {
 			t.Errorf("variant table missing %q\n%s", want, html)
 		}

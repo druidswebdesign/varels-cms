@@ -105,6 +105,7 @@ View: `partials/variant_table.templ`, `partials/restock_row.templ`,
 | GET    | `/variants/{id}/edit`      | `HandleVariantForm`      | `pages.VariantForm()`            |                           |
 | POST   | `/variants/{id}`           | `HandleVariantUpdate`    | redirect                         | Size, color, prices, SKU. |
 | POST   | `/variants/{id}/threshold` | `HandleVariantThreshold` | inline (HTMX)                    | `low_stock_threshold`.    |
+| POST   | `/variants/{id}/quantity`  | `HandleVariantSetQuantity` | variant row (HTMX)             | Sets absolute sellable qty; writes a `recount` adjustment (ADR-0017). |
 | POST   | `/variants/{id}/archive`   | `HandleVariantArchive`   | row                              |                           |
 
 ### 3.4 Restock & adjustments — `restock_handler.go`

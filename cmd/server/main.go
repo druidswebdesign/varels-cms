@@ -265,6 +265,7 @@ func routes(s *common.Server) http.Handler {
 		r.Post("/variants/{id}", catalogh.HandleVariantUpdate)
 		r.Post("/variants/{id}/archive", catalogh.HandleVariantArchive)
 		r.Post("/variants/{id}/threshold", catalogh.HandleVariantThreshold)
+		r.Post("/variants/{id}/quantity", catalogh.HandleVariantSetQuantity)
 
 		// Customers.
 		r.Get("/customers", salesh.HandleCustomersList)
