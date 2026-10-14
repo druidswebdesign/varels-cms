@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"context"
 	"database/sql"
 
 	"github.com/a-h/templ"
@@ -16,6 +17,19 @@ import (
 	"github.com/druidswebdesign/varels-cms/internal/views/pages"
 	"github.com/druidswebdesign/varels-cms/internal/views/partials"
 )
+
+// sellableTotals maps variant id to its total sellable quantity for a product.
+func (s *Server) sellableTotals(ctx context.Context, productID int64) map[int64]int64 {
+	rows, err := s.Q.ListSellableTotalsByProduct(ctx, productID)
+	if err != nil {
+		return map[int64]int64{}
+	}
+	out := make(map[int64]int64, len(rows))
+	for _, r := range rows {
+		out[r.VariantID] = r.OnHand
+	}
+	return out
+}
 
 // HandleVariantTable renders GET /products/{id}/variants as an HTMX fragment.
 func (s *Server) HandleVariantTable(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +43,7 @@ func (s *Server) HandleVariantTable(w http.ResponseWriter, r *http.Request) {
 		common.ServerError(w, err)
 		return
 	}
-	common.Render(w, r, http.StatusOK, partials.VariantTable(id, variants, middleware.CSRFToken(r)))
+	common.Render(w, r, http.StatusOK, partials.VariantTable(id, variants, s.sellableTotals(r.Context(), id), middleware.CSRFToken(r)))
 }
 
 // HandleVariantCreate handles POST /products/{id}/variants.
@@ -111,7 +125,7 @@ func (s *Server) renderVariantTable(w http.ResponseWriter, r *http.Request, prod
 		return
 	}
 	common.Render(w, r, http.StatusOK, templ.Join(
-		partials.VariantTable(productID, variants, middleware.CSRFToken(r)),
+		partials.VariantTable(productID, variants, s.sellableTotals(r.Context(), productID), middleware.CSRFToken(r)),
 		partials.FlashOOB(flash.Flash{Message: message, Tone: tone}),
 	))
 }

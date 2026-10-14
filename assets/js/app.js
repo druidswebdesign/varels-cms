@@ -252,6 +252,7 @@ const PHRASES = {
   "Trapped cash": "Capital inmovilizado",
   "Trapped cash:": "Capital inmovilizado:",
   "On hand": "Disponible",
+  "Stock": "Stock",
   "Point of sale": "Punto de venta",
   "New sale": "Nueva venta",
   "New sale (POS)": "Nueva venta (POS)",

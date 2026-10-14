@@ -9,8 +9,9 @@ import (
 )
 
 // VariantTable lists a product's variants and their margin. Returned alone for
-// HTMX swaps after variant create/update/archive.
-templ VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) {
+// HTMX swaps after variant create/update/archive. onHand maps variant id to its
+// total sellable quantity; the Stock link opens the receive/adjust editor.
+templ VariantTable(productID int64, variants []sqlc.ProductVariant, onHand map[int64]int64, csrf string) {
 	<div id="variant-table">
 		@components.Table() {
 			<thead class="bg-muted">
@@ -18,6 +19,7 @@ templ VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string)
 					<th class="px-4 py-2 text-left font-medium text-muted-foreground">SKU</th>
 					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Size</th>
 					<th class="px-4 py-2 text-left font-medium text-muted-foreground">Color</th>
+					<th class="px-4 py-2 text-right font-medium text-muted-foreground">On hand</th>
 					<th class="px-4 py-2 text-right font-medium text-muted-foreground">Cost</th>
 					<th class="px-4 py-2 text-right font-medium text-muted-foreground">Retail</th>
 					<th class="px-4 py-2 text-right font-medium text-muted-foreground">Margin</th>
@@ -28,7 +30,7 @@ templ VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string)
 			<tbody id="variant-rows" class="divide-y divide-border">
 				if len(variants) == 0 {
 					<tr>
-						<td colspan="8" class="px-4 py-6 text-center text-muted-foreground">No variants yet.</td>
+						<td colspan="9" class="px-4 py-6 text-center text-muted-foreground">No variants yet.</td>
 					</tr>
 				}
 				for _, v := range variants {
@@ -36,12 +38,14 @@ templ VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string)
 						<td class="px-4 py-2 font-mono text-xs text-foreground">{ v.Sku }</td>
 						<td class="px-4 py-2">{ format.NullString(v.Size) }</td>
 						<td class="px-4 py-2">{ format.NullString(v.Color) }</td>
+						<td class="px-4 py-2 text-right tabular-nums">{ fmt.Sprint(onHand[v.ID]) }</td>
 						<td class="px-4 py-2 text-right">{ format.Money(v.CostMinor) }</td>
 						<td class="px-4 py-2 text-right">{ format.Money(v.RetailPriceMinor) }</td>
 						<td class="px-4 py-2 text-right">{ fmt.Sprintf("%.1f%%", format.GrossMarginPct(v.RetailPriceMinor, v.CostMinor)) }</td>
 						<td class="px-4 py-2 text-right">{ fmt.Sprint(v.LowStockThreshold) }</td>
 						<td class="px-4 py-2 text-right">
 							<div class="flex items-center justify-end gap-2">
+								<a href={ "/variants/" + fmt.Sprint(v.ID) + "/restock" } class="text-sm text-muted-foreground hover:text-foreground">Stock</a>
 								<a href={ "/variants/" + fmt.Sprint(v.ID) + "/edit" } class="text-sm text-muted-foreground hover:text-foreground">Edit</a>
 								if v.IsArchived == 1 {
 									@components.Badge("Archived", "warning")

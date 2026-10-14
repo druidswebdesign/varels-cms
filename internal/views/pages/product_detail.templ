@@ -11,7 +11,7 @@ import (
 
 // ProductDetail shows a product, its media, collections, variants and forms for
 // adding variants, media and collection assignments.
-templ ProductDetail(p sqlc.Product, categoryName string, variants []sqlc.ProductVariant, media []sqlc.ProductMedium, collections []sqlc.Collection, allCollections []sqlc.Collection, csrf string) {
+templ ProductDetail(p sqlc.Product, categoryName string, variants []sqlc.ProductVariant, onHand map[int64]int64, media []sqlc.ProductMedium, collections []sqlc.Collection, allCollections []sqlc.Collection, csrf string) {
 	@layouts.Base(p.Name, "products", csrf) {
 		<div class="mb-4 flex items-center justify-between">
 			<div>
@@ -113,7 +113,7 @@ templ ProductDetail(p sqlc.Product, categoryName string, variants []sqlc.Product
 		</div>
 
 		<h2 class="mb-2 text-lg font-semibold">Variants</h2>
-		@partials.VariantTable(p.ID, variants, csrf)
+		@partials.VariantTable(p.ID, variants, onHand, csrf)
 
 		<h2 class="mb-2 mt-6 text-lg font-semibold">Add variant</h2>
 		<form method="post" action={ "/products/" + fmt.Sprint(p.ID) + "/variants" }

@@ -17,8 +17,9 @@ import (
 )
 
 // VariantTable lists a product's variants and their margin. Returned alone for
-// HTMX swaps after variant create/update/archive.
-func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) templ.Component {
+// HTMX swaps after variant create/update/archive. onHand maps variant id to its
+// total sellable quantity; the Stock link opens the receive/adjust editor.
+func VariantTable(productID int64, variants []sqlc.ProductVariant, onHand map[int64]int64, csrf string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -55,12 +56,12 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">SKU</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Size</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Color</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Cost</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Retail</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Margin</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Threshold</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody id=\"variant-rows\" class=\"divide-y divide-border\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<thead class=\"bg-muted\"><tr><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">SKU</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Size</th><th class=\"px-4 py-2 text-left font-medium text-muted-foreground\">Color</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">On hand</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Cost</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Retail</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Margin</th><th class=\"px-4 py-2 text-right font-medium text-muted-foreground\">Threshold</th><th class=\"px-4 py-2\"></th></tr></thead> <tbody id=\"variant-rows\" class=\"divide-y divide-border\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(variants) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr><td colspan=\"8\" class=\"px-4 py-6 text-center text-muted-foreground\">No variants yet.</td></tr>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr><td colspan=\"9\" class=\"px-4 py-6 text-center text-muted-foreground\">No variants yet.</td></tr>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -73,7 +74,7 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue("variant-row-" + fmt.Sprint(v.ID))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 35, Col: 47}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 37, Col: 47}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 				if templ_7745c5c3_Err != nil {
@@ -86,7 +87,7 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(v.Sku)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 36, Col: 69}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 38, Col: 69}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -99,7 +100,7 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(v.Size))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 37, Col: 55}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 39, Col: 55}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -112,20 +113,20 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(format.NullString(v.Color))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 38, Col: 56}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 40, Col: 56}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</td><td class=\"px-4 py-2 text-right\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</td><td class=\"px-4 py-2 text-right tabular-nums\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(v.CostMinor))
+				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(onHand[v.ID]))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 39, Col: 66}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 41, Col: 78}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -136,9 +137,9 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var8 string
-				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(v.RetailPriceMinor))
+				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(v.CostMinor))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 40, Col: 73}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 42, Col: 66}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -149,9 +150,9 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var9 string
-				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f%%", format.GrossMarginPct(v.RetailPriceMinor, v.CostMinor)))
+				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(format.Money(v.RetailPriceMinor))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 41, Col: 118}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 43, Col: 73}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -162,28 +163,54 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var10 string
-				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(v.LowStockThreshold))
+				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f%%", format.GrossMarginPct(v.RetailPriceMinor, v.CostMinor)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 42, Col: 72}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 44, Col: 118}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</td><td class=\"px-4 py-2 text-right\"><div class=\"flex items-center justify-end gap-2\"><a href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</td><td class=\"px-4 py-2 text-right\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var11 templ.SafeURL
-				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinURLErrs("/variants/" + fmt.Sprint(v.ID) + "/edit")
+				var templ_7745c5c3_Var11 string
+				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(v.LowStockThreshold))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 45, Col: 59}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 45, Col: 72}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" class=\"text-sm text-muted-foreground hover:text-foreground\">Edit</a> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</td><td class=\"px-4 py-2 text-right\"><div class=\"flex items-center justify-end gap-2\"><a href=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var12 templ.SafeURL
+				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinURLErrs("/variants/" + fmt.Sprint(v.ID) + "/restock")
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 48, Col: 62}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"text-sm text-muted-foreground hover:text-foreground\">Stock</a> <a href=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var13 templ.SafeURL
+				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinURLErrs("/variants/" + fmt.Sprint(v.ID) + "/edit")
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 49, Col: 59}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" class=\"text-sm text-muted-foreground hover:text-foreground\">Edit</a> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -193,56 +220,56 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 						return templ_7745c5c3_Err
 					}
 				} else {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<form method=\"post\" action=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<form method=\"post\" action=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var12 templ.SafeURL
-					templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinURLErrs("/variants/" + fmt.Sprint(v.ID) + "/archive")
+					var templ_7745c5c3_Var14 templ.SafeURL
+					templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinURLErrs("/variants/" + fmt.Sprint(v.ID) + "/archive")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 49, Col: 82}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 53, Col: 82}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" hx-post=\"")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var13 string
-					templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.ResolveAttributeValue("/variants/" + fmt.Sprint(v.ID) + "/archive")
-					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 50, Col: 64}
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var13)
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\" hx-post=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\" hx-target=\"#variant-table\" hx-swap=\"outerHTML\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
+					var templ_7745c5c3_Var15 string
+					templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.ResolveAttributeValue("/variants/" + fmt.Sprint(v.ID) + "/archive")
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 54, Col: 64}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var15)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var14 string
-					templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
-					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 52, Col: 61}
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" hx-target=\"#variant-table\" hx-swap=\"outerHTML\"><input type=\"hidden\" name=\"csrf_token\" value=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"> <button type=\"submit\" class=\"text-sm text-destructive hover:text-destructive/80\">Archive</button></form>")
+					var templ_7745c5c3_Var16 string
+					templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.ResolveAttributeValue(csrf)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/views/partials/variant_table.templ`, Line: 56, Col: 61}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\"> <button type=\"submit\" class=\"text-sm text-destructive hover:text-destructive/80\">Archive</button></form>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</div></td></tr>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div></td></tr>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</tbody>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</tbody>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -252,7 +279,7 @@ func VariantTable(productID int64, variants []sqlc.ProductVariant, csrf string) 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -59,6 +59,14 @@ SELECT COALESCE(SUM(quantity), 0) AS quantity
 FROM stock_levels
 WHERE variant_id = sqlc.arg(variant_id) AND state = 'sellable';
 
+-- name: ListSellableTotalsByProduct :many
+SELECT pv.id AS variant_id,
+       CAST(COALESCE(SUM(sl.quantity), 0) AS INTEGER) AS on_hand
+FROM product_variants pv
+LEFT JOIN stock_levels sl ON sl.variant_id = pv.id AND sl.state = 'sellable'
+WHERE pv.product_id = sqlc.arg(product_id)
+GROUP BY pv.id;
+
 -- name: CreateStockMovement :one
 INSERT INTO stock_movements (
     variant_id, location_id, state, quantity_delta, reason_code,

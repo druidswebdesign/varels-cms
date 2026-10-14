@@ -175,7 +175,7 @@ func (s *Server) HandleProductDetail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	common.Render(w, r, http.StatusOK, pages.ProductDetail(p, categoryName, variants, media, collections, allCollections, middleware.CSRFToken(r)))
+	common.Render(w, r, http.StatusOK, pages.ProductDetail(p, categoryName, variants, s.sellableTotals(ctx, id), media, collections, allCollections, middleware.CSRFToken(r)))
 }
 
 // HandleProductEdit renders GET /products/{id}/edit.
